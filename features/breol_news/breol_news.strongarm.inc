@@ -92,6 +92,9 @@ function breol_news_strongarm() {
       'workflow_tab' => array(
         'custom_settings' => FALSE,
       ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
@@ -99,10 +102,13 @@ function breol_news_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '3',
+          'weight' => '4',
         ),
         'redirect' => array(
-          'weight' => '2',
+          'weight' => '3',
+        ),
+        'metatags' => array(
+          'weight' => '7',
         ),
       ),
       'display' => array(
