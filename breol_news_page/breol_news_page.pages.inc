@@ -17,7 +17,7 @@ function breol_news_page_news_page() {
 
   if (empty($query_parameters)) {
     // Define query.
-    $news_query = _breol_news_page_news_query_empty($items);
+    $news_query = _breol_news_page_news_query($items);
   }
   else {
     $news_category = '';
@@ -31,7 +31,7 @@ function breol_news_page_news_page() {
     $title = !empty($term) ? t('News about !term', array('!term' => $term->name), array('context' => 'pluralis')) : $title;
 
     // Define query.
-    $news_query = _breol_news_page_news_query_parameters($items, $news_category);
+    $news_query = _breol_news_page_news_query($items, $news_category);
   }
 
   $news_res = $news_query->execute();
@@ -66,32 +66,11 @@ function breol_news_page_news_page() {
  * Implements hook_query_TAG_alter()
  *
  * Get all relevant nodes without a news type tag.
+ * This is the only way to get around a left join in an entity query.
  */
-function breol_news_page_query_node_is_not_tagged_alter(QueryAlterableInterface $query) {
+function breol_news_page_query_b_news_node_is_not_tagged_alter(QueryAlterableInterface $query) {
   $query->leftJoin('field_data_field_news_type', 'o', '(node.nid = o.entity_id AND o.entity_type = :entity_type)', array(':entity_type' => 'node'));
   $query->isNull('o.field_news_type_tid');
-}
-
-/**
- * Get all items without a tag.
- *
- * See https://www.drupal.org/project/drupal/issues/1157006#comment-7634027
- *
- * @param $items integer
- *   The number of items to display.
- *
- * @return \EntityFieldQuery
- *   The entity field query.
- */
-function _breol_news_page_news_query_empty($items) {
-  $news_query = new EntityFieldQuery();
-  return $news_query
-    ->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'breol_news')
-    ->addTag('node_is_not_tagged')
-    ->propertyCondition('status', 1)
-    ->propertyOrderBy('changed', 'DESC')
-    ->pager($items, 1);
 }
 
 /**
@@ -105,14 +84,21 @@ function _breol_news_page_news_query_empty($items) {
  * @return \EntityFieldQuery
  *  The entity field query
  */
-function _breol_news_page_news_query_parameters($items, $news_category) {
+function _breol_news_page_news_query($items, $news_category = '') {
   // Make entity field query with news catagory as condition.
   $news_query = new EntityFieldQuery();
-  return $news_query
-    ->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'breol_news')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('field_news_type', 'tid', array($news_category))
-    ->propertyOrderBy('changed', 'DESC')
-    ->pager($items, 1);
+  $news_query->entityCondition('entity_type', 'node');
+  $news_query->entityCondition('bundle', 'breol_news');
+  $news_query->propertyCondition('status', 1);
+  // Get all not-tagged news.
+  if (empty($news_category)) {
+    $news_query->addTag('b_news_node_is_not_tagged');
+  }
+  // Get all news tagged with a specific term.
+  else {
+    $news_query->fieldCondition('field_news_type', 'tid', array($news_category));
+  }
+  $news_query->propertyOrderBy('changed', 'DESC');
+  $news_query->pager($items, 1);
+  return $news_query;
 }
