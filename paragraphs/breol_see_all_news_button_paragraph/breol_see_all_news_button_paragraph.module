@@ -6,3 +6,25 @@
  */
 
 include_once 'breol_see_all_news_button_paragraph.features.inc';
+
+/**
+ * Implements HOOK_preprocess_entity().
+ *
+ * Prepare button text and query parameters from paragraph data.
+ */
+function breol_see_all_news_button_paragraph_preprocess_entity(&$variables) {
+ if ($variables['entity_type'] == 'paragraphs_item') {
+  if ($variables['paragraphs_item']->bundle == 'see_all_news_button') {
+   $variables['button_query'] = array();
+   $wrapper = entity_metadata_wrapper('paragraphs_item', $variables['paragraphs_item']);
+   $type = $wrapper->field_news_page_button_type->value();
+   $button_text = $wrapper->field_news_page_button_text->value();
+   $variables['button_text'] = isset($button_text) ? $button_text : t('See all news');
+   if (isset($type)) {
+    $variables['button_query'] = array(
+      $type->vocabulary_machine_name => $type->tid
+    );
+   }
+  }
+ }
+}

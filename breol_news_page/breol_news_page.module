@@ -44,6 +44,7 @@ function breol_news_page_theme() {
         'image_file' => NULL,
         'content' => NULL,
         'pager' => NULL,
+        'title' => NULL,
       ),
       'file' => 'breol_news_page.theme.inc',
       'template' => 'breol_news_page',
