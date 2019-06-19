@@ -343,6 +343,8 @@ function breol_base_update_7143() {
     'appbanners_android_name' => 'eReolen GO! app',
     'appbanners_android_short_name' => 'eReolen GO! app',
 
+    'appbanners_ios_app_id' => '1149963343',
+
     // Include banner on all pages.
     'appbanners_pages' => '*',
     'appbanners_visibility' => 'include',
