@@ -329,3 +329,28 @@ function breol_base_update_7142() {
   // Ensure that form alter is executed last.
   db_query("UPDATE {system} SET weight = 300 WHERE type = 'module' AND name = 'breol_base'");
 }
+
+/**
+ * Enable and configure appbanners.
+ */
+function breol_base_update_7143() {
+  module_enable(array('appbanners'), TRUE);
+
+  // Default variable values.
+  $variables = array(
+    'appbanners_android_app_id' => 'io.gonative.android.wwlqm',
+    'appbanners_android_icon' => '/sites/all/themes/wille/images/favicon/play-store-icon-192.png',
+    'appbanners_android_name' => 'eReolen GO! app',
+    'appbanners_android_short_name' => 'eReolen GO! app',
+
+    'appbanners_ios_app_id' => '1149963343',
+
+    // Include banner on all pages.
+    'appbanners_pages' => '*',
+    'appbanners_visibility' => 'include',
+  );
+
+  foreach ($variables as $name => $value) {
+    variable_set($name, $value);
+  }
+}
