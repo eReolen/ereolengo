@@ -381,7 +381,7 @@ function _ding_unilogin_login($username) {
 
     if ($access) {
       $municipalities = $user->getInstitutionMunicipalities();
-      $libraries = publizon_filter_known_municipalities($municipalities);
+      $libraries = publizon_filter_libraries_list($municipalities);
 
       if (!empty($libraries)) {
         // Take the first one.
