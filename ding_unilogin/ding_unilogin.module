@@ -249,7 +249,8 @@ function ding_unilogin_publizon_client_id_alter(&$client_id) {
 /**
  * Whether to globally log out.
  *
- * @param null $state
+ * @param mixed $state
+ *   The current logout state.
  *
  * @return array|mixed|null
  */

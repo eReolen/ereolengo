@@ -13,8 +13,8 @@
       $('.adgangsplatformen-button').once(function() {
         var element = $(this);
         var path = window.location.pathname;
-        if (path === "/") {
-          path = "/user";
+        if (path === '/') {
+          path = '/user';
         }
         element.attr('href', element.attr('href') + '?destination=' + path);
       });
