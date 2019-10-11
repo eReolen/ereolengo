@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function breol_base_install() {
+  db_update('system')
+    ->fields(array('weight' => 10000))
+    ->condition('name', 'breol_base')
+    ->condition('type', 'module')
+    ->execute();
+}
+
+/**
  * Disable unused modules.
  */
 function breol_base_update_7101() {
@@ -353,4 +364,15 @@ function breol_base_update_7143() {
   foreach ($variables as $name => $value) {
     variable_set($name, $value);
   }
+}
+
+/**
+ * Set new module weight for SSO login execution order.
+ */
+function breol_base_update_7144() {
+  db_update('system')
+    ->fields(array('weight' => 10000))
+    ->condition('name', 'breol_base')
+    ->condition('type', 'module')
+    ->execute();
 }
