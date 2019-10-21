@@ -68,7 +68,7 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
   $form['auth'] = array(
     '#type' => 'fieldset',
     '#title' => t('UNI•Login Auth'),
-    '#description' => t('Settings for the authenticaion web services.'),
+    '#description' => t('Settings for the authentication web services.'),
   );
 
   $form['auth']['ding_unilogin_auth_context'] = array(
