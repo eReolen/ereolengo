@@ -134,13 +134,21 @@ function ding_unilogin_url_json($path) {
  *   The state of the form.
  */
 function ding_unilogin_form_alter(&$form, &$form_state, $form_id) {
-  if (in_array($form_id, array(
+  $form_ids = array(
     'user_login',
     'user_login_block',
     'ding_user_authenticate_form',
-  ))) {
+  );
+
+  if (in_array($form_id, $form_ids)) {
     if (variable_get('ding_unilogin_id', '')) {
-      $form['unilogin'] = array(
+      $form['unilogin_wrapper'] = array(
+        '#type' => 'fieldset',
+        '#description' => t('Log in via !service', array('!service' => '<span class="unilogin-logo">UNI•Login</span>')),
+        '#weight' => -10,
+      );
+
+      $form['unilogin_wrapper']['unilogin'] = array(
         '#attributes' => array(
           'class' => array(
             'unilogin-button',
@@ -150,16 +158,15 @@ function ding_unilogin_form_alter(&$form, &$form_state, $form_id) {
         ),
         '#type' => 'link',
         '#href' => '#',
-        '#title' => t('Log in via !service',
-                      array(
-                        '!service' => '<span class="unilogin-logo">UNI•Login</span>',
-                      )),
+        '#title' => t('Login'),
         '#options' => array('html' => TRUE),
         '#attached' => array(
           'js' => array(
             drupal_get_path('module', 'ding_unilogin') . '/js/ding_unilogin.js',
           ),
         ),
+        '#prefix' => '<div class="unilogin-wrapper">',
+        '#suffix' => '</div>',
       );
     }
   }
@@ -195,8 +202,10 @@ function ding_unilogin_ding_unilogin_login($user) {
     if (!$access) {
       watchdog('ding_unilogin', 'UNI•Login user %user does not have appropriate license.', array('%user' => $user->name), WATCHDOG_NOTICE);
     }
+
     return $access;
   }
+
   return TRUE;
 }
 
@@ -207,8 +216,7 @@ function ding_unilogin_ding_unilogin_login($user) {
  * ding_unilogin_drupal_goto_alter to trigger on.
  */
 function ding_unilogin_user_logout($account) {
-  if (variable_get('ding_unilogin_global_logout', FALSE) &&
-      ding_unilogin_authenticated($account)) {
+  if (variable_get('ding_unilogin_global_logout', FALSE) && ding_unilogin_authenticated($account)) {
     _ding_unilogin_global_logout(TRUE);
   }
 }
@@ -240,6 +248,11 @@ function ding_unilogin_publizon_client_id_alter(&$client_id) {
 
 /**
  * Whether to globally log out.
+ *
+ * @param mixed $state
+ *   The current logout state.
+ *
+ * @return array|mixed|null
  */
 function _ding_unilogin_global_logout($state = NULL) {
   $logout = &drupal_static(__FUNCTION__);
@@ -251,54 +264,46 @@ function _ding_unilogin_global_logout($state = NULL) {
 }
 
 /**
- * Handle logging in returing UNI•Login users.
+ * Handle logging in returning UNI•Login users.
  *
  * @see http://www.stil.dk/-/media/STIL/Filer/Publikationer/Tekniske-vejledninger/uni-login-authentication.ashx?la=da
  * @see http://www.stil.dk/It-og-administration/Brugere-og-adgangsstyring/Udbyder-UNILogin/Dokumentation
  */
 function _ding_unilogin_handle_login() {
-  if (isset($_GET['user']) &&
-      isset($_GET['timestamp']) &&
-      isset($_GET['auth'])) {
+  if (isset($_GET['user']) && isset($_GET['timestamp']) && isset($_GET['auth'])) {
+
     // Error message in case of errors.
     $error = FALSE;
+
     // Whether we successfully logged the user in.
     $success = FALSE;
-    // Validate ticket.
-    $hash = md5($_GET['timestamp'] .
-                variable_get('ding_unilogin_secret', '') .
-                $_GET['user']);
-    if ($hash === $_GET['auth']) {
-      $time = DateTime::createFromFormat('YmdHis', $_GET['timestamp'],
-                                         new DateTimeZone('UTC'));
 
+    // Validate ticket.
+    $hash = md5($_GET['timestamp'] . variable_get('ding_unilogin_secret', '') . $_GET['user']);
+    if ($hash === $_GET['auth']) {
+      $time = DateTime::createFromFormat('YmdHis', $_GET['timestamp'], new DateTimeZone('UTC'));
       if ($time) {
         // Check that the given time stamp is in the past (with 5 seconds
         // grace to avoid NTP race conditions), but not older than
         // one minute.
         $now = (new DateTime())->getTimestamp();
-        if ($time->getTimestamp() < ($now + 5) &&
-            ($now - $time->getTimestamp()) < 60
-        ) {
+        if ($time->getTimestamp() < ($now + 5) && ($now - $time->getTimestamp()) < 60) {
           $success = _ding_unilogin_login($_GET['user']);
         }
         else {
           $error = 'Timestamp %time too old for %user';
         }
-
       }
       else {
         $error = 'Could not parse timestamp %time for %user';
       }
     }
     else {
-      $error = "Auth hash din't validate for %user";
+      $error = "Auth hash did not validate for %user";
     }
 
     if ($error) {
-      watchdog('ding_unilogin', $error,
-               array('%time' => $_GET['timestamp'], '%user' => $_GET['user']),
-               WATCHDOG_WARNING);
+      watchdog('ding_unilogin', $error, array('%time' => $_GET['timestamp'], '%user' => $_GET['user']), WATCHDOG_WARNING);
       drupal_set_message(t('Could not understand the reply from UNI•Login, so cannot log you in.'), 'error');
     }
     // Redirect to current_path() to clear most GET parameters.
@@ -332,14 +337,19 @@ function ding_unilogin_url($path = NULL) {
 
   $secret = variable_get('ding_unilogin_secret', '');
   return sprintf('https://sso.emu.dk/unilogin/login.cgi?id=%s&path=%s&auth=%s',
-                 $unilogin_id,
-                 urlencode(base64_encode($path)),
-                 md5($path . $secret)
+     $unilogin_id,
+     urlencode(base64_encode($path)),
+     md5($path . $secret)
   );
 }
 
 /**
  * Check whether a user is logged in via UNI•Login.
+ *
+ * @param null $account
+ *
+ * @return bool
+ *   TRUE if authenticated with unilogin else FALSE.
  */
 function ding_unilogin_authenticated($account = NULL) {
   global $user;
@@ -358,6 +368,9 @@ function ding_unilogin_authenticated($account = NULL) {
  *
  * @return bool
  *   Whether the user was logged in.
+ *
+ * @throws \DingProviderDoesntImplement
+ * @throws \DingProviderNoProvider
  */
 function _ding_unilogin_login($username) {
   _ding_unilogin_in_progress(TRUE);
@@ -381,7 +394,7 @@ function _ding_unilogin_login($username) {
 
     if ($access) {
       $municipalities = $user->getInstitutionMunicipalities();
-      $libraries = publizon_filter_known_municipalities($municipalities);
+      $libraries = publizon_filter_libraries_list($municipalities);
 
       if (!empty($libraries)) {
         // Take the first one.
@@ -461,6 +474,9 @@ function _ding_unilogin_login($username) {
  *
  * @param string $service
  *   The service to get, either 'auth', 'user' or 'inst'.
+ *
+ * @return \DingUniloginWSIautor|\DingUniloginWSIbruger|\DingUniloginWSIinst
+ *   Service object.
  */
 function ding_unilogin_wservice($service) {
   switch ($service) {
