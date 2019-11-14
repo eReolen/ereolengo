@@ -5,6 +5,16 @@
  * Base module for ereolen for kids.
  */
 
+
+/**
+ * Implements hook_init().
+ */
+function breol_base_init() {
+  if (module_exists('ding_adgangsplatformen')) {
+    drupal_add_js(drupal_get_path('module', 'breol_base') . '/js/breol_base_adgangsplatformen.js', 'file');
+  }
+}
+
 /**
  * Implements hook_form_alter().
  *
@@ -12,24 +22,59 @@
  */
 function breol_base_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
-    case 'user_login':
-    case 'user_login_block':
-      // Remove into text from DDB core.
-      if (!empty($form['intro_text'])) {
-        unset($form['intro_text']);
-      }
-
-      // Change the login fields.
-      unset($form['user_login_container']['name']['#attributes']['placeholder']);
-      $form['user_login_container']['name']['#title_display'] = 'before';
-      unset($form['user_login_container']['pass']['#attributes']['placeholder']);
-      $form['user_login_container']['pass']['#title_display'] = 'before';
-      break;
-
     case 'ding_loan_loans_form':
     case 'ding_reservation_reservations_notready_form':
       $form['actions_container']['#access'] = FALSE;
       break;
+  }
+
+  $form_ids = array(
+    'user_login',
+    'user_login_block',
+    'ding_user_authenticate_form',
+  );
+
+  if (in_array($form_id, $form_ids)) {
+    if (module_exists('ding_adgangsplatformen')) {
+      $form['adgangsplatformen-wrapper'] = array(
+        '#type' => 'fieldset',
+        '#description' => t('Log in via adgangsplatformen'),
+        '#weight' => 10,
+      );
+
+      $form['adgangsplatformen-wrapper']['button'] = array(
+        '#attributes' => array(
+          'class' => array(
+            'adgangsplatformen-button',
+          ),
+        ),
+        '#type' => 'link',
+        '#href' => DING_ADGANGSPLATFORMEN_LOGIN_URL,
+        '#title' => t('Login'),
+        '#options' => array('html' => TRUE),
+        '#prefix' => '<div class="adgangsplatformen-wrapper">',
+        '#suffix' => '</div>',
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_ajax_login_command().
+ *
+ * This is an hack to get around the fact that we need adgangsplatformen to
+ * hijack ajax login url's, but on eReolenGo we need the normal login to be
+ * shown first to give the option to use uni-login or adgangsplatformen. This
+ * hook is part of the ding_user SSO solution from DDB Core - a little mis-used
+ * here.
+ */
+function breol_base_ajax_login_command($path) {
+  if (module_exists('ding_adgangsplatformen')) {
+    $form_state = array();
+    $form = drupal_build_form('user_login', $form_state);
+    $login_form = drupal_render($form);
+
+    return ajax_command_ding_popup('ding_user', t('Login'), $login_form, array('resubmit' => TRUE));
   }
 }
 
