@@ -131,6 +131,7 @@ class DingUniloginUser {
     $municipality_ids = array();
 
     $institutions = $this->getUserService()->getUserInstitutions($this->name);
+    $institutions = ding_unilogin_filter_institutions($institutions);
     foreach ($institutions as $institution_id) {
       $institution = $this->getInstitutionService()->getInstitution($institution_id);
       if (isset($institution->kommunenr)) {

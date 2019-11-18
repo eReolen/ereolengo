@@ -34,6 +34,15 @@ function ding_unilogin_menu() {
     'file' => 'ding_unilogin.admin.inc',
   );
 
+  $items['admin/config/ding/unilogin/institutions'] = array(
+    'title' => 'UNI•Login',
+    'description' => 'Configure UNI•Login institutions',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ding_unilogin_admin_institutions_form'),
+    'access arguments' => array('configure unilogin'),
+    'file' => 'ding_unilogin.admin.inc',
+  );
+
   $items['ding_unilogin/get/%'] = array(
     'page callback' => 'ding_unilogin_url_json',
     'page arguments' => array(2),
@@ -524,4 +533,36 @@ function _ding_unilogin_in_progress($new_state = NULL) {
   }
 
   return $state;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ding_unilogin_theme() {
+  return array(
+    'ding_unilogin_admin_institutions_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Filter institution numbers if requested.
+ *
+ * @param array
+ *   The institution ids.
+ * @return array
+ *   The filtered institution ids.
+ */
+function ding_unilogin_filter_institutions(array $institutions) {
+  if (variable_get('ding_unilogin_institutions_apply_filter', FALSE)) {
+    $numbers = array_keys(variable_get('ding_unilogin_institutions', []));
+    $institutions = array_filter($institutions, static function ($institution_id) use ($numbers) {
+      // Note: we use non-strict comparison to be able to compare int and
+      // string values.
+      return in_array($institution_id, $numbers, FALSE);
+    });
+  }
+
+  return $institutions;
 }
