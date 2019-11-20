@@ -384,6 +384,7 @@ function ding_unilogin_authenticated($account = NULL) {
 function _ding_unilogin_login($username) {
   _ding_unilogin_in_progress(TRUE);
   $access = FALSE;
+  $unilogin_data = [];
 
   try {
     $user = new DingUniloginUser(
@@ -402,9 +403,12 @@ function _ding_unilogin_login($username) {
     }
 
     if ($access) {
-      $municipalities = $user->getInstitutionMunicipalities();
-      $libraries = publizon_filter_libraries_list($municipalities);
+      $institutions = $user->getInstitutionsIds();
+      $municipalities = $user->getInstitutionMunicipalities($institutions);
 
+      $unilogin_data['institutions'] = $user->getInstitutions();
+
+      $libraries = publizon_filter_libraries_list($municipalities);
       if (!empty($libraries)) {
         // Take the first one.
         $library = reset($libraries);
@@ -453,7 +457,11 @@ function _ding_unilogin_login($username) {
   $account = _ding_user_create_account($user->getAuthName(), $auth_res);
 
   // Make a note that this is a UNI•Login account in data by saving once more.
-  user_save($account, array('data' => array('unilogin' => TRUE)));
+  $unilogin_user = user_save($account, array(
+    'data' => array(
+      'unilogin' => $unilogin_data,
+    ),
+  ));
 
   // Check that a profile exists for the user and if not create one.
   _ding_user_create_profile2($account);
@@ -471,6 +479,10 @@ function _ding_unilogin_login($username) {
   }
 
   _ding_unilogin_in_progress(FALSE);
+
+  foreach (module_implements('ding_unilogin_login_success') as $module) {
+    module_invoke($module, 'ding_unilogin_login_success', $unilogin_user);
+  }
 
   $form_state['uid'] = $account->uid;
   ding_provider_invoke('user', 'authenticate_finalize', $account);
@@ -549,20 +561,21 @@ function ding_unilogin_theme() {
 /**
  * Filter institution numbers if requested.
  *
- * @param array
+ * @param array $institution_ids
  *   The institution ids.
+ *
  * @return array
  *   The filtered institution ids.
  */
-function ding_unilogin_filter_institutions(array $institutions) {
+function ding_unilogin_filter_institutions(array $institution_ids) {
   if (variable_get('ding_unilogin_institutions_apply_filter', FALSE)) {
-    $numbers = array_keys(variable_get('ding_unilogin_institutions', []));
-    $institutions = array_filter($institutions, static function ($institution_id) use ($numbers) {
+    $allowed_ids = array_keys(variable_get('ding_unilogin_institutions', []));
+    $institution_ids = array_filter($institution_ids, static function ($institution_id) use ($allowed_ids) {
       // Note: we use non-strict comparison to be able to compare int and
       // string values.
-      return in_array($institution_id, $numbers, FALSE);
+      return in_array($institution_id, $allowed_ids, FALSE);
     });
   }
 
-  return $institutions;
+  return $institution_ids;
 }

@@ -45,5 +45,18 @@ function hook_ding_unilogin_login(DingUniloginUser $user) {
 }
 
 /**
+ * Hook called after user has been successfully authenticated via UNI•Login.
+ *
+ * Useful UNI•Login information is available in `$user->data['unilogin']`:
+ *
+ *  'institutions': a list of instution objects.
+ *
+ * @param object $user
+ *   The user.
+ */
+function hook_ding_unilogin_login_success($user) {
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
