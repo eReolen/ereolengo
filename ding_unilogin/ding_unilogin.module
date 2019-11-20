@@ -480,10 +480,6 @@ function _ding_unilogin_login($username) {
 
   _ding_unilogin_in_progress(FALSE);
 
-  foreach (module_implements('ding_unilogin_login_success') as $module) {
-    module_invoke($module, 'ding_unilogin_login_success', $unilogin_user);
-  }
-
   $form_state['uid'] = $account->uid;
   ding_provider_invoke('user', 'authenticate_finalize', $account);
   user_login_submit(array(), $form_state);
