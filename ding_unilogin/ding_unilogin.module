@@ -26,7 +26,7 @@ function ding_unilogin_menu() {
 
   // Administration config page.
   $items['admin/config/ding/unilogin'] = array(
-    'title' => 'UNI•Login',
+    'title' => 'UNI•Login access',
     'description' => 'Configure UNI•Login access',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_settings_form'),
@@ -34,8 +34,8 @@ function ding_unilogin_menu() {
     'file' => 'ding_unilogin.admin.inc',
   );
 
-  $items['admin/config/ding/unilogin/institutions'] = array(
-    'title' => 'UNI•Login',
+  $items['admin/config/ding/unilogin_institutions'] = array(
+    'title' => 'UNI•Login institutions',
     'description' => 'Configure UNI•Login institutions',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_institutions_form'),
@@ -565,11 +565,9 @@ function ding_unilogin_theme() {
  */
 function ding_unilogin_filter_institutions(array $institution_ids) {
   if (variable_get('ding_unilogin_institutions_apply_filter', FALSE)) {
-    $allowed_ids = array_keys(variable_get('ding_unilogin_institutions', []));
-    $institution_ids = array_filter($institution_ids, static function ($institution_id) use ($allowed_ids) {
-      // Note: we use non-strict comparison to be able to compare int and
-      // string values.
-      return in_array($institution_id, $allowed_ids, FALSE);
+    $institutions = variable_get('ding_unilogin_institutions', []);
+    $institution_ids = array_filter($institution_ids, static function ($institution_id) use ($institutions) {
+      return isset($institutions[$institution_id]);
     });
   }
 

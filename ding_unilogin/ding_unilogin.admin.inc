@@ -95,6 +95,8 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
  * UNI•Login institutions form.
  */
 function ding_unilogin_admin_institutions_form() {
+  $institutions = variable_get('ding_unilogin_institutions', []);
+
   $form['ding_unilogin_institutions_apply_filter'] = array(
     '#type' => 'checkbox',
     '#title' => t('Apply institutions filter'),
@@ -102,33 +104,46 @@ function ding_unilogin_admin_institutions_form() {
     '#description' => t("If set, a user's list of institutions will be filtered by the list below when signing in via UNI•Login."),
   );
 
-  $institutions = variable_get('ding_unilogin_institutions', []);
-
   $form['ding_unilogin_institutions'] = array(
     '#type' => 'fieldset',
     '#title' => t('Institutions'),
     '#tree' => TRUE,
-    '#description' => t('Clear the institution number to remove a row.'),
+    '#description' => t('Clear the institution id to remove a row.'),
   );
 
-  // Add empty options.
-  for ($i = 0; $i < 10; $i++) {
-    $institutions[] = array(
-      'number' => '',
-    );
-  }
+  // Add empty row.
+  $institutions['__new__'] = array(
+    'id' => '',
+  );
 
   foreach ($institutions as $index => $institution) {
     $form['ding_unilogin_institutions'][$index] = array(
-      'number' => array(
+      'id' => array(
         '#type' => 'textfield',
-        '#title' => t('Institution number'),
-        '#default_value' => $institution['number'] ?? NULL,
+        '#size' => 10,
+        '#title' => t('Id'),
+        '#default_value' => $institution['id'] ?? NULL,
       ),
-      'number_of_students' => array(
+      'name' => array(
         '#type' => 'textfield',
-        '#title' => t('Number of students'),
-        '#default_value' => $institution['number_of_students'] ?? NULL,
+        '#title' => t('Name'),
+        '#default_value' => $institution['name'] ?? NULL,
+      ),
+      'number_of_members' => array(
+        '#type' => 'textfield',
+        '#size' => 10,
+        '#title' => t('Number of members'),
+        '#default_value' => $institution['number_of_members'] ?? NULL,
+      ),
+      'group' => array(
+        '#type' => 'textfield',
+        '#title' => t('Group'),
+        '#default_value' => $institution['group'] ?? NULL,
+      ),
+      'type' => array(
+        '#type' => 'textfield',
+        '#title' => t('Type'),
+        '#default_value' => $institution['type'] ?? NULL,
       ),
     );
   }
@@ -174,11 +189,12 @@ function theme_ding_unilogin_admin_institutions_form($variables) {
 function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_state) {
   $values = $form_state['values'];
 
+  // Get institutions with id.
   $institutions = array_filter($values['ding_unilogin_institutions'], static function (array $institution) {
-    return $institution['number'];
+    return $institution['id'];
   });
-  // Note: array_column will convert numeric values to integer keys.
-  $institutions = array_column($institutions, NULL, 'number');
+  // Note: PHP will work very hard to convert numeric keys to integer keys.
+  $institutions = array_column($institutions, NULL, 'id');
 
   variable_set('ding_unilogin_institutions_apply_filter', (bool) $values['ding_unilogin_institutions_apply_filter']);
   variable_set('ding_unilogin_institutions', $institutions);

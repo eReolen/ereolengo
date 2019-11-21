@@ -183,12 +183,12 @@ class DingUniloginUser {
       if (NULL === $institutionIds) {
         $institutionIds = $this->getInstitutionsIds();
       }
-      foreach ($institution_ids as $institution_id) {
+      foreach ($institutionIds as $institutionId) {
         $institution = $this->getInstitutionService()
-          ->getInstitution($institution_id);
+          ->getInstitution($institutionId);
         if (isset($institution->kommunenr)) {
           $municipalityIds[] = $institution->kommunenr;
-          $this->institutions[$institution_id] = $institution;
+          $this->institutions[$institutionId] = $institution;
         }
       }
 
