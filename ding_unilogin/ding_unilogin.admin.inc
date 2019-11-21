@@ -97,6 +97,18 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
 function ding_unilogin_admin_institutions_form() {
   $institutions = variable_get('ding_unilogin_institutions', []);
 
+  // Check that the huge form below can actually be handled.
+  $max_input_vars_current_value = (int) ini_get('max_input_vars');
+  $max_input_vars_recommended_value = (int) 4 * count($institutions) + 100;
+
+  if ($max_input_vars_current_value < $max_input_vars_recommended_value) {
+    drupal_set_message(t('The value of the PHP runtime variable <a href="!doc_url"><code>max_input_vars</code></a> is too low. The current value is <code>!current_value</code>, but it should be at least <code>!recommended_value</code>.', array(
+      '!doc_url' => 'https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars',
+      '!current_value' => $max_input_vars_current_value,
+      '!recommended_value' => $max_input_vars_recommended_value,
+    )), 'error');
+  }
+
   $form['ding_unilogin_institutions_apply_filter'] = array(
     '#type' => 'checkbox',
     '#title' => t('Apply institutions filter'),
