@@ -94,7 +94,7 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
 /**
  * UNI•Login institutions form.
  */
-function ding_unilogin_admin_institutions_form() {
+function ding_unilogin_admin_institutions_form($form, &$form_state) {
   $institutions = variable_get('ding_unilogin_institutions', []);
 
   // Check that the huge form below can actually be handled.
