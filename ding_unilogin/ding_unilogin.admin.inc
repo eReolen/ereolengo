@@ -169,6 +169,8 @@ function ding_unilogin_admin_institutions_form($form, &$form_state) {
 
 /**
  * Theme for UNI•Login institutions form.
+ *
+ * Renders fields of each institution as rows in a table.
  */
 function theme_ding_unilogin_admin_institutions_form($variables) {
   $form = $variables['form'];
