@@ -228,6 +228,7 @@ function ding_unilogin_user_logout($account) {
   if (variable_get('ding_unilogin_global_logout', FALSE) && ding_unilogin_authenticated($account)) {
     _ding_unilogin_global_logout(TRUE);
   }
+  _ding_unilogin_set_user_data(NULL);
 }
 
 /**
@@ -457,11 +458,8 @@ function _ding_unilogin_login($username) {
   $account = _ding_user_create_account($user->getAuthName(), $auth_res);
 
   // Make a note that this is a UNI•Login account in data by saving once more.
-  $unilogin_user = user_save($account, array(
-    'data' => array(
-      'unilogin' => $unilogin_data,
-    ),
-  ));
+  user_save($account, array('data' => array('unilogin' => TRUE)));
+  _ding_unilogin_set_user_data($unilogin_data);
 
   // Check that a profile exists for the user and if not create one.
   _ding_user_create_profile2($account);
@@ -572,4 +570,29 @@ function ding_unilogin_filter_institutions(array $institution_ids) {
   }
 
   return $institution_ids;
+}
+
+/**
+ * Get UNI•Login user data.
+ *
+ * @return null|array
+ *   The previously stored user data if any.
+ */
+function ding_unilogin_get_user_data() {
+  return $_SESSION['ding_unilogin_user_data'] ?? NULL;
+}
+
+/**
+ * Set UNI•Login user data.
+ *
+ * @param null|array $data
+ *   The data to store or NULL to clear the user data.
+ */
+function _ding_unilogin_set_user_data(array $data = NULL) {
+  if (NULL === $data) {
+    unset($_SESSION['ding_unilogin_user_data']);
+  }
+  else {
+    $_SESSION['ding_unilogin_user_data'] = $data;
+  }
 }
