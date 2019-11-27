@@ -122,23 +122,79 @@ class DingUniloginUser {
   }
 
   /**
+   * The institution ids for this user.
+   *
+   * @var array
+   */
+  private $institutionsIds;
+
+  /**
+   * Get a whitelisted list of ids of user's institutions.
+   *
+   * @return array
+   *   Institution ids.
+   */
+  public function getInstitutionsIds() {
+    if (NULL === $this->institutionsIds) {
+      $institutions = $this->getUserService()->getUserInstitutions($this->name);
+      $this->institutionsIds = ding_unilogin_filter_institutions($institutions);
+    }
+
+    return $this->institutionsIds;
+  }
+
+  /**
+   * The municipality ids for this user.
+   *
+   * @var array
+   */
+  private $municipalityIds;
+
+  /**
+   * List of institutions loaded in getInstitutionMunicipalities.
+   *
+   * @var array
+   */
+  private $institutions;
+
+  /**
+   * Get institutions.
+   *
+   * @return null|array
+   *   The list of institutions.
+   */
+  public function getInstitutions() {
+    return $this->institutions;
+  }
+
+  /**
    * Get the municipality IDs of the users institutions.
+   *
+   * @param null|array $institutionIds
+   *   A list of institutions.
    *
    * @return array
    *   Municipality ids.
    */
-  public function getInstitutionMunicipalities() {
-    $municipality_ids = array();
+  public function getInstitutionMunicipalities(array $institutionIds = NULL) {
+    if (NULL === $this->municipalityIds) {
+      $municipalityIds = [];
 
-    $institutions = $this->getUserService()->getUserInstitutions($this->name);
-    foreach ($institutions as $institution_id) {
-      $institution = $this->getInstitutionService()->getInstitution($institution_id);
-      if (isset($institution->kommunenr)) {
-        $municipality_ids[] = $institution->kommunenr;
+      if (NULL === $institutionIds) {
+        $institutionIds = $this->getInstitutionsIds();
       }
+      foreach ($institutionIds as $institutionId) {
+        $institution = $this->getInstitutionService()->getInstitution($institutionId);
+        if (isset($institution->kommunenr)) {
+          $municipalityIds[] = $institution->kommunenr;
+          $this->institutions[$institutionId] = $institution;
+        }
+      }
+
+      $this->municipalityIds = array_unique($municipalityIds);
     }
 
-    return $municipality_ids;
+    return $this->municipalityIds;
   }
 
   /**

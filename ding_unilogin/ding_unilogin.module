@@ -26,10 +26,19 @@ function ding_unilogin_menu() {
 
   // Administration config page.
   $items['admin/config/ding/unilogin'] = array(
-    'title' => 'UNI•Login',
+    'title' => 'UNI•Login access',
     'description' => 'Configure UNI•Login access',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_settings_form'),
+    'access arguments' => array('configure unilogin'),
+    'file' => 'ding_unilogin.admin.inc',
+  );
+
+  $items['admin/config/ding/unilogin_institutions'] = array(
+    'title' => 'UNI•Login institutions',
+    'description' => 'Configure UNI•Login institutions',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ding_unilogin_admin_institutions_form'),
     'access arguments' => array('configure unilogin'),
     'file' => 'ding_unilogin.admin.inc',
   );
@@ -219,6 +228,7 @@ function ding_unilogin_user_logout($account) {
   if (variable_get('ding_unilogin_global_logout', FALSE) && ding_unilogin_authenticated($account)) {
     _ding_unilogin_global_logout(TRUE);
   }
+  _ding_unilogin_set_user_data(NULL);
 }
 
 /**
@@ -375,6 +385,7 @@ function ding_unilogin_authenticated($account = NULL) {
 function _ding_unilogin_login($username) {
   _ding_unilogin_in_progress(TRUE);
   $access = FALSE;
+  $unilogin_data = [];
 
   try {
     $user = new DingUniloginUser(
@@ -393,9 +404,12 @@ function _ding_unilogin_login($username) {
     }
 
     if ($access) {
-      $municipalities = $user->getInstitutionMunicipalities();
-      $libraries = publizon_filter_libraries_list($municipalities);
+      $institutions = $user->getInstitutionsIds();
+      $municipalities = $user->getInstitutionMunicipalities($institutions);
 
+      $unilogin_data['institutions'] = $user->getInstitutions();
+
+      $libraries = publizon_filter_libraries_list($municipalities);
       if (!empty($libraries)) {
         // Take the first one.
         $library = reset($libraries);
@@ -445,6 +459,7 @@ function _ding_unilogin_login($username) {
 
   // Make a note that this is a UNI•Login account in data by saving once more.
   user_save($account, array('data' => array('unilogin' => TRUE)));
+  _ding_unilogin_set_user_data($unilogin_data);
 
   // Check that a profile exists for the user and if not create one.
   _ding_user_create_profile2($account);
@@ -524,4 +539,60 @@ function _ding_unilogin_in_progress($new_state = NULL) {
   }
 
   return $state;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function ding_unilogin_theme() {
+  return array(
+    'ding_unilogin_admin_institutions_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Filter institution numbers if requested.
+ *
+ * @param array $institution_ids
+ *   The institution ids.
+ *
+ * @return array
+ *   The filtered institution ids.
+ */
+function ding_unilogin_filter_institutions(array $institution_ids) {
+  if (variable_get('ding_unilogin_institutions_apply_filter', FALSE)) {
+    $institutions = variable_get('ding_unilogin_institutions', []);
+    $institution_ids = array_filter($institution_ids, static function ($institution_id) use ($institutions) {
+      return isset($institutions[$institution_id]);
+    });
+  }
+
+  return $institution_ids;
+}
+
+/**
+ * Get UNI•Login user data.
+ *
+ * @return null|array
+ *   The previously stored user data if any.
+ */
+function ding_unilogin_get_user_data() {
+  return $_SESSION['ding_unilogin_user_data'] ?? NULL;
+}
+
+/**
+ * Set UNI•Login user data.
+ *
+ * @param null|array $data
+ *   The data to store or NULL to clear the user data.
+ */
+function _ding_unilogin_set_user_data(array $data = NULL) {
+  if (NULL === $data) {
+    unset($_SESSION['ding_unilogin_user_data']);
+  }
+  else {
+    $_SESSION['ding_unilogin_user_data'] = $data;
+  }
 }
