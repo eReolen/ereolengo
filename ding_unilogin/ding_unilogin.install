@@ -13,6 +13,14 @@ function ding_unilogin_install() {
 }
 
 /**
+ * Implements hook_uninstall().
+ */
+function ding_unilogin_uninstall() {
+  variable_del('ding_unilogin_institutions_apply_filter');
+  variable_del('ding_unilogin_institutions');
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function ding_unilogin_update_dependencies() {
