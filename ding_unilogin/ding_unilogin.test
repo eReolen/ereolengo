@@ -1,0 +1,151 @@
+<?php
+
+/**
+ * Class DingUniloginApiTestCase.
+ */
+class DingUniloginApiTestCase extends DrupalUnitTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return [
+      'name' => 'UNI•Login api tests',
+      'description' => 'UNI•Login api tests',
+      'group' => 'ding_unilogin',
+    ];
+  }
+
+  /**
+   * A test.
+   */
+  public function testUnauthorized() {
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $response = drupal_http_request($url);
+
+    $this->assertEqual(401, $response->code);
+  }
+
+  /**
+   * A test.
+   */
+  public function testAuthorized() {
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+    ];
+    $response = drupal_http_request($url, $options);
+
+    $this->assertEqual(200, $response->code);
+
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+      'method' => 'POST',
+    ];
+    $response = drupal_http_request($url, $options);
+
+    $this->assertEqual(401, $response->code);
+
+  }
+
+  /**
+   * A test.
+   */
+  public function testUpdate() {
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+      ],
+      'method' => 'POST',
+    ];
+    $response = drupal_http_request($url, $options);
+
+    $this->assertEqual(400, $response->code);
+    $this->assertEqual('application/vnd.api+json', $response->headers['content-type']);
+    $data = json_decode($response->data, TRUE);
+    $this->assertTrue(array_key_exists('errors', $data));
+    $this->assertEqual(1, count($data['errors']));
+    $this->assertTrue(array_key_exists('title', $data['errors'][0]));
+    $this->assertEqual('Invalid content type: ', $data['errors'][0]['title']);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+        'content-type' => 'application/vnd.api+json',
+      ],
+      'method' => 'POST',
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(400, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertEqual('Invalid content', $data['errors'][0]['title']);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+        'content-type' => 'application/vnd.api+json',
+      ],
+      'method' => 'POST',
+      'data' => json_encode([]),
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(400, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertEqual('Invalid content', $data['errors'][0]['title']);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+        'content-type' => 'application/vnd.api+json',
+      ],
+      'method' => 'POST',
+      'data' => json_encode([
+        'data' => [
+          '023123' => [
+            'name' => 'a',
+            'type' => 's',
+            'group' => 'a',
+            'number_of_members' => 1231,
+          ],
+        ],
+      ]),
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(204, $response->code);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(200, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertTrue(array_key_exists('data', $data));
+    $this->assertEqual(1, count($data['data']));
+    $this->assertEqual('023123', array_keys($data['data'])[0]);
+
+    $url = url('/unilogin/api/institutions/023123', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(200, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertTrue(array_key_exists('data', $data));
+    $this->assertTrue(array_key_exists('id', $data['data']));
+    $this->assertEqual('023123', $data['data']['id']);
+  }
+
+}
