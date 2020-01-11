@@ -92,10 +92,37 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
 }
 
 /**
+ * UNI•Login api form.
+ */
+function ding_unilogin_admin_api_form($form, &$form_state) {
+  $form['api']['ding_unilogin_api_token_read'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Api token (read)'),
+    '#required' => TRUE,
+    // Elvis operator used to handle falsy values.
+    '#default_value' => variable_get('ding_unilogin_api_token_read') ?: sha1(random_bytes(32)),
+    '#description' => t('Token needed to access the api.'),
+  );
+
+  $form['api']['ding_unilogin_api_token_write'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Api token (write)'),
+    '#required' => TRUE,
+    // Elvis operator used to handle falsy values.
+    '#default_value' => variable_get('ding_unilogin_api_token_write') ?: sha1(random_bytes(32)),
+    '#description' => t('Token needed to access the api.'),
+  );
+
+  $form = system_settings_form($form);
+
+  return $form;
+}
+
+/**
  * UNI•Login institutions form.
  */
 function ding_unilogin_admin_institutions_form($form, &$form_state) {
-  $institutions = variable_get('ding_unilogin_institutions', []);
+  $institutions = _ding_unilogin_get_institutions();
 
   // Check that the huge form below can actually be handled.
   $max_input_vars_current_value = (int) ini_get('max_input_vars');
@@ -211,5 +238,5 @@ function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_
   $institutions = array_column($institutions, NULL, 'id');
 
   variable_set('ding_unilogin_institutions_apply_filter', (bool) $values['ding_unilogin_institutions_apply_filter']);
-  variable_set('ding_unilogin_institutions', $institutions);
+  _ding_unilogin_set_institutions($institutions);
 }
