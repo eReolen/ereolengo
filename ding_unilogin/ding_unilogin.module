@@ -654,6 +654,7 @@ function ding_unilogin_api_router() {
  */
 function ding_unilogin_jsonapi_deliver($result = NULL) {
   drupal_add_http_header('content-type', 'application/vnd.api+json');
+  drupal_add_http_header('cache-control', 'no-cache');
 
   if ($result instanceof \Exception) {
     if ($result instanceof HttpException) {
