@@ -3,6 +3,7 @@
 namespace Drupal\ding_unilogin\Controller;
 
 use Drupal\ding_unilogin\Exception\HttpBadRequestException;
+use Drupal\ding_unilogin\Exception\HttpNotFoundException;
 use Drupal\ding_unilogin\Exception\HttpUnauthorizedException;
 
 /**
@@ -63,7 +64,7 @@ class InstitutionController {
       return ['data' => $institutions[$id]];
     }
 
-    throw new HttpBadRequestException(sprintf('Invalid institution id: %s', $id));
+    throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));
   }
 
   /**

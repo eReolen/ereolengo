@@ -3,16 +3,16 @@
 namespace Drupal\ding_unilogin\Exception;
 
 /**
- * Class HttpUnauthorizedException.
+ * Class HttpNotFoundException.
  *
  * @package Drupal\ding_unilogin\Exception
  */
-class HttpUnauthorizedException extends HttpException {
+class HttpNotFoundException extends HttpException {
 
   /**
    * {@inheritdoc}
    */
-  public function __construct($message = 'Unauthorized', $code = 401, Throwable $previous = NULL) {
+  public function __construct($message = 'Not found', $code = 404, Throwable $previous = NULL) {
     parent::__construct($message, $code, $previous);
   }
 
@@ -20,7 +20,7 @@ class HttpUnauthorizedException extends HttpException {
    * {@inheritdoc}
    */
   public function getStatusHeaderName() {
-    return 'Unauthorized';
+    return 'Bad Request';
   }
 
 }

@@ -98,21 +98,20 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
   $form['api']['ding_unilogin_api_token_read'] = array(
     '#type' => 'textfield',
     '#title' => t('Api token (read)'),
-    '#required' => TRUE,
     // Elvis operator used to handle falsy values.
-    '#default_value' => variable_get('ding_unilogin_api_token_read') ?: sha1(random_bytes(32)),
-    '#description' => t('Token needed to access the api.'),
+    '#default_value' => variable_get('ding_unilogin_api_token_read'),
+    '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
   );
 
   $form['api']['ding_unilogin_api_token_write'] = array(
     '#type' => 'textfield',
     '#title' => t('Api token (write)'),
-    '#required' => TRUE,
     // Elvis operator used to handle falsy values.
-    '#default_value' => variable_get('ding_unilogin_api_token_write') ?: sha1(random_bytes(32)),
-    '#description' => t('Token needed to access the api.'),
+    '#default_value' => variable_get('ding_unilogin_api_token_write'),
+    '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
   );
 
+  $form['#submit'][] = 'ding_unilogin_admin_api_form_submit';
   $form = system_settings_form($form);
 
   return $form;
@@ -239,4 +238,18 @@ function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_
 
   variable_set('ding_unilogin_institutions_apply_filter', (bool) $values['ding_unilogin_institutions_apply_filter']);
   _ding_unilogin_set_institutions($institutions);
+}
+
+/**
+ * Submit handler for UNI•Login api form.
+ */
+function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {
+  $values = &$form_state['values'];
+
+  $fields = ['ding_unilogin_api_token_read', 'ding_unilogin_api_token_write'];
+  foreach ($fields as $field) {
+    if (empty(trim($values[$field]))) {
+      $values[$field] = sha1(random_bytes(32));
+    }
+  }
 }

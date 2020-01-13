@@ -16,4 +16,11 @@ class HttpBadRequestException extends HttpException {
     parent::__construct($message, $code, $previous);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getStatusHeaderName() {
+    return 'Bad Request';
+  }
+
 }

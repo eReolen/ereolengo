@@ -146,6 +146,15 @@ class DingUniloginApiTestCase extends DrupalUnitTestCase {
     $this->assertTrue(array_key_exists('data', $data));
     $this->assertTrue(array_key_exists('id', $data['data']));
     $this->assertEqual('023123', $data['data']['id']);
+
+    $url = url('/unilogin/api/institutions/hest', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(404, $response->code);
   }
 
 }
