@@ -111,6 +111,20 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
     '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
   );
 
+  $form['ereol_app_feeds_feeds'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Api endpoints'),
+    'content' => array(
+      '#markup' => implode('', array(
+        '<ul>',
+        '<li>' . l(t('Institutions'), '/unilogin/api/institutions') . '</li>',
+        '</ul>',
+      )),
+    ),
+  );
+
+  // Important: Our custom submit hook must be added before the ones added by
+  // `system_settings_form`.
   $form['#submit'][] = 'ding_unilogin_admin_api_form_submit';
   $form = system_settings_form($form);
 

@@ -16,7 +16,7 @@ class InstitutionController {
    */
   public function handle(array $args) {
     $authorization = $this->getRequestHeader('authorization');
-    if (!preg_match('/^token (?P<token>.+)$/', $authorization, $matches)) {
+    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
       throw new HttpUnauthorizedException();
     }
     $token = $matches['token'];
