@@ -103,6 +103,11 @@ class InstitutionController {
   protected function getRequestHeader($name) {
     $name = strtoupper(preg_replace('/[^a-z0-9]/i', '_', $name));
 
+    // Workaround for authorization header (which is removed by Varnish).
+    if ('AUTHORIZATION' === $name && isset($_SERVER['HTTP_X_' . $name])) {
+      return $_SERVER['HTTP_X_' . $name];
+    }
+
     return $_SERVER['HTTP_' . $name] ?? $_SERVER[$name] ?? NULL;
   }
 

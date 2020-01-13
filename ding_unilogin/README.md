@@ -4,7 +4,6 @@
 
 Go to `/admin/config/ding/unilogin_api` to set the api token.
 
-
 ### Endpoints
 
 This api adheres to the [JSON:API specification](https://jsonapi.org/).
@@ -19,12 +18,15 @@ This api adheres to the [JSON:API specification](https://jsonapi.org/).
 
 ```sh
 curl http://127.0.0.1/unilogin/api/institutions \
-     --header 'authorization: token «api read token»
+     --header 'x-authorization: token «api read token»
 ```
+
+**Important**: Note that the header name is `x-authorization` (not
+`authorization`)!
 
 ```sh
 curl http://127.0.0.1/unilogin/api/institutions/«id» \
-     --header 'authorization: token «api read token»
+     --header 'x-authorization: token «api read token»
 ```
 
 ## Tests
