@@ -92,20 +92,23 @@ function breol_inspiration_strongarm() {
       'workflow_tab' => array(
         'custom_settings' => FALSE,
       ),
+      'diff_standard' => array(
+        'custom_settings' => FALSE,
+      ),
     ),
     'extra_fields' => array(
       'form' => array(
         'metatags' => array(
-          'weight' => '4',
+          'weight' => '6',
         ),
         'title' => array(
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '2',
+          'weight' => '5',
         ),
         'redirect' => array(
-          'weight' => '1',
+          'weight' => '4',
         ),
       ),
       'display' => array(
