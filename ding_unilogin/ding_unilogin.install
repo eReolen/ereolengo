@@ -18,6 +18,8 @@ function ding_unilogin_install() {
 function ding_unilogin_uninstall() {
   variable_del('ding_unilogin_institutions_apply_filter');
   variable_del('ding_unilogin_institutions');
+  variable_del('ding_unilogin_api_token_read');
+  variable_del('ding_unilogin_api_token_write');
 }
 
 /**

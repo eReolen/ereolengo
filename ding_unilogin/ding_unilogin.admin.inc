@@ -111,7 +111,7 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
     '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
   );
 
-  $form['ereol_app_feeds_feeds'] = array(
+  $form['ding_unilogin_api_endpoints'] = array(
     '#type' => 'fieldset',
     '#title' => t('Api endpoints'),
     'content' => array(
