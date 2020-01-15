@@ -35,6 +35,6 @@ Note: The tests are run against the current site and will change the list of
 institutions!
 
 ```sh
-itkdev-docker-compose drush --yes pm-enable simpletest
-itkdev-docker-compose drush --uri=http://nginx0 test-run ding_unilogin
+docker-compose run --rm drush --root=/app --yes pm-enable simpletest
+docker-compose run --rm drush --root=/app --uri=http://nginx0 test-run ding_unilogin
 ```
