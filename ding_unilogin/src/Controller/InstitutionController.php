@@ -24,19 +24,22 @@ class InstitutionController {
     if (empty($args)) {
       $method = $_SERVER['REQUEST_METHOD'];
 
-      if ('POST' === $method) {
-        if (variable_get('ding_unilogin_api_token_write') !== $token) {
-          throw new HttpUnauthorizedException();
-        }
+      switch ($method) {
+        case 'POST':
+          if (variable_get('ding_unilogin_api_token_write') !== $token) {
+            throw new HttpUnauthorizedException();
+          }
+          return $this->update();
 
-        return $this->update();
+        case 'GET':
+          if (variable_get('ding_unilogin_api_token_read') !== $token) {
+            throw new HttpUnauthorizedException();
+          }
+          return $this->list();
+
+        default:
+          throw new HttpBadRequestException(sprintf('Method %s not supported', $method));
       }
-
-      if (variable_get('ding_unilogin_api_token_read') !== $token) {
-        throw new HttpUnauthorizedException();
-      }
-
-      return $this->list();
     }
     elseif (1 === \count($args)) {
       return $this->read($args[0]);
