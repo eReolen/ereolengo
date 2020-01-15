@@ -27,9 +27,10 @@ class ApiRouter {
     switch ($name) {
       case 'institutions':
         return new InstitutionController();
-    }
 
-    throw new \RuntimeException(sprintf('Invalid controller name: %s', $name));
+      default:
+        throw new \RuntimeException(sprintf('Invalid controller name: %s', $name));
+    }
   }
 
 }
