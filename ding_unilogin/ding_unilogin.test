@@ -109,6 +109,52 @@ class DingUniloginApiTestCase extends DrupalUnitTestCase {
       'method' => 'POST',
       'data' => json_encode([
         'data' => [
+          'hest' => [
+            'name' => 'a',
+            'type' => 's',
+            'group' => 'a',
+            'number_of_members' => 87,
+          ],
+        ],
+      ]),
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(400, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertEqual('Invalid id: hest', $data['errors'][0]['title']);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+        'content-type' => 'application/vnd.api+json',
+      ],
+      'method' => 'POST',
+      'data' => json_encode([
+        'data' => [
+          '023123' => [
+            'name' => 'a',
+            'type' => 's',
+            'group' => 'a',
+            'number_of_members' => -1,
+          ],
+        ],
+      ]),
+    ];
+    $response = drupal_http_request($url, $options);
+    $this->assertEqual(400, $response->code);
+    $data = json_decode($response->data, TRUE);
+    $this->assertEqual('Invalid number_of_members: -1', $data['errors'][0]['title']);
+
+    $url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+    $options = [
+      'headers' => [
+        'authorization' => 'token ' . variable_get('ding_unilogin_api_token_write'),
+        'content-type' => 'application/vnd.api+json',
+      ],
+      'method' => 'POST',
+      'data' => json_encode([
+        'data' => [
           '023123' => [
             'name' => 'a',
             'type' => 's',

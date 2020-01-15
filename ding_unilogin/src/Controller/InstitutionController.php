@@ -88,10 +88,16 @@ class InstitutionController {
 
     // Validate data.
     foreach ($data as $id => &$item) {
-      if (!isset($item['name'], $item['group'], $item['type'], $item['number_of_members'])
-        || !preg_match('/^[a-z0-9]{6}$/i', (string) $id)) {
+      if (!isset($item['name'], $item['group'], $item['type'], $item['number_of_members'])) {
         throw new HttpBadRequestException(sprintf('Invalid content'));
       }
+      if (!preg_match('/^[a-z0-9]{6}$/i', (string) $id)) {
+        throw new HttpBadRequestException(sprintf('Invalid id: %s', $id));
+      }
+      if (!is_int($item['number_of_members']) || $item['number_of_members'] <= 0) {
+        throw new HttpBadRequestException(sprintf('Invalid number_of_members: %d', $item['number_of_members']));
+      }
+
       $item['id'] = $id;
     }
 
