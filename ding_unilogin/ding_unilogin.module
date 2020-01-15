@@ -34,7 +34,7 @@ function ding_unilogin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_settings_form'),
     'access arguments' => array('configure unilogin'),
-    'file' => 'ding_unilogin.admin.inc',
+    'file' => 'includes/ding_unilogin.admin.inc',
   );
 
   $items['admin/config/ding/unilogin_institutions'] = array(
@@ -43,7 +43,7 @@ function ding_unilogin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_institutions_form'),
     'access arguments' => array('configure unilogin'),
-    'file' => 'ding_unilogin.admin.inc',
+    'file' => 'includes/ding_unilogin.admin.inc',
   );
 
   $items['admin/config/ding/unilogin_api'] = array(
@@ -52,7 +52,7 @@ function ding_unilogin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_api_form'),
     'access arguments' => array('configure unilogin'),
-    'file' => 'ding_unilogin.admin.inc',
+    'file' => 'includes/ding_unilogin.admin.inc',
   );
 
   $items['ding_unilogin/get/%'] = array(
