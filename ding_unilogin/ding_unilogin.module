@@ -648,9 +648,10 @@ function ding_unilogin_api_router() {
 }
 
 /**
- * Deliver data in the JSON:API format.
+ * Deliver data in the JSON:API format (https://jsonapi.org/format/).
  *
- * @see https://jsonapi.org/format/
+ * @param null|array|\Exception $result
+ *   The result to return.
  */
 function ding_unilogin_jsonapi_deliver($result = NULL) {
   drupal_add_http_header('content-type', 'application/vnd.api+json');

@@ -13,15 +13,23 @@ class InstitutionController {
 
   /**
    * Handle request.
+   *
+   * @param array $path
+   *   The request path.
+   *
+   * @return array|null
+   *   The data.
+   *
+   * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
-  public function handle(array $args) {
+  public function handle(array $path) {
     $authorization = $this->getRequestHeader('authorization');
     if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
       throw new HttpUnauthorizedException();
     }
     $token = $matches['token'];
 
-    if (empty($args)) {
+    if (empty($path)) {
       $method = $_SERVER['REQUEST_METHOD'];
 
       switch ($method) {
@@ -41,8 +49,8 @@ class InstitutionController {
           throw new HttpBadRequestException(sprintf('Method %s not supported', $method));
       }
     }
-    elseif (1 === \count($args)) {
-      return $this->read($args[0]);
+    elseif (1 === count($path)) {
+      return $this->read($path[0]);
     }
 
     throw new HttpBadRequestException('Invalid request');
@@ -50,6 +58,9 @@ class InstitutionController {
 
   /**
    * List of institutions.
+   *
+   * @return array
+   *   The list of institutions.
    */
   public function list() {
     $institutions = _ding_unilogin_get_institutions();
@@ -59,6 +70,14 @@ class InstitutionController {
 
   /**
    * Get an institution by id.
+   *
+   * @param string $id
+   *   The institution id.
+   *
+   * @return array
+   *   The institution if found.
+   *
+   * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function read($id) {
     $institutions = _ding_unilogin_get_institutions();
@@ -72,6 +91,8 @@ class InstitutionController {
 
   /**
    * Update the list of institutions.
+   *
+   * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function update() {
     $contentType = $this->getRequestHeader('content-type');
@@ -108,6 +129,12 @@ class InstitutionController {
 
   /**
    * Get a http request header by name.
+   *
+   * @param string $name
+   *   The request header name.
+   *
+   * @return string|null
+   *   The request header if found.
    */
   protected function getRequestHeader($name) {
     $name = strtoupper(preg_replace('/[^a-z0-9]/i', '_', $name));
