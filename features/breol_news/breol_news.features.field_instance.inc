@@ -258,7 +258,7 @@ function breol_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_ding_news_list_image',
-    'label' => 'List image',
+    'label' => 'App feed image',
     'required' => 1,
     'settings' => array(
       'alt_field' => 0,
@@ -267,7 +267,7 @@ function breol_news_field_default_field_instances() {
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
       'max_resolution' => '',
-      'min_resolution' => '',
+      'min_resolution' => '500x500',
       'title_field' => 0,
       'user_register_form' => FALSE,
     ),
@@ -296,14 +296,18 @@ function breol_news_field_default_field_instances() {
         ),
         'manualcrop_crop_info' => 1,
         'manualcrop_default_crop_area' => 1,
-        'manualcrop_enable' => 0,
+        'manualcrop_enable' => 1,
         'manualcrop_inline_crop' => 0,
         'manualcrop_instant_crop' => FALSE,
         'manualcrop_instant_preview' => 1,
         'manualcrop_keyboard' => 1,
         'manualcrop_maximize_default_crop_area' => 0,
-        'manualcrop_require_cropping' => array(),
-        'manualcrop_styles_list' => array(),
+        'manualcrop_require_cropping' => array(
+          'app_feed_image' => 'app_feed_image',
+        ),
+        'manualcrop_styles_list' => array(
+          'app_feed_image' => 'app_feed_image',
+        ),
         'manualcrop_styles_mode' => 'include',
         'manualcrop_thumblist' => 0,
       ),
@@ -416,10 +420,10 @@ function breol_news_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('App feed image');
   t('Cover Image');
   t('Indhold');
   t('Karouseller');
-  t('List image');
   t('Show in app');
   t('Type');
 
