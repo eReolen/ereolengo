@@ -5,6 +5,9 @@
  * Allows users to log in via UNI•Login.
  */
 
+use Drupal\ding_unilogin\ApiRouter;
+use Drupal\ding_unilogin\Exception\HttpException;
+
 /**
  * Implements hook_init().
  *
@@ -31,7 +34,7 @@ function ding_unilogin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_settings_form'),
     'access arguments' => array('configure unilogin'),
-    'file' => 'ding_unilogin.admin.inc',
+    'file' => 'includes/ding_unilogin.admin.inc',
   );
 
   $items['admin/config/ding/unilogin_institutions'] = array(
@@ -40,7 +43,16 @@ function ding_unilogin_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ding_unilogin_admin_institutions_form'),
     'access arguments' => array('configure unilogin'),
-    'file' => 'ding_unilogin.admin.inc',
+    'file' => 'includes/ding_unilogin.admin.inc',
+  );
+
+  $items['admin/config/ding/unilogin_api'] = array(
+    'title' => 'UNI•Login api',
+    'description' => 'Configure UNI•Login api',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ding_unilogin_admin_api_form'),
+    'access arguments' => array('configure unilogin'),
+    'file' => 'includes/ding_unilogin.admin.inc',
   );
 
   $items['ding_unilogin/get/%'] = array(
@@ -49,6 +61,13 @@ function ding_unilogin_menu() {
     // Let anyone access.
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
+  );
+
+  $items['unilogin/api/%'] = array(
+    'page callback' => 'ding_unilogin_api_router',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'delivery callback' => 'ding_unilogin_jsonapi_deliver',
   );
 
   return $items;
@@ -563,7 +582,7 @@ function ding_unilogin_theme() {
  */
 function ding_unilogin_filter_institutions(array $institution_ids) {
   if (variable_get('ding_unilogin_institutions_apply_filter', FALSE)) {
-    $institutions = variable_get('ding_unilogin_institutions', []);
+    $institutions = _ding_unilogin_get_institutions();
     $institution_ids = array_filter($institution_ids, static function ($institution_id) use ($institutions) {
       return isset($institutions[$institution_id]);
     });
@@ -595,4 +614,77 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
   else {
     $_SESSION['ding_unilogin_user_data'] = $data;
   }
+}
+
+/**
+ * Get UNI•Login institutions.
+ *
+ * @return array
+ *   The list of institutions indexed by id.
+ */
+function _ding_unilogin_get_institutions() {
+  return variable_get('ding_unilogin_institutions', []);
+}
+
+/**
+ * Set UNI•Login institutions.
+ *
+ * @param array $institutions
+ *   The list of institutions indexed by id.
+ */
+function _ding_unilogin_set_institutions(array $institutions) {
+  variable_set('ding_unilogin_institutions', $institutions);
+}
+
+/**
+ * Api router.
+ *
+ * @return array|\Exception
+ *   The data on success or an exception.
+ */
+function ding_unilogin_api_router() {
+  $args = func_get_args();
+
+  try {
+    $router = new ApiRouter();
+    $result = $router->route($args);
+
+    return $result;
+  }
+  catch (\Exception $exception) {
+    return $exception;
+  }
+}
+
+/**
+ * Deliver data in the JSON:API format (https://jsonapi.org/format/).
+ *
+ * @param null|array|\Exception $result
+ *   The result to return.
+ */
+function ding_unilogin_jsonapi_deliver($result = NULL) {
+  drupal_add_http_header('content-type', 'application/vnd.api+json');
+  drupal_page_is_cacheable(FALSE);
+
+  if ($result instanceof \Exception) {
+    if ($result instanceof HttpException) {
+      drupal_add_http_header('status', $result->getStatusHeader());
+    }
+    $result = array(
+      // @see https://jsonapi.org/format/#error-objects.
+      'errors' => array(
+        array(
+          'title' => $result->getMessage(),
+          'code' => $result->getCode(),
+        ),
+      ),
+    );
+  }
+
+  if (NULL === $result) {
+    drupal_add_http_header('status', '204 No Content');
+    exit;
+  }
+
+  echo drupal_json_encode($result);
 }

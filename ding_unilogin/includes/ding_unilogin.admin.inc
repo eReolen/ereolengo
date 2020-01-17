@@ -92,10 +92,50 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
 }
 
 /**
+ * UNI•Login api form.
+ */
+function ding_unilogin_admin_api_form($form, &$form_state) {
+  $form['api']['ding_unilogin_api_token_read'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Api token (read)'),
+    // Elvis operator used to handle falsy values.
+    '#default_value' => variable_get('ding_unilogin_api_token_read'),
+    '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
+  );
+
+  $form['api']['ding_unilogin_api_token_write'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Api token (write)'),
+    // Elvis operator used to handle falsy values.
+    '#default_value' => variable_get('ding_unilogin_api_token_write'),
+    '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
+  );
+
+  $form['ding_unilogin_api_endpoints'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Api endpoints'),
+    'content' => array(
+      '#markup' => implode('', array(
+        '<ul>',
+        '<li>' . l(t('Institutions'), '/unilogin/api/institutions') . '</li>',
+        '</ul>',
+      )),
+    ),
+  );
+
+  // Important: Our custom submit hook must be added before the ones added by
+  // `system_settings_form`.
+  $form['#submit'][] = 'ding_unilogin_admin_api_form_submit';
+  $form = system_settings_form($form);
+
+  return $form;
+}
+
+/**
  * UNI•Login institutions form.
  */
 function ding_unilogin_admin_institutions_form($form, &$form_state) {
-  $institutions = variable_get('ding_unilogin_institutions', []);
+  $institutions = _ding_unilogin_get_institutions();
 
   // Check that the huge form below can actually be handled.
   $max_input_vars_current_value = (int) ini_get('max_input_vars');
@@ -211,5 +251,19 @@ function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_
   $institutions = array_column($institutions, NULL, 'id');
 
   variable_set('ding_unilogin_institutions_apply_filter', (bool) $values['ding_unilogin_institutions_apply_filter']);
-  variable_set('ding_unilogin_institutions', $institutions);
+  _ding_unilogin_set_institutions($institutions);
+}
+
+/**
+ * Submit handler for UNI•Login api form.
+ */
+function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {
+  $values = &$form_state['values'];
+
+  $fields = ['ding_unilogin_api_token_read', 'ding_unilogin_api_token_write'];
+  foreach ($fields as $field) {
+    if (empty(trim($values[$field]))) {
+      $values[$field] = sha1(random_bytes(32));
+    }
+  }
 }
