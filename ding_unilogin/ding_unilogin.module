@@ -618,6 +618,9 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
 
 /**
  * Get UNI•Login institutions.
+ *
+ * @return array
+ *   The list of institutions indexed by id.
  */
 function _ding_unilogin_get_institutions() {
   return variable_get('ding_unilogin_institutions', []);
@@ -625,6 +628,9 @@ function _ding_unilogin_get_institutions() {
 
 /**
  * Set UNI•Login institutions.
+ *
+ * @param array $institutions
+ *   The list of institutions indexed by id.
  */
 function _ding_unilogin_set_institutions(array $institutions) {
   variable_set('ding_unilogin_institutions', $institutions);
@@ -632,6 +638,9 @@ function _ding_unilogin_set_institutions(array $institutions) {
 
 /**
  * Api router.
+ *
+ * @return array|\Exception
+ *   The data on success or an exception.
  */
 function ding_unilogin_api_router() {
   $args = func_get_args();

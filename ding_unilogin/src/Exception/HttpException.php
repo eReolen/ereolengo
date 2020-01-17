@@ -13,6 +13,9 @@ abstract class HttpException extends RuntimeException {
 
   /**
    * Get http status header including status code.
+   *
+   * @return string
+   *   The http status header.
    */
   public function getStatusHeader() {
     return $this->code . ' ' . $this->getStatusHeaderName();
@@ -20,6 +23,9 @@ abstract class HttpException extends RuntimeException {
 
   /**
    * Get http status header name.
+   *
+   * @return string
+   *   The http status header name.
    */
   abstract public function getStatusHeaderName();
 
