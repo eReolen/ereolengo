@@ -241,6 +241,7 @@ function breol_inspiration_field_default_field_instances() {
         'audio_preview' => -1,
         'breol_linkbox' => -1,
         'material_carousel' => 'material_carousel',
+        'picked_article_carousel' => 'picked_article_carousel',
         'see_all_news_button' => 'see_all_news_button',
         'two_elements' => 'two_elements',
         'video' => -1,
@@ -249,6 +250,7 @@ function breol_inspiration_field_default_field_instances() {
         'audio_preview' => 2,
         'breol_linkbox' => 7,
         'material_carousel' => 3,
+        'picked_article_carousel' => -14,
         'see_all_news_button' => 9,
         'two_elements' => 4,
         'video' => 11,
@@ -267,12 +269,100 @@ function breol_inspiration_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'paragraphs_item-picked_article_carousel-field_picked_articles'.
+  $field_instances['paragraphs_item-picked_article_carousel-field_picked_articles'] = array(
+    'bundle' => 'picked_article_carousel',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 1,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_picked_articles',
+    'label' => 'Nyheder',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-picked_article_carousel-field_picked_title'.
+  $field_instances['paragraphs_item-picked_article_carousel-field_picked_title'] = array(
+    'bundle' => 'picked_article_carousel',
+    'default_value' => array(
+      0 => array(
+        'value' => 'Udvalgte temaer',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => 'Overskrift til karrusel.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_picked_title',
+    'label' => 'Overskrift',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 40,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('App feed color');
   t('App feed image');
   t('Category query');
   t('Elementer');
+  t('Nyheder');
+  t('Overskrift');
+  t('Overskrift til karrusel.');
 
   return $field_instances;
 }
