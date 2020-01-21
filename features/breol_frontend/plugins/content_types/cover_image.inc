@@ -78,12 +78,12 @@ function breol_frontend_cover_image_content_type_render($subtype, $conf, $panel_
     // TODO(ts) - This was made last minute before launch. Should be refactored
     // later.
     $variables['wrapper_class'] = 'cover__' . strtolower($node->title);
-    if (strtolower($node->title) === 'ebøger' || strtolower($node->title) === 'netlydbøger') {
+    if (strtolower($node->title) === 'ebøger' || strtolower($node->title) === 'lydbøger') {
       $variables['image_uri'] = NULL;
       if (strtolower($node->title) === 'ebøger') {
         $variables['wrapper_class'] = 'cover__ebooks';
       }
-      elseif (strtolower($node->title) === 'netlydbøger') {
+      elseif (strtolower($node->title) === 'lydbøger') {
         $variables['wrapper_class'] = 'cover__audiobooks';
       }
     }
