@@ -26,6 +26,7 @@ features[field_instance][] = node-inspiration-field_category_query
 features[field_instance][] = node-inspiration-field_inspiration_paragraphs
 features[field_instance][] = paragraphs_item-picked_article_carousel-field_picked_articles
 features[field_instance][] = paragraphs_item-picked_article_carousel-field_picked_title
+features[image][] = app_feed_image
 features[node][] = inspiration
 features[paragraphs][] = picked_article_carousel
 features[variable][] = comment_anonymous_inspiration

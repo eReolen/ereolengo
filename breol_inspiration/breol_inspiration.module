@@ -5,3 +5,17 @@
  */
 
 include_once 'breol_inspiration.features.inc';
+
+/**
+ * Implements hook_node_validate().
+ */
+function breol_inspiration_node_validate($node, $form, &$form_state) {
+  if ('inspiration' === $node->type) {
+    $field_name = 'field_app_feed_image';
+    $message = reol_base_validate_image_size($node, $field_name);
+
+    if (NULL !== $message) {
+      form_set_error($field_name, $message);
+    }
+  }
+}

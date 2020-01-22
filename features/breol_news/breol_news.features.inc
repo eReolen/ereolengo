@@ -19,19 +19,36 @@ function breol_news_ctools_plugin_api($module = NULL, $api = NULL) {
 function breol_news_image_default_styles() {
   $styles = array();
 
-  // Exported image style: app_feed_image.
-  $styles['app_feed_image'] = array(
-    'label' => 'App feed image',
+  // Exported image style: app_news_image.
+  $styles['app_news_image'] = array(
+    'label' => 'App news image',
     'effects' => array(
-      1 => array(
-        'name' => 'manualcrop_crop_and_scale',
+      3 => array(
+        'name' => 'manualcrop_crop',
         'data' => array(
-          'width' => 500,
-          'height' => 500,
-          'upscale' => 0,
-          'respectminimum' => 1,
-          'onlyscaleifcrop' => 0,
-          'style_name' => 'app_feed_image',
+          'width' => 1080,
+          'height' => 400,
+          'keepproportions' => 1,
+          'reuse_crop_style' => '',
+          'style_name' => 'app_news_image',
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  // Exported image style: web_news_image.
+  $styles['web_news_image'] = array(
+    'label' => 'Web news image',
+    'effects' => array(
+      4 => array(
+        'name' => 'manualcrop_crop',
+        'data' => array(
+          'width' => 880,
+          'height' => 495,
+          'keepproportions' => 1,
+          'reuse_crop_style' => '',
+          'style_name' => 'web_news_image',
         ),
         'weight' => 0,
       ),
