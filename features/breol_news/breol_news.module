@@ -12,7 +12,7 @@ include_once 'breol_news.features.inc';
  */
 function breol_news_node_validate($node, $form, &$form_state) {
   if ('breol_news' === $node->type) {
-    $field_name = 'field_ding_news_list_image';
+    $field_name = 'field_breol_cover_image';
     $message = reol_base_validate_image_size($node, $field_name);
     if (NULL !== $message) {
       form_set_error($field_name, $message);

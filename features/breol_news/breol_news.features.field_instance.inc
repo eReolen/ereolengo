@@ -120,15 +120,15 @@ function breol_news_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_breol_cover_image',
     'label' => 'Cover Image',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'alt_field' => 0,
       'default_image' => 0,
       'file_directory' => '',
       'file_extensions' => 'png gif jpg jpeg',
       'max_filesize' => '',
-      'max_resolution' => '',
-      'min_resolution' => '',
+      'max_resolution' => '1080x400',
+      'min_resolution' => '1080x400',
       'title_field' => 0,
       'user_register_form' => FALSE,
     ),
@@ -137,7 +137,7 @@ function breol_news_field_default_field_instances() {
       'module' => 'media',
       'settings' => array(
         'allowed_schemes' => array(
-          'private' => 'private',
+          'oembed' => 0,
           'public' => 'public',
           'vimeo' => 0,
           'youtube' => 0,
@@ -155,18 +155,22 @@ function breol_news_field_default_field_instances() {
           'media_internet' => 0,
           'upload' => 0,
         ),
-        'manualcrop_crop_info' => TRUE,
-        'manualcrop_default_crop_area' => TRUE,
-        'manualcrop_enable' => FALSE,
-        'manualcrop_inline_crop' => FALSE,
+        'manualcrop_crop_info' => 1,
+        'manualcrop_default_crop_area' => 1,
+        'manualcrop_enable' => 0,
+        'manualcrop_inline_crop' => 0,
         'manualcrop_instant_crop' => FALSE,
-        'manualcrop_instant_preview' => TRUE,
-        'manualcrop_keyboard' => TRUE,
-        'manualcrop_maximize_default_crop_area' => FALSE,
-        'manualcrop_require_cropping' => array(),
-        'manualcrop_styles_list' => array(),
+        'manualcrop_instant_preview' => 1,
+        'manualcrop_keyboard' => 1,
+        'manualcrop_maximize_default_crop_area' => 0,
+        'manualcrop_require_cropping' => array(
+          'app_news_image' => 'app_news_image',
+        ),
+        'manualcrop_styles_list' => array(
+          'app_news_image' => 'app_news_image',
+        ),
         'manualcrop_styles_mode' => 'include',
-        'manualcrop_thumblist' => FALSE,
+        'manualcrop_thumblist' => 1,
       ),
       'type' => 'media_generic',
       'weight' => 7,
@@ -222,99 +226,6 @@ function breol_news_field_default_field_instances() {
       'settings' => array(),
       'type' => 'reol_field_carousel_widget',
       'weight' => 8,
-    ),
-  );
-
-  // Exported field_instance: 'node-breol_news-field_ding_news_list_image'.
-  $field_instances['node-breol_news-field_ding_news_list_image'] = array(
-    'bundle' => 'breol_news',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 5,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser_medium' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-      'teaser_small' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_ding_news_list_image',
-    'label' => 'App feed image',
-    'required' => 1,
-    'settings' => array(
-      'alt_field' => 0,
-      'default_image' => 0,
-      'file_directory' => '',
-      'file_extensions' => 'png',
-      'max_filesize' => '',
-      'max_resolution' => '1080x495',
-      'min_resolution' => '1080x495',
-      'title_field' => 0,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'media',
-      'settings' => array(
-        'allowed_schemes' => array(
-          'oembed' => 0,
-          'public' => 'public',
-          'vimeo' => 0,
-          'youtube' => 0,
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'document' => 0,
-          'image' => 'image',
-          'video' => 0,
-        ),
-        'browser_plugins' => array(
-          'ding_content' => 0,
-          'media_default--media_browser_1' => 0,
-          'media_default--media_browser_my_files' => 0,
-          'media_internet' => 0,
-          'upload' => 0,
-        ),
-        'manualcrop_crop_info' => 1,
-        'manualcrop_default_crop_area' => 1,
-        'manualcrop_enable' => 1,
-        'manualcrop_inline_crop' => 0,
-        'manualcrop_instant_crop' => FALSE,
-        'manualcrop_instant_preview' => 1,
-        'manualcrop_keyboard' => 1,
-        'manualcrop_maximize_default_crop_area' => 0,
-        'manualcrop_require_cropping' => array(
-          'app_news_image' => 'app_news_image',
-          'web_news_image' => 'web_news_image',
-        ),
-        'manualcrop_styles_list' => array(
-          'app_news_image' => 'app_news_image',
-          'web_news_image' => 'web_news_image',
-        ),
-        'manualcrop_styles_mode' => 'include',
-        'manualcrop_thumblist' => 1,
-      ),
-      'type' => 'media_generic',
-      'weight' => 2,
     ),
   );
 
@@ -422,7 +333,6 @@ function breol_news_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('App feed image');
   t('Cover Image');
   t('Indhold');
   t('Karouseller');
