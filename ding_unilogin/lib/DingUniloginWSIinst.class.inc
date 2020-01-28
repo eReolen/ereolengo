@@ -27,6 +27,24 @@ class DingUniloginWSIinst extends DingUniloginServiceBase {
   }
 
   /**
+   * Get institutions.
+   *
+   * @param array $ids
+   *   The list of institution ids.
+   *
+   * @return object[]
+   *   List of institution data.
+   */
+  public function getInstitutions($ids) {
+    $parameters = array(
+      'instnr' => $ids,
+    );
+    $res = $this->callWithAuth('hentInstitutioner', $parameters, 'institution');
+
+    return $res;
+  }
+
+  /**
    * Get user data.
    */
   public function getUser($id, $user_id) {

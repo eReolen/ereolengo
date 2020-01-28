@@ -65,6 +65,12 @@ class InstitutionController {
   public function list() {
     $institutions = _ding_unilogin_get_institutions();
 
+    // Add information on municipalities.
+    $municipalities = _ding_unilogin_get_municipalities();
+    foreach ($institutions as &$institution) {
+      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
+    }
+
     return ['data' => $institutions];
   }
 
@@ -83,7 +89,11 @@ class InstitutionController {
     $institutions = _ding_unilogin_get_institutions();
 
     if (isset($institutions[$id])) {
-      return ['data' => $institutions[$id]];
+      $institution = $institutions[$id];
+      $municipalities = _ding_unilogin_get_municipalities();
+      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
+
+      return ['data' => $institution];
     }
 
     throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));

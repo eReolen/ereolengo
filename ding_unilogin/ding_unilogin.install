@@ -18,6 +18,7 @@ function ding_unilogin_install() {
 function ding_unilogin_uninstall() {
   variable_del('ding_unilogin_institutions_apply_filter');
   variable_del('ding_unilogin_institutions');
+  variable_del('ding_unilogin_municipalities');
   variable_del('ding_unilogin_api_token_read');
   variable_del('ding_unilogin_api_token_write');
 }
@@ -66,3 +67,11 @@ function ding_unilogin_update_7102() {
     variable_set('ding_unilogin_publizon_client_id', $client_id);
   }
 }
+
+/**
+ * Update municipalities.
+ */
+function ding_unilogin_update_7103() {
+  _ding_unilogin_update_municipalities();
+}
+
