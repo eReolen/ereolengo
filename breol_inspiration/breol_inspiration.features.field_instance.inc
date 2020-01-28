@@ -241,7 +241,6 @@ function breol_inspiration_field_default_field_instances() {
         'audio_preview' => -1,
         'breol_linkbox' => -1,
         'material_carousel' => 'material_carousel',
-        'picked_article_carousel' => 'picked_article_carousel',
         'see_all_news_button' => 'see_all_news_button',
         'two_elements' => 'two_elements',
         'video' => -1,
@@ -250,7 +249,6 @@ function breol_inspiration_field_default_field_instances() {
         'audio_preview' => 2,
         'breol_linkbox' => 7,
         'material_carousel' => 3,
-        'picked_article_carousel' => -14,
         'see_all_news_button' => 9,
         'two_elements' => 4,
         'video' => 11,
@@ -360,9 +358,6 @@ function breol_inspiration_field_default_field_instances() {
   t('App feed image');
   t('Category query');
   t('Elementer');
-  t('Nyheder');
-  t('Overskrift');
-  t('Overskrift til karrusel.');
 
   return $field_instances;
 }
