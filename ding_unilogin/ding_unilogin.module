@@ -634,6 +634,39 @@ function _ding_unilogin_get_institutions() {
  */
 function _ding_unilogin_set_institutions(array $institutions) {
   variable_set('ding_unilogin_institutions', $institutions);
+
+  _ding_unilogin_update_municipalities(array_keys($institutions));
+}
+
+/**
+ * Update UNI•Login municipalities.
+ *
+ * @param array $institution_ids
+ *   The list of institution ids.
+ */
+function _ding_unilogin_update_municipalities(array $institution_ids = NULL) {
+  if (NULL === $institution_ids) {
+    $institution_ids = array_keys(_ding_unilogin_get_institutions());
+  }
+
+  /** @var \DingUniloginWSIinst $service */
+  $service = ding_unilogin_wservice('inst');
+  $municipalities = $service->getInstitutions($institution_ids);
+
+  // Index by institution id.
+  $municipalities = array_column($municipalities, null, 'instnr');
+
+  variable_set('ding_unilogin_municipalities', $municipalities);
+}
+
+/**
+ * Get UNI•Login municipalities.
+ *
+ * @return array
+ *   The list of municipalities id.
+ */
+function _ding_unilogin_get_municipalities() {
+  return variable_get('ding_unilogin_municipalities', []);
 }
 
 /**

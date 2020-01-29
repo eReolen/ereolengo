@@ -8,17 +8,17 @@ Go to `/admin/config/ding/unilogin_api` to set the api token.
 
 This api adheres to the [JSON:API specification](https://jsonapi.org/).
 
-| Request                  | Description                         |
-|--------------------------|-------------------------------------|
-| `GET /institutions`      | Get list of all institutions        |
-| `GET /institutions/«id»` | Get details on a single institution |
-| `POST /institutions`     | Update the list of institutions     |
+| Request                               | Description                         |
+|---------------------------------------|-------------------------------------|
+| `GET /unilogin/api/institutions`      | Get list of all institutions        |
+| `GET /unilogin/api/institutions/«id»` | Get details on a single institution |
+| `POST /unilogin/api/institutions`     | Update the list of institutions     |
 
 #### Examples
 
 ```sh
 curl http://127.0.0.1/unilogin/api/institutions \
-     --header 'x-authorization: token «api read token»
+     --header 'x-authorization: token «api read token»'
 ```
 
 **Important**: Note that the header name is `x-authorization` (not
@@ -26,7 +26,7 @@ curl http://127.0.0.1/unilogin/api/institutions \
 
 ```sh
 curl http://127.0.0.1/unilogin/api/institutions/«id» \
-     --header 'x-authorization: token «api read token»
+     --header 'x-authorization: token «api read token»'
 ```
 
 ## Tests
