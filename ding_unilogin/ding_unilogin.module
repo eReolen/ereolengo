@@ -228,7 +228,7 @@ function ding_unilogin_ding_unilogin_login($user) {
     );
 
     if (!$access) {
-      watchdog('ding_unilogin', 'UNI•Login user %user does not have appropriate license.', array('%user' => $user->name), WATCHDOG_NOTICE);
+      watchdog('ding_unilogin', 'UNI•Login user %user does not have appropriate license.', array('%user' => $user->getName()), WATCHDOG_NOTICE);
     }
 
     return $access;
