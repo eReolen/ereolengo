@@ -102,13 +102,13 @@ function breol_news_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '4',
+          'weight' => '6',
         ),
         'redirect' => array(
-          'weight' => '3',
+          'weight' => '5',
         ),
         'metatags' => array(
-          'weight' => '7',
+          'weight' => '9',
         ),
       ),
       'display' => array(

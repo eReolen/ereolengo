@@ -30,3 +30,17 @@ function breol_inspiration_node_info() {
   drupal_alter('node_info', $items);
   return $items;
 }
+
+/**
+ * Implements hook_paragraphs_info().
+ */
+function breol_inspiration_paragraphs_info() {
+  $items = array(
+    'picked_article_carousel' => array(
+      'name' => 'Nyhedskarrusel',
+      'bundle' => 'picked_article_carousel',
+      'locked' => '1',
+    ),
+  );
+  return $items;
+}
