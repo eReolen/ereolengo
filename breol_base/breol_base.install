@@ -376,3 +376,28 @@ function breol_base_update_7144() {
     ->condition('type', 'module')
     ->execute();
 }
+
+/**
+ * Enable Menu Attributes module.
+ */
+function breol_base_update_7145() {
+  module_enable(array('menu_attributes'), TRUE);
+
+  // Add default classes to items in main-menu.
+  // Map from menu item title to css class name.
+  $default_classes = [
+    'e-bøger' => 'menu-e-books',
+    'lydbøger' => 'menu-audio-books',
+    'Min side' => 'menu-profile',
+    'hjælp' => 'menu-help',
+    'søg' => 'menu-search',
+  ];
+  $links = menu_load_links('main-menu');
+  foreach ($links as $link) {
+    $title = $link['link_title'];
+    if (isset($default_classes[$title])) {
+      $link['options']['item_attributes']['class'] = $default_classes[$title];
+      menu_link_save($link);
+    }
+  }
+}
