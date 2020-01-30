@@ -3,4 +3,5 @@ description = "Base module for eReolen for kids"
 core = 7.x
 package = eReolen for kids
 
+dependencies[] = menu_attributes
 dependencies[] = reol_widget
