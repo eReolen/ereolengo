@@ -108,6 +108,16 @@ function breol_base_field_default_field_instances_alter(&$fields) {
     'weight' => 2,
   ];
 
+  // Show series in "search_result" view (moved into group by
+  // `breol_base_field_default_field_instances_alter`, which see).
+  $fields['ting_object-ting_object-ting_series']['display']['search_result'] = [
+    'label' => 'hidden',
+    'module' => 'reol_base',
+    'settings' => array(),
+    'type' => 'reol_base_series',
+    'weight' => 3,
+  ];
+
   // Hide material type.
   if (isset($fields['ting_object-ting_object-ting_details_type'])) {
     $fields['ting_object-ting_object-ting_details_type']['display']['compact'] = [
@@ -129,11 +139,12 @@ function breol_base_field_group_info_alter(&$groups) {
     $groups['group_overlay|ting_object|ting_object|compact']->data['weight'] = 2;
   }
 
-  // Move language into group.
+  // Move language and series into group.
   if (isset($groups['group_ting_left_col_search|ting_object|ting_object|search_result']->data['children'])) {
     $groups['group_ting_left_col_search|ting_object|ting_object|search_result']->data['children'] = [
       'ting_cover',
       'ting_details_language',
+      'ting_series',
     ];
   }
 }
