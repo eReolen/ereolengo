@@ -54,3 +54,10 @@ function breol_frontend_update_7103() {
 function breol_frontend_update_7104() {
   variable_set('pm_existing_pages_disabled_reol_bookmarks', FALSE);
 }
+
+/**
+ * Flush image style ding_list_medium.
+ */
+function breol_frontend_update_7105() {
+  image_style_flush(image_style_load('ding_list_medium'));
+}

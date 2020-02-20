@@ -423,12 +423,14 @@ function _ding_unilogin_login($username) {
     }
 
     if ($access) {
-      $institutions = $user->getInstitutionsIds();
-      $municipalities = $user->getInstitutionMunicipalities($institutions);
+      $institutionIds = $user->getInstitutionsIds();
+      $municipalities = $user->getInstitutionMunicipalities($institutionIds);
+      $institutions = $user->getInstitutions() ?: [];
+      $unilogin_data['institutions'] = $institutions;
 
-      $unilogin_data['institutions'] = $user->getInstitutions();
-
-      $libraries = publizon_filter_libraries_list($municipalities);
+      // Get retailer id from first institution.
+      $municipalityIds = !empty($institutions) ? [reset($institutions)->kommunenr] : [];
+      $libraries = publizon_filter_libraries_list($municipalityIds);
       if (!empty($libraries)) {
         // Take the first one.
         $library = reset($libraries);
