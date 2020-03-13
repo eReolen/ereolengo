@@ -93,6 +93,18 @@ function breol_base_field_default_field_instances_alter(&$fields) {
     ];
   }
 
+  // Show series in "compact" view.
+  $fields['ting_object-ting_object-ting_series']['display']['compact'] = [
+    'label' => 'hidden',
+    'module' => 'reol_base',
+    'settings' => array(),
+    'type' => 'reol_base_series',
+    'weight' => 2,
+  ];
+  // Make sure that other fields come after series in "compact" view.
+  $fields['ting_object-ting_object-ting_title']['display']['compact']['weight'] = 3;
+  $fields['ting_object-ting_object-ting_author']['display']['compact']['weight'] = 4;
+
   // Move cover before details_language.
   if (isset($fields['ting_object-ting_object-ting_cover'])) {
     $fields['ting_object-ting_object-ting_cover']['display']['compact']['weight'] = 0;
