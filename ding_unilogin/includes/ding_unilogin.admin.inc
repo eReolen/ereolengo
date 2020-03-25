@@ -255,6 +255,167 @@ function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_
 }
 
 /**
+ * UNI•Login nonstitutions form.
+ */
+function ding_unilogin_admin_nonstitutions_form($form, &$form_state) {
+  $nonstitutions = _ding_unilogin_get_nonstitutions();
+
+  // Check that the huge form below can actually be handled.
+  $max_input_vars_current_value = (int) ini_get('max_input_vars');
+  $max_input_vars_recommended_value = (int) 4 * count($nonstitutions) + 100;
+
+  if ($max_input_vars_current_value < $max_input_vars_recommended_value) {
+    drupal_set_message(t('The value of the PHP runtime variable <a href="!doc_url"><code>max_input_vars</code></a> is too low. The current value is <code>!current_value</code>, but it should be at least <code>!recommended_value</code>.', array(
+      '!doc_url' => 'https://www.php.net/manual/en/info.configuration.php#ini.max-input-vars',
+      '!current_value' => $max_input_vars_current_value,
+      '!recommended_value' => $max_input_vars_recommended_value,
+    )), 'error');
+  }
+
+  $form['ding_unilogin_nonstitutions'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Nonstitutions'),
+    '#tree' => TRUE,
+    '#description' => t('Clear the institution id to remove a row.'),
+  );
+
+  // Add empty row.
+  $nonstitutions['__new__'] = array(
+    'id' => '',
+  );
+
+  foreach ($nonstitutions as $index => $nonstitution) {
+    $form['ding_unilogin_nonstitutions'][$index] = array(
+      'institution_id' => array(
+        '#type' => 'textfield',
+        '#size' => 10,
+        '#title' => t('Institution id'),
+        '#default_value' => $nonstitution['institution_id'] ?? NULL,
+      ),
+      'municipality_kommunenr' => array(
+        '#type' => 'textfield',
+        '#size' => 10,
+        '#title' => t('Municipality id'),
+        '#default_value' => $nonstitution['municipality_kommunenr'] ?? NULL,
+      ),
+      'municipality_kommune' => array(
+        '#type' => 'textfield',
+        '#title' => t('Municipality name'),
+        '#default_value' => $nonstitution['municipality_kommune'] ?? NULL,
+      ),
+      'test' => array(
+        '#type' => 'container',
+        '#title' => t('Test (using saved data)'),
+      ),
+    );
+
+    if (isset($nonstitution['institution_id'])) {
+      $test_url = 'unilogin/api/institutions/' . $nonstitution['institution_id'];
+      $form['ding_unilogin_nonstitutions'][$index]['test']['link'] = array(
+        '#type' => 'link',
+        '#title' => $test_url,
+        '#href' => $test_url,
+        '#attributes' => [
+          'target' => 'ding_unilogin_nonstitutions',
+        ],
+      );
+    }
+  }
+
+  $form['test'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Test'),
+
+    'all_institutions' => [
+      '#type' => 'link',
+      '#title' => t('List all institutions'),
+      '#href' => 'unilogin/api/institutions/',
+      '#attributes' => [
+        'target' => 'ding_unilogin_nonstitutions',
+      ],
+    ],
+  ];
+
+  $form['#theme'] = 'ding_unilogin_admin_nonstitutions_form';
+  $form['#validate'] = array('ding_unilogin_admin_nonstitutions_form_validate');
+  $form = system_settings_form($form);
+  $form['#submit'] = array('ding_unilogin_admin_nonstitutions_form_submit');
+
+  return $form;
+}
+
+/**
+ * Theme for UNI•Login nonstitutions form.
+ *
+ * Renders fields of each nonstitution as rows in a table.
+ */
+function theme_ding_unilogin_admin_nonstitutions_form($variables) {
+  $form = $variables['form'];
+
+  // Render nonstitutions as table.
+  $header = array();
+  $rows = array();
+  $first_row = TRUE;
+  foreach (element_children($form['ding_unilogin_nonstitutions']) as $key) {
+    $row = array();
+    foreach (element_children($form['ding_unilogin_nonstitutions'][$key]) as $field) {
+      if ($first_row) {
+        $header[] = $form['ding_unilogin_nonstitutions'][$key][$field]['#title'];
+      }
+      $form['ding_unilogin_nonstitutions'][$key][$field]['#title_display'] = 'invisible';
+      $row[] = drupal_render($form['ding_unilogin_nonstitutions'][$key][$field]);
+    }
+    $rows[] = $row;
+    $first_row = FALSE;
+  }
+  $form['ding_unilogin_nonstitutions']['#children'] = theme('table', array('header' => $header, 'rows' => $rows));
+
+  // Render the form.
+  return drupal_render_children($form);
+}
+
+/**
+ * Validating handler for UNI•Login nonstitutions form.
+ */
+function ding_unilogin_admin_nonstitutions_form_validate(array $form, array &$form_state) {
+  $institutions = _ding_unilogin_get_institutions();
+  $values = $form_state['values'];
+  foreach (element_children($form['ding_unilogin_nonstitutions']) as $child) {
+    $row = $values['ding_unilogin_nonstitutions'][$child];
+    if (!empty($row['institution_id'])) {
+      if (!isset($institutions[$row['institution_id']])) {
+        form_set_error(
+          'ding_unilogin_nonstitutions][' . $child . '][institution_id',
+          t('Invalid institution id: @institution_id', ['@institution_id' => $row['institution_id']])
+        );
+      }
+      if (empty($row['municipality_kommunenr'])) {
+        form_set_error(
+          'ding_unilogin_nonstitutions][' . $child . '][municipality_kommunenr',
+          t('Municipality id cannot be empty')
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Submit handler for UNI•Login nonstitutions form.
+ */
+function ding_unilogin_admin_nonstitutions_form_submit(array $form, array &$form_state) {
+  $values = $form_state['values'];
+
+  // Get nonstitutions with non-empty institution id.
+  $nonstitutions = array_filter($values['ding_unilogin_nonstitutions'], static function (array $nonstitution) {
+    return $nonstitution['institution_id'];
+  });
+  // Note: PHP will work very hard to convert numeric keys to integer keys.
+  $nonstitutions = array_column($nonstitutions, NULL, 'institution_id');
+
+  _ding_unilogin_set_nonstitutions($nonstitutions);
+}
+
+/**
  * Submit handler for UNI•Login api form.
  */
 function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {

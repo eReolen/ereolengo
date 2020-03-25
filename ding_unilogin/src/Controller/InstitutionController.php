@@ -23,26 +23,16 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function handle(array $path) {
-    $authorization = $this->getRequestHeader('authorization');
-    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
-      throw new HttpUnauthorizedException();
-    }
-    $token = $matches['token'];
+    $this->checkAuthorization($path);
 
     if (empty($path)) {
       $method = $_SERVER['REQUEST_METHOD'];
 
       switch ($method) {
         case 'POST':
-          if (variable_get('ding_unilogin_api_token_write') !== $token) {
-            throw new HttpUnauthorizedException();
-          }
           return $this->update();
 
         case 'GET':
-          if (variable_get('ding_unilogin_api_token_read') !== $token) {
-            throw new HttpUnauthorizedException();
-          }
           return $this->list();
 
         default:
@@ -54,6 +44,44 @@ class InstitutionController {
     }
 
     throw new HttpBadRequestException('Invalid request');
+  }
+
+  /**
+   * Check that user is authorized to use the api as requested.
+   *
+   * @param array $path
+   *   The path.
+   *
+   * @throws \Drupal\ding_unilogin\Exception\HttpUnauthorizedException
+   *   If user is not authorized.
+   */
+  private function checkAuthorization(array $path) {
+    if (user_access('configure unilogin')) {
+      return;
+    }
+
+    $authorization = $this->getRequestHeader('authorization');
+    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
+      throw new HttpUnauthorizedException();
+    }
+    $token = $matches['token'];
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    switch ($method) {
+      case 'POST':
+        if (variable_get('ding_unilogin_api_token_write') !== $token) {
+          throw new HttpUnauthorizedException();
+        }
+        break;
+
+      case 'GET':
+        if (variable_get('ding_unilogin_api_token_read') !== $token) {
+          throw new HttpUnauthorizedException();
+        }
+        break;
+    }
+
+    // Authorized with token.
   }
 
   /**
