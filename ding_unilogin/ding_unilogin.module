@@ -632,12 +632,25 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
 
 /**
  * Get UNI•Login institutions.
+*
+ * @param bool $with_municipalities
+ *   If true, municipality data will be added to each institution.
  *
  * @return array
  *   The list of institutions indexed by id.
  */
-function _ding_unilogin_get_institutions() {
-  return variable_get('ding_unilogin_institutions', []);
+function _ding_unilogin_get_institutions($with_municipalities = FALSE) {
+  $institutions = variable_get('ding_unilogin_institutions', []);
+
+  if ($with_municipalities) {
+    // Add information on municipalities.
+    $municipalities = _ding_unilogin_get_municipalities();
+    foreach ($institutions as &$institution) {
+      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
+    }
+  }
+
+  return $institutions;
 }
 
 /**

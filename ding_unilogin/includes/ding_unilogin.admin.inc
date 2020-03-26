@@ -322,13 +322,47 @@ function ding_unilogin_admin_nonstitutions_form($form, &$form_state) {
     }
   }
 
+  $form['institutions_with_no_municipality_id'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Institutions with no municipality id'),
+    '#weight' => 1000,
+  ];
+
+  $institutions_with_no_municipality_id = array_filter(
+    _ding_unilogin_get_institutions(TRUE),
+    static function (array $institution) {
+      return !isset($institution['municipality']->kommunenr);
+    }
+  );
+
+  if (empty($institutions_with_no_municipality_id)) {
+    $form['institutions_with_no_municipality_id']['list']['#markup'] = t('No institutions are missing municipality id');
+  }
+  else {
+    $header = array(
+      t('Institution id'),
+      t('Name'),
+      t('Municipality'),
+    );
+    $rows = array_map(static function (array $institution) {
+      return array(
+        $institution['id'],
+        $institution['name'],
+        sprintf('%s %s', $institution['municipality']->postnr ?? NULL, $institution['municipality']->bynavn ?? NULL),
+      );
+    }, $institutions_with_no_municipality_id);
+
+    $form['institutions_with_no_municipality_id']['list']['#markup'] = theme('table', array('header' => $header, 'rows' => $rows));
+  }
+
   $form['test'] = [
     '#type' => 'fieldset',
     '#title' => t('Test'),
+    '#weight' => 1001,
 
     'all_institutions' => [
       '#type' => 'link',
-      '#title' => t('List all institutions'),
+      '#title' => t('List all institutions (API)'),
       '#href' => 'unilogin/api/institutions/',
       '#attributes' => [
         'target' => 'ding_unilogin_nonstitutions',

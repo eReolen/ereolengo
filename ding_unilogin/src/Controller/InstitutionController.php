@@ -91,13 +91,7 @@ class InstitutionController {
    *   The list of institutions.
    */
   public function list() {
-    $institutions = _ding_unilogin_get_institutions();
-
-    // Add information on municipalities.
-    $municipalities = _ding_unilogin_get_municipalities();
-    foreach ($institutions as &$institution) {
-      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
-    }
+    $institutions = _ding_unilogin_get_institutions(TRUE);
 
     return ['data' => $institutions];
   }
@@ -114,14 +108,10 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function read($id) {
-    $institutions = _ding_unilogin_get_institutions();
+    $institutions = _ding_unilogin_get_institutions(TRUE);
 
     if (isset($institutions[$id])) {
-      $institution = $institutions[$id];
-      $municipalities = _ding_unilogin_get_municipalities();
-      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
-
-      return ['data' => $institution];
+      return ['data' => $institutions[$id]];
     }
 
     throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));
