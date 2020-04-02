@@ -23,16 +23,26 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function handle(array $path) {
-    $this->checkAuthorization($path);
+    $authorization = $this->getRequestHeader('authorization');
+    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
+      throw new HttpUnauthorizedException();
+    }
+    $token = $matches['token'];
 
     if (empty($path)) {
       $method = $_SERVER['REQUEST_METHOD'];
 
       switch ($method) {
         case 'POST':
+          if (variable_get('ding_unilogin_api_token_write') !== $token) {
+            throw new HttpUnauthorizedException();
+          }
           return $this->update();
 
         case 'GET':
+          if (variable_get('ding_unilogin_api_token_read') !== $token) {
+            throw new HttpUnauthorizedException();
+          }
           return $this->list();
 
         default:
@@ -47,51 +57,19 @@ class InstitutionController {
   }
 
   /**
-   * Check that user is authorized to use the api as requested.
-   *
-   * @param array $path
-   *   The path.
-   *
-   * @throws \Drupal\ding_unilogin\Exception\HttpUnauthorizedException
-   *   If user is not authorized.
-   */
-  private function checkAuthorization(array $path) {
-    if (user_access('configure unilogin')) {
-      return;
-    }
-
-    $authorization = $this->getRequestHeader('authorization');
-    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
-      throw new HttpUnauthorizedException();
-    }
-    $token = $matches['token'];
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    switch ($method) {
-      case 'POST':
-        if (variable_get('ding_unilogin_api_token_write') !== $token) {
-          throw new HttpUnauthorizedException();
-        }
-        break;
-
-      case 'GET':
-        if (variable_get('ding_unilogin_api_token_read') !== $token) {
-          throw new HttpUnauthorizedException();
-        }
-        break;
-    }
-
-    // Authorized with token.
-  }
-
-  /**
    * List of institutions.
    *
    * @return array
    *   The list of institutions.
    */
   public function list() {
-    $institutions = _ding_unilogin_get_institutions(TRUE);
+    $institutions = _ding_unilogin_get_institutions();
+
+    // Add information on municipalities.
+    $municipalities = _ding_unilogin_get_municipalities();
+    foreach ($institutions as &$institution) {
+      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
+    }
 
     return ['data' => $institutions];
   }
@@ -108,10 +86,14 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function read($id) {
-    $institutions = _ding_unilogin_get_institutions(TRUE);
+    $institutions = _ding_unilogin_get_institutions();
 
     if (isset($institutions[$id])) {
-      return ['data' => $institutions[$id]];
+      $institution = $institutions[$id];
+      $municipalities = _ding_unilogin_get_municipalities();
+      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
+
+      return ['data' => $institution];
     }
 
     throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));

@@ -46,15 +46,6 @@ function ding_unilogin_menu() {
     'file' => 'includes/ding_unilogin.admin.inc',
   );
 
-  $items['admin/config/ding/unilogin_nonstitutions'] = array(
-    'title' => 'UNI•Login nonstitutions',
-    'description' => 'Configure UNI•Login institutions that are missing municipality data',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ding_unilogin_admin_nonstitutions_form'),
-    'access arguments' => array('configure unilogin'),
-    'file' => 'includes/ding_unilogin.admin.inc',
-  );
-
   $items['admin/config/ding/unilogin_api'] = array(
     'title' => 'UNI•Login api',
     'description' => 'Configure UNI•Login api',
@@ -579,9 +570,6 @@ function ding_unilogin_theme() {
     'ding_unilogin_admin_institutions_form' => array(
       'render element' => 'form',
     ),
-    'ding_unilogin_admin_nonstitutions_form' => array(
-      'render element' => 'form',
-    ),
   );
 }
 
@@ -632,25 +620,12 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
 
 /**
  * Get UNI•Login institutions.
-*
- * @param bool $with_municipalities
- *   If true, municipality data will be added to each institution.
  *
  * @return array
  *   The list of institutions indexed by id.
  */
-function _ding_unilogin_get_institutions($with_municipalities = FALSE) {
-  $institutions = variable_get('ding_unilogin_institutions', []);
-
-  if ($with_municipalities) {
-    // Add information on municipalities.
-    $municipalities = _ding_unilogin_get_municipalities();
-    foreach ($institutions as &$institution) {
-      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
-    }
-  }
-
-  return $institutions;
+function _ding_unilogin_get_institutions() {
+  return variable_get('ding_unilogin_institutions', []);
 }
 
 /**
@@ -663,45 +638,6 @@ function _ding_unilogin_set_institutions(array $institutions) {
   variable_set('ding_unilogin_institutions', $institutions);
 
   _ding_unilogin_update_municipalities(array_keys($institutions));
-}
-
-/**
- * Get UNI•Login nonstitutions.
- *
- * @return array
- *   The list of nonstitutions indexed by id.
- */
-function _ding_unilogin_get_nonstitutions() {
-  return variable_get('ding_unilogin_nonstitutions', []);
-}
-
-/**
- * Get UNI•Login nonstitution municipality data.
- *
- * @return array
- *   The list of municipalities indexed by institution id.
- */
-function _ding_unilogin_get_nonstitution_municipalities() {
-  return array_map(static function (array $data) {
-    $municipality = [];
-    foreach ($data as $key => $value) {
-      if (preg_match('/^municipality_(?P<key>.+)$/', $key, $matches)) {
-        $municipality[$matches['key']] = $value;
-      }
-    }
-
-    return $municipality;
-  }, _ding_unilogin_get_nonstitutions());
-}
-
-/**
- * Set UNI•Login nonstitutions.
- *
- * @param array $nonstitutions
- *   The list of nonstitutions indexed by id.
- */
-function _ding_unilogin_set_nonstitutions(array $nonstitutions) {
-  variable_set('ding_unilogin_nonstitutions', $nonstitutions);
 }
 
 /**
@@ -732,20 +668,7 @@ function _ding_unilogin_update_municipalities(array $institution_ids = NULL) {
  *   The list of municipalities id.
  */
 function _ding_unilogin_get_municipalities() {
-  $municipalities = variable_get('ding_unilogin_municipalities', []);
-
-  // Merge in additional municipality data from nonstitutions.
-  $nonstitution_municipalities = _ding_unilogin_get_nonstitution_municipalities();
-  foreach ($municipalities as &$municipality) {
-    $institution_id = $municipality->instnr;
-    if (isset($nonstitution_municipalities[$institution_id])) {
-      foreach ($nonstitution_municipalities[$institution_id] as $key => $value) {
-        $municipality->{$key} = $value;
-      }
-    }
-  }
-
-  return $municipalities;
+  return variable_get('ding_unilogin_municipalities', []);
 }
 
 /**
