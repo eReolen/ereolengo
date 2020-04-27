@@ -4,6 +4,7 @@ namespace Drupal\ding_unilogin;
 
 use Drupal\ding_unilogin\Controller\InstitutionController;
 use Drupal\ding_unilogin\Controller\MunicipalityController;
+use Drupal\ding_unilogin\Controller\UserController;
 use RuntimeException;
 
 /**
@@ -48,6 +49,9 @@ class ApiRouter {
 
       case 'municipalities':
         return new MunicipalityController();
+
+      case 'users':
+        return new UserController();
 
       default:
         throw new RuntimeException(sprintf('Invalid controller name: %s', $name));

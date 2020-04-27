@@ -802,3 +802,72 @@ function ding_unilogin_jsonapi_deliver($result = NULL) {
 
   echo drupal_json_encode($result);
 }
+
+/**
+ * Get user data from UNI-Login service.
+ *
+ * On success, the result will have the following keys:
+ *
+ *   "username": the username
+ *   "municipality": data on the user's municipality
+ *   "library": data on the user's library
+ *
+ * @param string $username
+ *   The username.
+ *
+ * @return array
+ *   The user data.
+ */
+function _ding_unilogin_get_data($username) {
+  $user = new DingUniloginUser(
+    $username,
+    variable_get('ding_unilogin_ws_user', ''),
+    variable_get('ding_unilogin_ws_pass', '')
+  );
+  $user->setAuthName(ding_user_default_authname($username));
+
+  foreach (module_implements('ding_unilogin_login') as $module) {
+    $access = module_invoke($module, 'ding_unilogin_login', $user);
+    // Break out if someone denied access.
+    if (!$access) {
+      throw new RuntimeException('User does not have access.');
+    }
+  }
+
+  $institutionIds = $user->getInstitutionsIds();
+  // Called for side-effects!
+  $user->getInstitutionMunicipalities($institutionIds);
+  $institutions = $user->getInstitutions() ?: [];
+
+  // Always use first institution.
+  $institution = reset($institutions);
+  if (empty($institution)) {
+    throw new RuntimeException('Cannot get institution');
+  }
+
+  // Get library.
+  $municipalityIds = [$institution->kommunenr];
+  $libraries = publizon_filter_libraries_list($municipalityIds);
+  $library = reset($libraries);
+  if (empty($library)) {
+    throw new RuntimeException('Missing library');
+  }
+
+  // Get institution with municipality.
+  $institutions = _ding_unilogin_get_institutions(TRUE);
+  $institution = $institutions[$institution->instnr] ?? NULL;
+  if (empty($institution)) {
+    throw new RuntimeException('Cannot get institution');
+  }
+
+  return [
+    'username' => $user->getName(),
+    'institution' => $institution,
+    'library' => [
+      'name' => $library->library_name,
+      'retailer_id' => $library->retailer_id,
+      'unilogin_id' => $library->unilogin_id,
+    ],
+  ];
+
+}
