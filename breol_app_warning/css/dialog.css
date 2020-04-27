@@ -1,0 +1,9 @@
+.ui-dialog.app-warning .ui-dialog-content {
+  text-align: left;
+}
+
+/* Match some styling from .article */
+.ui-dialog.app-warning a {
+  color: #d50049;
+  text-decoration: none;
+}

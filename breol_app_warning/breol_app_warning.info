@@ -1,0 +1,4 @@
+name = BReol app warning
+description = "Show warning about obsolete app"
+core = 7.x
+package = eReolen for kids
