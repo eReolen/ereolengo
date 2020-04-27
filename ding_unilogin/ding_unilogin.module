@@ -720,7 +720,7 @@ function _ding_unilogin_update_municipalities(array $institution_ids = NULL) {
   $municipalities = $service->getInstitutions($institution_ids);
 
   // Index by institution id.
-  $municipalities = array_column($municipalities, null, 'instnr');
+  $municipalities = array_column($municipalities, NULL, 'instnr');
 
   variable_set('ding_unilogin_municipalities', $municipalities);
 }

@@ -9,7 +9,7 @@ use Drupal\ding_unilogin\Exception\HttpUnauthorizedException;
 /**
  * Institution controller.
  */
-class InstitutionController {
+class InstitutionController  extends  ApiController {
 
   /**
    * Handle request.
@@ -44,44 +44,6 @@ class InstitutionController {
     }
 
     throw new HttpBadRequestException('Invalid request');
-  }
-
-  /**
-   * Check that user is authorized to use the api as requested.
-   *
-   * @param array $path
-   *   The path.
-   *
-   * @throws \Drupal\ding_unilogin\Exception\HttpUnauthorizedException
-   *   If user is not authorized.
-   */
-  private function checkAuthorization(array $path) {
-    if (user_access('configure unilogin')) {
-      return;
-    }
-
-    $authorization = $this->getRequestHeader('authorization');
-    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
-      throw new HttpUnauthorizedException();
-    }
-    $token = $matches['token'];
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    switch ($method) {
-      case 'POST':
-        if (variable_get('ding_unilogin_api_token_write') !== $token) {
-          throw new HttpUnauthorizedException();
-        }
-        break;
-
-      case 'GET':
-        if (variable_get('ding_unilogin_api_token_read') !== $token) {
-          throw new HttpUnauthorizedException();
-        }
-        break;
-    }
-
-    // Authorized with token.
   }
 
   /**
@@ -153,26 +115,6 @@ class InstitutionController {
     _ding_unilogin_set_institutions($data);
 
     return NULL;
-  }
-
-  /**
-   * Get a http request header by name.
-   *
-   * @param string $name
-   *   The request header name.
-   *
-   * @return string|null
-   *   The request header if found.
-   */
-  protected function getRequestHeader($name) {
-    $name = strtoupper(preg_replace('/[^a-z0-9]/i', '_', $name));
-
-    // Workaround for authorization header (which is removed by Varnish).
-    if ('AUTHORIZATION' === $name && isset($_SERVER['HTTP_X_' . $name])) {
-      return $_SERVER['HTTP_X_' . $name];
-    }
-
-    return $_SERVER['HTTP_' . $name] ?? $_SERVER[$name] ?? NULL;
   }
 
 }

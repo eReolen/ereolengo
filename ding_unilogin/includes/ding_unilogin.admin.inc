@@ -118,6 +118,7 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
       '#markup' => implode('', array(
         '<ul>',
         '<li>' . l(t('Institutions'), '/unilogin/api/institutions') . '</li>',
+        '<li>' . l(t('Municipalities'), '/unilogin/api/municipalities') . '</li>',
         '</ul>',
       )),
     ),
