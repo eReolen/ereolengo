@@ -36,25 +36,10 @@ function breol_app_warning_admin_form(array $form, array &$form_state) {
   $form['breol_app_warning_popup_user_agent_pattern'] = [
     '#type' => 'textfield',
     '#title' => t('User agent pattern'),
-    '#description' => t("The pattern to match against browser's user-agent string."),
+    '#description' => t("The pattern to match against browser's user-agent string. Must be a valid JavaScript regexp pattern."),
     '#required' => TRUE,
-    '#default_value' => variable_get('breol_app_warning_popup_user_agent_pattern', '/gonative/'),
-    '#element_validate' => ['breol_app_warning_validate_regex'],
+    '#default_value' => variable_get('breol_app_warning_popup_user_agent_pattern', 'gonative'),
   ];
 
   return system_settings_form($form);
-}
-
-/**
- * Validation function for regex.
- */
-function breol_app_warning_validate_regex($element, &$form_state, $form) {
-  $pattern = $form_state['values'][$element['#name']];
-
-  // Run match to check pattern is valid and suppress any errors.
-  @preg_match($pattern, '');
-  // Check that regex match generated no error.
-  if (PREG_NO_ERROR !== preg_last_error()) {
-    form_error($form[$element['#name']], t('Invalid regex'));
-  }
 }

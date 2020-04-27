@@ -26,29 +26,29 @@ function breol_app_warning_menu() {
  * Implements hook_init().
  */
 function breol_app_warning_init() {
-  if (drupal_is_front_page() && isset($_SERVER['HTTP_USER_AGENT'])) {
-    $user_agent = $_SERVER['HTTP_USER_AGENT'];
+  if (drupal_is_front_page()) {
     $pattern = variable_get('breol_app_warning_popup_user_agent_pattern');
     $title = variable_get('breol_app_warning_popup_title');
     $content = variable_get('breol_app_warning_popup_content');
 
-    if ($pattern && $title && $content && @preg_match($pattern, $user_agent)) {
-      // We don't want to cache the page with the popup.
-      // @TODO Do we actually need to do this? Can we do it in a better way?
-      drupal_page_is_cacheable(FALSE);
-
-      $response = [
+    if ($pattern && $title && $content) {
+      $dialog_options = [
         'title' => $title,
         'data' => $content,
         'name' => 'app_warning',
         'class' => ['app-warning'],
-        'extra_data' => (object)[],
+        'extra_data' => (object) [],
       ];
 
       drupal_add_css(drupal_get_path('module', 'breol_app_warning') . '/css/dialog.css');
-      // Required by ding_popup.
+      drupal_add_js([
+        'breol_app_warning' => [
+          'dialog_options' => $dialog_options,
+          'user_agent_pattern' => $pattern,
+        ],
+      ], 'setting');
       drupal_add_library('system', 'ui.dialog');
-      drupal_add_js('jQuery(function() { Drupal.ding_popup.open('.json_encode($response).') })', 'inline');
+      drupal_add_js(drupal_get_path('module', 'breol_app_warning') . '/js/dialog.js');
     }
   }
 }
