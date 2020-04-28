@@ -187,9 +187,13 @@ class DingUniloginUser {
       $fake_municipalities = _ding_unilogin_get_nonstitution_municipalities();
       foreach ($institutionIds as $institutionId) {
         $institution = $this->getInstitutionService()->getInstitution($institutionId);
-        // Add or overwrite kommunenr from fake municipality if it's defined.
+        // Add or overwrite custom data from fake municipality if any.
         if (isset($institution->instnr, $fake_municipalities[$institution->instnr]['kommunenr'])) {
-          $institution->kommunenr = $fake_municipalities[$institution->instnr]['kommunenr'];
+          foreach ($fake_municipalities[$institution->instnr] as $key => $value) {
+            if (!empty($value)) {
+              $institution->{$key} = $value;
+            }
+          }
         }
         if (isset($institution->kommunenr)) {
           $municipalityIds[] = $institution->kommunenr;
