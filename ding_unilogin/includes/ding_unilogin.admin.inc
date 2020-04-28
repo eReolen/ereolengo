@@ -429,6 +429,12 @@ function ding_unilogin_admin_nonstitutions_form_validate(array $form, array &$fo
           t('Municipality id cannot be empty')
         );
       }
+      if (empty($row['municipality_kommune'])) {
+        form_set_error(
+          'ding_unilogin_nonstitutions][' . $child . '][municipality_kommune',
+          t('Municipality name cannot be empty')
+        );
+      }
     }
   }
 }
