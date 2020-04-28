@@ -24,7 +24,14 @@ function ding_unilogin_drush_command() {
  * Update municipalities.
  */
 function drush_ding_unilogin_update_municipalities() {
-  _ding_unilogin_update_municipalities();
-  $municipalities = _ding_unilogin_get_municipalities();
-  drush_log(t('Municipalities updated (!count)', ['!count' =>count($municipalities)]), 'status');
+  try {
+    _ding_unilogin_update_municipalities();
+
+    $municipalities = _ding_unilogin_get_municipalities();
+    drush_log(t('Municipalities updated (!count)', ['!count' => count($municipalities)]), 'status');
+  }
+  catch (\Exception $exception) {
+    drush_log(t('Error updating municipalities: !message', ['!message' => $exception->getMessage()]), 'error');
+  }
+
 }
