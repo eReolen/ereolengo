@@ -2,6 +2,10 @@
   text-align: left;
 }
 
+.ui-dialog.app-warning .ui-dialog-title {
+  font-size: 50%;
+}
+
 /* Match some styling from .article */
 .ui-dialog.app-warning a {
   color: #d50049;
