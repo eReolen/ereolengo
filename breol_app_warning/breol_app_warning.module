@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Module file for breol_app_warning.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function breol_app_warning_menu() {
+  $items['admin/config/ereolen/breol_app_warning'] = [
+    'title' => 'App warning settings',
+    'description' => 'Settings for the app warning',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['breol_app_warning_admin_form'],
+    'access arguments' => ['administer site configuration'],
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'includes/breol_app_warning.admin.inc',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_init().
+ */
+function breol_app_warning_init() {
+  if (drupal_is_front_page()) {
+    $pattern = variable_get('breol_app_warning_popup_user_agent_pattern');
+    $title = variable_get('breol_app_warning_popup_title');
+    $content = variable_get('breol_app_warning_popup_content');
+
+    if ($pattern && $title && $content) {
+      $dialog_options = [
+        'title' => $title,
+        'data' => $content,
+        'name' => 'app_warning',
+        'class' => ['app-warning'],
+        'extra_data' => (object) [],
+      ];
+
+      drupal_add_css(drupal_get_path('module', 'breol_app_warning') . '/css/dialog.css');
+      drupal_add_js([
+        'breol_app_warning' => [
+          'dialog_options' => $dialog_options,
+          'user_agent_pattern' => $pattern,
+        ],
+      ], 'setting');
+      drupal_add_library('system', 'ui.dialog');
+      drupal_add_js(drupal_get_path('module', 'breol_app_warning') . '/js/dialog.js');
+    }
+  }
+}
