@@ -51,3 +51,27 @@ function breol_news_page_theme() {
     ),
   );
 }
+
+/**
+ * Implements hook_preprocess_entity().
+ */
+function breol_news_page_preprocess_entity(&$variables) {
+  if ($variables['entity_type'] == 'paragraphs_item') {
+    /** @var \ParagraphsItemEntity $paragraphs_item */
+    $paragraphs_item = $variables['paragraphs_item'];
+    if ('picked_article_carousel' === $paragraphs_item->bundle()) {
+      $variables['content'] = array(
+        '#type' => 'ding_carousel',
+        '#title' => t('Nyheder'),
+        '#more_link' => l(t('All news'), 'nyheder'),
+        '#path' => 'reol_news_paragraph/ajax/paragraphs_item/'.$paragraphs_item->item_id.'/field_picked_articles',
+        '#offset' => 0,
+        '#items' => array(),
+        '#placeholder' => array(
+          '#theme' => 'reol_news_paragraph_placeholder',
+        ),
+        '#placeholders' => 5,
+      );
+    }
+  }
+}
