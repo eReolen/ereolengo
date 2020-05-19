@@ -9,7 +9,7 @@ use Drupal\ding_unilogin\Exception\HttpUnauthorizedException;
 /**
  * Institution controller.
  */
-class InstitutionController {
+class InstitutionController  extends  ApiController {
 
   /**
    * Handle request.
@@ -23,26 +23,16 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function handle(array $path) {
-    $authorization = $this->getRequestHeader('authorization');
-    if (!preg_match('/^(bearer|token) (?P<token>.+)$/i', $authorization, $matches)) {
-      throw new HttpUnauthorizedException();
-    }
-    $token = $matches['token'];
+    $this->checkAuthorization($path);
 
     if (empty($path)) {
       $method = $_SERVER['REQUEST_METHOD'];
 
       switch ($method) {
         case 'POST':
-          if (variable_get('ding_unilogin_api_token_write') !== $token) {
-            throw new HttpUnauthorizedException();
-          }
           return $this->update();
 
         case 'GET':
-          if (variable_get('ding_unilogin_api_token_read') !== $token) {
-            throw new HttpUnauthorizedException();
-          }
           return $this->list();
 
         default:
@@ -63,13 +53,7 @@ class InstitutionController {
    *   The list of institutions.
    */
   public function list() {
-    $institutions = _ding_unilogin_get_institutions();
-
-    // Add information on municipalities.
-    $municipalities = _ding_unilogin_get_municipalities();
-    foreach ($institutions as &$institution) {
-      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
-    }
+    $institutions = _ding_unilogin_get_institutions(TRUE);
 
     return ['data' => $institutions];
   }
@@ -86,14 +70,10 @@ class InstitutionController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function read($id) {
-    $institutions = _ding_unilogin_get_institutions();
+    $institutions = _ding_unilogin_get_institutions(TRUE);
 
     if (isset($institutions[$id])) {
-      $institution = $institutions[$id];
-      $municipalities = _ding_unilogin_get_municipalities();
-      $institution['municipality'] = $municipalities[$institution['id']] ?? NULL;
-
-      return ['data' => $institution];
+      return ['data' => $institutions[$id]];
     }
 
     throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));
@@ -135,26 +115,6 @@ class InstitutionController {
     _ding_unilogin_set_institutions($data);
 
     return NULL;
-  }
-
-  /**
-   * Get a http request header by name.
-   *
-   * @param string $name
-   *   The request header name.
-   *
-   * @return string|null
-   *   The request header if found.
-   */
-  protected function getRequestHeader($name) {
-    $name = strtoupper(preg_replace('/[^a-z0-9]/i', '_', $name));
-
-    // Workaround for authorization header (which is removed by Varnish).
-    if ('AUTHORIZATION' === $name && isset($_SERVER['HTTP_X_' . $name])) {
-      return $_SERVER['HTTP_X_' . $name];
-    }
-
-    return $_SERVER['HTTP_' . $name] ?? $_SERVER[$name] ?? NULL;
   }
 
 }
