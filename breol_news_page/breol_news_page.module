@@ -54,6 +54,8 @@ function breol_news_page_theme() {
 
 /**
  * Implements hook_preprocess_entity().
+ *
+ * Sets up placeholders and AJAX loading of news carousel items.
  */
 function breol_news_page_preprocess_entity(&$variables) {
   if ($variables['entity_type'] == 'paragraphs_item') {
