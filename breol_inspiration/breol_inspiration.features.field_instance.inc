@@ -278,10 +278,11 @@ function breol_inspiration_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
+        'module' => 'reol_news_paragraph',
         'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
+        'type' => 'reol_article_carousel',
+        'weight' => 0,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
@@ -323,10 +324,10 @@ function breol_inspiration_field_default_field_instances() {
     'description' => 'Overskrift til karrusel.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 1,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
