@@ -2,11 +2,9 @@
 
 namespace Drupal\ding_unilogin\Controller;
 
-use DingUniloginUser;
 use Drupal\ding_unilogin\Exception\HttpBadRequestException;
 use Drupal\ding_unilogin\Exception\HttpNotFoundException;
 use Drupal\ding_unilogin\Exception\HttpRuntimeException;
-use http\Exception\RuntimeException;
 
 /**
  * User controller.
@@ -48,13 +46,10 @@ class UserController extends ApiController {
   public function read($username) {
     try {
       $data = _ding_unilogin_get_data($username);
-
       return ['data' => $data];
     } catch (\Exception $exception) {
       throw new HttpRuntimeException('Error processing request', 400, $exception);
     }
-
-    throw new HttpNotFoundException(sprintf('Invalid username: %s', $username));
   }
 
 }

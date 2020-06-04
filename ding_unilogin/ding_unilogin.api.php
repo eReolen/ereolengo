@@ -35,9 +35,8 @@ function hook_ding_unilogin_login(DingUniloginUser $user) {
   $municipalities = $user->getInstitutionMunicipalities();
   $libraries = publizon_get_libraries();
   foreach ($libraries as $retailer_id => $library) {
-    if (!empty($library->unilogin_id) &&
-      in_array($library->unilogin_id, $municipalities)) {
-      $user->setProfileData('field_publizon_retailer_id', $retailer_id);
+    if (!empty($library->unilogin_id) && in_array($library->unilogin_id, $municipalities)) {
+      $user->setProfileData('retailer_id', $retailer_id);
       return TRUE;
     }
   }
