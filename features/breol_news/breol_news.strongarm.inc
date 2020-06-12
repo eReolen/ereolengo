@@ -62,6 +62,27 @@ function breol_news_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'diff_enable_revisions_page_node_breol_news';
+  $strongarm->value = 1;
+  $export['diff_enable_revisions_page_node_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_show_preview_changes_node_breol_news';
+  $strongarm->value = 1;
+  $export['diff_show_preview_changes_node_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'diff_view_mode_preview_node_breol_news';
+  $strongarm->value = 'full';
+  $export['diff_view_mode_preview_node_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'field_bundle_settings_node__breol_news';
   $strongarm->value = array(
     'view_modes' => array(
@@ -167,6 +188,76 @@ function breol_news_strongarm() {
   $strongarm->name = 'node_submitted_breol_news';
   $strongarm->value = 0;
   $export['node_submitted_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_expand_fieldset_breol_news';
+  $strongarm->value = '0';
+  $export['scheduler_expand_fieldset_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_publish_enable_breol_news';
+  $strongarm->value = 1;
+  $export['scheduler_publish_enable_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_publish_past_date_breol_news';
+  $strongarm->value = 'error';
+  $export['scheduler_publish_past_date_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_publish_required_breol_news';
+  $strongarm->value = 0;
+  $export['scheduler_publish_required_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_publish_revision_breol_news';
+  $strongarm->value = 0;
+  $export['scheduler_publish_revision_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_publish_touch_breol_news';
+  $strongarm->value = 1;
+  $export['scheduler_publish_touch_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_unpublish_enable_breol_news';
+  $strongarm->value = 0;
+  $export['scheduler_unpublish_enable_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_unpublish_required_breol_news';
+  $strongarm->value = 0;
+  $export['scheduler_unpublish_required_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_unpublish_revision_breol_news';
+  $strongarm->value = 0;
+  $export['scheduler_unpublish_revision_breol_news'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'scheduler_use_vertical_tabs_breol_news';
+  $strongarm->value = '1';
+  $export['scheduler_use_vertical_tabs_breol_news'] = $strongarm;
 
   return $export;
 }
