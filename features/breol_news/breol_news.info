@@ -6,6 +6,7 @@ version = 7.x-1.2
 project = breol_news
 dependencies[] = cs_adaptive_image
 dependencies[] = ctools
+dependencies[] = ereol_article
 dependencies[] = features
 dependencies[] = image
 dependencies[] = list

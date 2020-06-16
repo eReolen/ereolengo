@@ -238,6 +238,7 @@ function breol_inspiration_field_default_field_instances() {
     'settings' => array(
       'add_mode' => 'select',
       'allowed_bundles' => array(
+        'article_carousel' => 'article_carousel',
         'audio_preview' => -1,
         'breol_linkbox' => -1,
         'material_carousel' => 'material_carousel',
@@ -247,6 +248,7 @@ function breol_inspiration_field_default_field_instances() {
         'video' => -1,
       ),
       'bundle_weights' => array(
+        'article_carousel' => 13,
         'audio_preview' => 2,
         'breol_linkbox' => 7,
         'material_carousel' => 3,
