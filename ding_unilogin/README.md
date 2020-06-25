@@ -1,5 +1,14 @@
 # Ding Unilogin
 
+## Installation
+
+Create a `cron` job to regularly update the list of municipalities, e.g.
+
+```cron
+# Update list of municipalities daily at midnight.
+0 0 * * * drush ding-unilogin-update-municipalities
+```
+
 ## API
 
 Go to `/admin/config/ding/unilogin_api` to set the api token.
