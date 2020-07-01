@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Panels pane to display page title with result count.

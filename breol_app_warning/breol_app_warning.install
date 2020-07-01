@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * TODO missing file doc comment.
+ */
+
+/**
  * Implements hook_uninstall().
  */
 function breol_app_warning_uninstall() {

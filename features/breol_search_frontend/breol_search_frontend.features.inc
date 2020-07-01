@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * breol_search_frontend.features.inc

@@ -74,4 +74,3 @@ function ding_unilogin_update_7102() {
 function ding_unilogin_update_7103() {
   _ding_unilogin_update_municipalities();
 }
-
