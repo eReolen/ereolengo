@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_inspiration.features.field_base.inc
