@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the breol_link_paragraph module.
+ */
+
+/**
+ * Convert colors on paragraphs.
+ */
+function breol_link_paragraph_update_7100() {
+  $entity_type = 'paragraphs_item';
+  $bundle = 'breol_linkbox';
+  $field_name = 'field_breol_linkbox_color';
+  $color_map = [
+    // old rgb value => new rgb value, e.g. '#ff7800' => '#abeabe'.
+    // Set this to match changes in breol_link_paragraph.features.field_base.inc.
+  ];
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle);
+  $result = $query->execute();
+  if (isset($result[$entity_type])) {
+    $items = entity_load($entity_type, array_keys($result[$entity_type]));
+    foreach ($items as $item) {
+      $wrapper = entity_metadata_wrapper($entity_type, $item);
+      $field = $wrapper->get($field_name);
+      $value = $field->value();
+      if (isset($value['rgb'], $color_map[$value['rgb']])) {
+        $field->set(array_merge($value, ['rgb' => $color_map[$value['rgb']]]));
+        $wrapper->save();
+      }
+    }
+  }
+}

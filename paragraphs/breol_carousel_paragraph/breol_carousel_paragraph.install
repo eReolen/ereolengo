@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the breol_link_paragraph module.
+ */
+
+/**
+ * Convert colors on paragraphs.
+ */
+function breol_carousel_paragraph_update_7101() {
+  $entity_type = 'paragraphs_item';
+  $bundle = 'material_carousel';
+  $field_name = 'field_material_carousel_color';
+  $color_map = [
+    // old rgb value => new rgb value, e.g. '#ff7800' => '#abeabe'.
+  ];
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle);
+  $result = $query->execute();
+  if (isset($result[$entity_type])) {
+    $items = entity_load($entity_type, array_keys($result[$entity_type]));
+    foreach ($items as $item) {
+      $wrapper = entity_metadata_wrapper($entity_type, $item);
+      $field = $wrapper->get($field_name);
+      $value = $field->value();
+      if (isset($value['rgb'], $color_map[$value['rgb']])) {
+        $field->set(array_merge($value, ['rgb' => $color_map[$value['rgb']]]));
+        $wrapper->save();
+      }
+    }
+  }
+}
