@@ -13,7 +13,9 @@ function breol_carousel_paragraph_update_7101() {
   $bundle = 'material_carousel';
   $field_name = 'field_material_carousel_color';
   $color_map = [
-    // old rgb value => new rgb value, e.g. '#ff7800' => '#abeabe'.
+    '#ff7800' => '#fa6400',
+    '#0aa9c1' =>'#0aa1b8',
+    '#7bb93a' => '#6da333'
   ];
 
   $query = new EntityFieldQuery();
