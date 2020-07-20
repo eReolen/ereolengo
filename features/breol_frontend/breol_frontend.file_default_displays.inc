@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_frontend.file_default_displays.inc

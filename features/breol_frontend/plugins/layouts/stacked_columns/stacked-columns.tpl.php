@@ -5,8 +5,11 @@
  * TODO missing file doc comment.
  */
 ?>
-<div <?php if (!empty($css_id)) {print ' id="$css_id"';
-} ?>>
+<div <?php
+if (!empty($css_id)) {
+  print ' id="$css_id"';
+}
+?>>
   <?php if (!empty($content['header'])): ?>
     <div class="stacked-section header">
       <div class="header__inner">

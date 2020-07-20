@@ -634,7 +634,7 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
 
 /**
  * Get UNI•Login institutions.
-*
+ *
  * @param bool $with_municipalities
  *   If true, municipality data will be added to each institution.
  *

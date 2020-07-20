@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_video.file_default_displays.inc

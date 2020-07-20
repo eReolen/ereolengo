@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_search_frontend.strongarm.inc

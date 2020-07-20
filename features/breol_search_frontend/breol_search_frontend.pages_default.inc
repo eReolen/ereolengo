@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_search_frontend.pages_default.inc
@@ -50,32 +49,32 @@ function breol_search_frontend_default_page_manager_handlers() {
   $display->uuid = '1ca095a8-2f66-4488-bd64-911ec2f14399';
   $display->content = array();
   $display->panels = array();
-  $pane = new stdClass();
-  $pane->pid = 'new-4e846570-83d2-4a19-9e21-9eea5286ca80';
-  $pane->panel = 'main_content';
-  $pane->type = 'panels_mini';
-  $pane->subtype = 'search';
-  $pane->shown = TRUE;
-  $pane->access = array();
-  $pane->configuration = array(
-    'context' => array(
-      0 => 'argument_string_1',
-    ),
-    'override_title' => 1,
-    'override_title_text' => '',
-    'override_title_heading' => 'h2',
-  );
-  $pane->cache = array();
-  $pane->style = array(
-    'settings' => NULL,
-  );
-  $pane->css = array();
-  $pane->extras = array();
-  $pane->position = 0;
-  $pane->locks = array();
-  $pane->uuid = '4e846570-83d2-4a19-9e21-9eea5286ca80';
-  $display->content['new-4e846570-83d2-4a19-9e21-9eea5286ca80'] = $pane;
-  $display->panels['main_content'][0] = 'new-4e846570-83d2-4a19-9e21-9eea5286ca80';
+    $pane = new stdClass();
+    $pane->pid = 'new-4e846570-83d2-4a19-9e21-9eea5286ca80';
+    $pane->panel = 'main_content';
+    $pane->type = 'panels_mini';
+    $pane->subtype = 'search';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'context' => array(
+        0 => 'argument_string_1',
+      ),
+      'override_title' => 1,
+      'override_title_text' => '',
+      'override_title_heading' => 'h2',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $pane->uuid = '4e846570-83d2-4a19-9e21-9eea5286ca80';
+    $display->content['new-4e846570-83d2-4a19-9e21-9eea5286ca80'] = $pane;
+    $display->panels['main_content'][0] = 'new-4e846570-83d2-4a19-9e21-9eea5286ca80';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = 'new-4e846570-83d2-4a19-9e21-9eea5286ca80';
   $handler->conf['display'] = $display;
