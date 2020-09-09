@@ -111,6 +111,13 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
     '#description' => t('Token needed to access the api. Leave empty to generate a random token.'),
   );
 
+  $form['api']['ding_unilogin_api_allowed_http_origins'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Allowed http origins (one per line)'),
+    '#default_value' => variable_get('ding_unilogin_api_allowed_http_origins', 'https://givadgang.uni-login.dk'),
+    '#description' => t('Allowed http origins, e.g. <pre>https://givadgang.uni-login.dk</pre>'),
+  );
+
   $form['ding_unilogin_api_endpoints'] = array(
     '#type' => 'fieldset',
     '#title' => t('Api endpoints'),
