@@ -21,6 +21,7 @@ function ding_unilogin_uninstall() {
   variable_del('ding_unilogin_municipalities');
   variable_del('ding_unilogin_api_token_read');
   variable_del('ding_unilogin_api_token_write');
+  variable_del('ding_unilogin_api_allowed_http_origins');
 }
 
 /**
@@ -74,4 +75,3 @@ function ding_unilogin_update_7102() {
 function ding_unilogin_update_7103() {
   _ding_unilogin_update_municipalities();
 }
-
