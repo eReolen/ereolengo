@@ -778,6 +778,18 @@ function ding_unilogin_api_router() {
  */
 function ding_unilogin_jsonapi_deliver($result = NULL) {
   drupal_add_http_header('content-type', 'application/vnd.api+json');
+
+  $http_origin = $_SERVER['HTTP_ORIGIN'] ?? NULL;
+  if (_ding_unilogin_is_allowed_http_origin($http_origin)) {
+    // Set Cross-Origin Resource Sharing headers
+    // (cf. https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+    // @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
+    drupal_add_http_header('access-control-allow-origin', $http_origin);
+    // Allow our custom authorization header.
+    // @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+    drupal_add_http_header('access-control-allow-headers', implode(',', ['x-authorization', 'content-type']));
+  }
+
   drupal_page_is_cacheable(FALSE);
 
   if ($result instanceof \Exception) {
@@ -801,6 +813,26 @@ function ding_unilogin_jsonapi_deliver($result = NULL) {
   }
 
   echo drupal_json_encode($result);
+}
+
+/**
+ * Check if http origin is allowed.
+ *
+ * @param string|null $http_origin
+ *   The http origin.
+ *
+ * @return bool
+ *   True if and only if http origin is set and allowed.
+ */
+function _ding_unilogin_is_allowed_http_origin($http_origin) {
+  if (empty($http_origin)) {
+    return FALSE;
+  }
+
+  $spec = variable_get('ding_unilogin_api_allowed_http_origins');
+  $allowed_http_origins = array_map('trim', explode(PHP_EOL, $spec));
+
+  return in_array($http_origin, $allowed_http_origins, TRUE);
 }
 
 /**
