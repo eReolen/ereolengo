@@ -23,11 +23,15 @@ class InstitutionController  extends  ApiController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function handle(array $path) {
+    // Always allow 'OPTIONS' requests.
+    $method = $_SERVER['REQUEST_METHOD'];
+    if ('OPTIONS' === $method) {
+      return 'OK';
+    }
+
     $this->checkAuthorization($path);
 
     if (empty($path)) {
-      $method = $_SERVER['REQUEST_METHOD'];
-
       switch ($method) {
         case 'POST':
           return $this->update();
