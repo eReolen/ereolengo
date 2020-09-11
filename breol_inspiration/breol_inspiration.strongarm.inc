@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * breol_inspiration.strongarm.inc

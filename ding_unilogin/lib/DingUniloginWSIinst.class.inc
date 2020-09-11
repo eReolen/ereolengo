@@ -35,7 +35,7 @@ class DingUniloginWSIinst extends DingUniloginServiceBase {
    * @return object[]
    *   List of institution data.
    */
-  public function getInstitutions($ids) {
+  public function getInstitutions(array $ids) {
     $parameters = array(
       'instnr' => $ids,
     );

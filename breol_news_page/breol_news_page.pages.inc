@@ -63,7 +63,7 @@ function breol_news_page_news_page() {
 }
 
 /**
- * Implements hook_query_TAG_alter()
+ * Implements hook_query_TAG_alter().
  *
  * Get all relevant nodes without a news type tag.
  * This is the only way to get around a left join in an entity query.
@@ -76,13 +76,13 @@ function breol_news_page_query_b_news_node_is_not_tagged_alter(QueryAlterableInt
 /**
  * Get all items with a certain tag.
  *
- * @param $items integer
+ * @param int $items
  *   The number of items to display.
- * @param $news_category string.
+ * @param string $news_category
  *   The query parameters.
  *
  * @return \EntityFieldQuery
- *  The entity field query
+ *   The entity field query.
  */
 function _breol_news_page_news_query($items, $news_category = '') {
   // Make entity field query with news catagory as condition.

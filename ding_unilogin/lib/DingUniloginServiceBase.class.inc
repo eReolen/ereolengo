@@ -9,12 +9,19 @@
  * Base class for UNI•Login services.
  */
 abstract class DingUniloginServiceBase {
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $client;
 
   /**
    * Soap version to use.
    *
    * Not all services uses the same Soap version.
+   *
+   * @var string
    */
   protected $soapVersion = SOAP_1_2;
 
