@@ -13,3 +13,16 @@ include_once 'breol_subject.features.inc';
 function breol_subject_ctools_plugin_directory($owner, $plugin_type) {
   return 'plugins/' . $plugin_type;
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function breol_subject_preprocess_node(&$variables) {
+  if ('breol_subject' === $variables['type'] && 'teaser' === $variables['view_mode']) {
+    $node = $variables['node'];
+    // Overwrite the node url if subject has a teaser menu target.
+    if (isset($node->field_teaser_menu_target[LANGUAGE_NONE][0]['target_id'])) {
+      $variables['node_url'] = url('node/'.$node->field_teaser_menu_target[LANGUAGE_NONE][0]['target_id']);
+    }
+  }
+}

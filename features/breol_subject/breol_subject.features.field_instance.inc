@@ -97,7 +97,7 @@ function breol_subject_field_default_field_instances() {
         'manualcrop_thumblist' => FALSE,
       ),
       'type' => 'media_generic',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -146,7 +146,7 @@ function breol_subject_field_default_field_instances() {
       'module' => 'color_field',
       'settings' => array(),
       'type' => 'color_field_plain_text',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -232,7 +232,7 @@ function breol_subject_field_default_field_instances() {
         'manualcrop_thumblist' => FALSE,
       ),
       'type' => 'media_generic',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -283,6 +283,61 @@ function breol_subject_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'node-breol_subject-field_teaser_menu_target'.
+  $field_instances['node-breol_subject-field_teaser_menu_target'] = array(
+    'bundle' => 'breol_subject',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Valgfri inspirationsside som punktet i temamenuen skal henvise til i stedet for selve temasiden.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser_medium' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser_small' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_teaser_menu_target',
+    'label' => 'Temamenuside',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 2,
     ),
   );
@@ -349,6 +404,8 @@ function breol_subject_field_default_field_instances() {
   t('Cover Image');
   t('Ikon');
   t('Søgestreng');
+  t('Temamenuside');
+  t('Valgfri inspirationsside som punktet i temamenuen skal henvise til i stedet for selve temasiden.');
   t('Vægt');
   t('Vægt i tema menuen. Lavere vægte kommer først, temaer med samme vægt sorteres alfabetisk.');
 

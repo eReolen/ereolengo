@@ -99,10 +99,13 @@ function breol_subject_strongarm() {
           'weight' => '0',
         ),
         'path' => array(
-          'weight' => '5',
+          'weight' => '6',
         ),
         'redirect' => array(
-          'weight' => '4',
+          'weight' => '5',
+        ),
+        'metatags' => array(
+          'weight' => '9',
         ),
       ),
       'display' => array(),
