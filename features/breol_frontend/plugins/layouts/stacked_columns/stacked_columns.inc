@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @file
+ * TODO missing file doc comment.
+ */
+
 $plugin['stacked_columns'] = array(
   'title' => t('Wille Stacked Columns'),
   'icon' => '25_50_25.png',

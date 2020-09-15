@@ -5,7 +5,6 @@
  * Base module for ereolen for kids.
  */
 
-
 /**
  * Implements hook_init().
  */

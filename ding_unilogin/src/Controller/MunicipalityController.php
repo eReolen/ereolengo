@@ -42,7 +42,6 @@ class MunicipalityController extends ApiController {
     throw new HttpBadRequestException('Invalid request');
   }
 
-
   /**
    * List of municipalities.
    *
@@ -76,13 +75,16 @@ class MunicipalityController extends ApiController {
     throw new HttpNotFoundException(sprintf('Invalid municipality id: %s', $id));
   }
 
+  /**
+   * Get municipalities.
+   */
   private function getMunicipalities() {
     $municipalities = _ding_unilogin_get_municipalities(TRUE);
 
     // @TODO: Add Publizon keys.
     $libraries = publizon_get_libraries();
     // Index by kommunenr (unilogin_id).
-    $libraries = array_column($libraries, null, 'unilogin_id');
+    $libraries = array_column($libraries, NULL, 'unilogin_id');
     foreach ($municipalities as &$municipality) {
       $retailer = $libraries[$municipality->kommunenr] ?? NULL;
       if (NULL !== $retailer) {

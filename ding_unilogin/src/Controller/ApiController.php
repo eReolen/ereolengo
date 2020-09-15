@@ -2,8 +2,6 @@
 
 namespace Drupal\ding_unilogin\Controller;
 
-use Drupal\ding_unilogin\Exception\HttpBadRequestException;
-use Drupal\ding_unilogin\Exception\HttpNotFoundException;
 use Drupal\ding_unilogin\Exception\HttpUnauthorizedException;
 
 /**
@@ -33,7 +31,7 @@ abstract class ApiController {
    * @throws \Drupal\ding_unilogin\Exception\HttpUnauthorizedException
    *   If user is not authorized.
    */
-protected function checkAuthorization(array $path) {
+  protected function checkAuthorization(array $path) {
     if (user_access('configure unilogin')) {
       return;
     }

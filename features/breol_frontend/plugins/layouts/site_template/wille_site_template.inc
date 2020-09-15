@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @file
+ * TODO missing file doc comment.
+ */
+
 $plugin = array(
   'title'     => t('Wille Site template'),
   'theme'     => 'wille_site_template',

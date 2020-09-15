@@ -26,5 +26,5 @@ function ding_unilogin_drush_command() {
 function drush_ding_unilogin_update_municipalities() {
   _ding_unilogin_update_municipalities();
   $municipalities = _ding_unilogin_get_municipalities();
-  drush_log(t('Municipalities updated (!count)', ['!count' =>count($municipalities)]), 'status');
+  drush_log(t('Municipalities updated (!count)', ['!count' => count($municipalities)]), 'status');
 }
