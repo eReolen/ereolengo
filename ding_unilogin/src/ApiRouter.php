@@ -2,9 +2,9 @@
 
 namespace Drupal\ding_unilogin;
 
-use Drupal\ding_unilogin\Controller\InstitutionController;
-use Drupal\ding_unilogin\Controller\MunicipalityController;
-use Drupal\ding_unilogin\Controller\UserController;
+use Drupal\ding_unilogin\Controller\Api\InstitutionController;
+use Drupal\ding_unilogin\Controller\Api\MunicipalityController;
+use Drupal\ding_unilogin\Controller\Api\UserController;
 use RuntimeException;
 
 /**
