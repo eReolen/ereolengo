@@ -662,6 +662,10 @@ function _ding_unilogin_get_institutions($with_municipalities = FALSE) {
  *   The list of institutions indexed by id.
  */
 function _ding_unilogin_set_institutions(array $institutions) {
+  // Force institution ids to be strings (most look like integers).
+  foreach ($institutions as &$institution) {
+    $institution['id'] = (string) $institution['id'];
+  }
   variable_set('ding_unilogin_institutions', $institutions);
 
   _ding_unilogin_update_municipalities(array_keys($institutions));
