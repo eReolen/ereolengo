@@ -4,12 +4,11 @@ namespace Drupal\ding_unilogin\Controller;
 
 use Drupal\ding_unilogin\Exception\HttpBadRequestException;
 use Drupal\ding_unilogin\Exception\HttpNotFoundException;
-use Drupal\ding_unilogin\Exception\HttpUnauthorizedException;
 
 /**
  * Institution controller.
  */
-class InstitutionController  extends  ApiController {
+class InstitutionController extends ApiController {
 
   /**
    * Handle request.

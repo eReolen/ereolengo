@@ -170,7 +170,7 @@ function ding_unilogin_url_json($path) {
  * @param array $form_state
  *   The state of the form.
  */
-function ding_unilogin_form_alter(&$form, &$form_state, $form_id) {
+function ding_unilogin_form_alter(array &$form, array &$form_state, $form_id) {
   $form_ids = array(
     'user_login',
     'user_login_block',
@@ -291,6 +291,7 @@ function ding_unilogin_publizon_client_id_alter(&$client_id) {
  *   The current logout state.
  *
  * @return array|mixed|null
+ *   TODO Description for the @return value is missing.
  */
 function _ding_unilogin_global_logout($state = NULL) {
   $logout = &drupal_static(__FUNCTION__);
@@ -384,7 +385,8 @@ function ding_unilogin_url($path = NULL) {
 /**
  * Check whether a user is logged in via UNI•Login.
  *
- * @param null $account
+ * @param mixed $account
+ *   TODO Missing parameter comment.
  *
  * @return bool
  *   TRUE if authenticated with unilogin else FALSE.
@@ -632,7 +634,7 @@ function _ding_unilogin_set_user_data(array $data = NULL) {
 
 /**
  * Get UNI•Login institutions.
-*
+ *
  * @param bool $with_municipalities
  *   If true, municipality data will be added to each institution.
  *

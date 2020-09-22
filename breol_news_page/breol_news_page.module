@@ -66,7 +66,7 @@ function breol_news_page_preprocess_entity(&$variables) {
         '#type' => 'ding_carousel',
         '#title' => t('News'),
         '#more_link' => l(t('All news'), 'nyheder'),
-        '#path' => 'reol_news_paragraph/ajax/paragraphs_item/'.$paragraphs_item->item_id.'/field_picked_articles',
+        '#path' => 'reol_news_paragraph/ajax/paragraphs_item/' . $paragraphs_item->item_id . '/field_picked_articles',
         '#offset' => 0,
         '#items' => array(),
         '#placeholder' => array(

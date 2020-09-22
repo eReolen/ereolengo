@@ -57,8 +57,8 @@ function breol_unilogin_statistics_form_validate($form, &$form_state) {
   if ($form_state['to'] > new DateObject()) {
     form_error($form['to'], t('Dates must be in the past.'));
   }
-}
 
+}
 
 /**
  * Submit handler for statisticts dump form.
@@ -105,12 +105,12 @@ function breol_unilogin_statistics_data($from, $to) {
   print implode(';', $fields) . "\n";
 
   $query = db_select('reol_statistics_loans', 'l')
-       ->fields('l', array(
-         'timestamp',
-         'retailer_id',
-         'isbn',
-       ))
-       ->condition('timestamp', array($from, $to), 'BETWEEN');
+    ->fields('l', array(
+      'timestamp',
+      'retailer_id',
+      'isbn',
+    ))
+    ->condition('timestamp', array($from, $to), 'BETWEEN');
 
   $query->join('reol_statistics_unilogin', 'u', 'l.sid = u.sid');
   $query
@@ -153,7 +153,7 @@ function breol_unilogin_statistics_data_other($from, $to) {
 
   print "timestamp;retailer_id;library;isbn\n";
   $query = db_select('reol_statistics_loans', 'b')
-         ->fields('b', $fields);
+    ->fields('b', $fields);
   $query->leftJoin('reol_statistics_unilogin', 'u', 'b.sid = u.sid');
   $query->isNull('u.sid')
     ->condition('timestamp', array($from, $to), 'BETWEEN')

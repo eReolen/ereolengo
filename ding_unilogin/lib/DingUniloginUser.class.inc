@@ -9,13 +9,53 @@
  * Represents a UNI•Login user.
  */
 class DingUniloginUser {
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $name;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $authname;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $authService;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $userService;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $institutionService;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $profileData = array();
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $wsuser;
+  /**
+   * TODO missing member variable doc comment.
+   *
+   * @var string
+   */
   protected $wspass;
 
   /**
