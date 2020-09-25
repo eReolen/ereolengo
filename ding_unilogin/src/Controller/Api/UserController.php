@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\ding_unilogin\Controller;
+namespace Drupal\ding_unilogin\Controller\Api;
 
 use Drupal\ding_unilogin\Exception\HttpBadRequestException;
 use Drupal\ding_unilogin\Exception\HttpRuntimeException;
