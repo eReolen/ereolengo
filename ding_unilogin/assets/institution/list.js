@@ -21,13 +21,15 @@ const App = ({ api_url: apiUrl }) => {
         // Group institutions by municipality.
         const municipalities = {}
         for (const { municipality, ...institution } of Object.values(institutions.data)) {
-          if (!municipalities[municipality.kommunenr]) {
-            municipalities[municipality.kommunenr] = {
-              municipality: municipality,
-              institutions: []
+          if (municipality) {
+            if (!municipalities[municipality.kommunenr]) {
+              municipalities[municipality.kommunenr] = {
+                municipality: municipality,
+                institutions: []
+              }
             }
+            municipalities[municipality.kommunenr].institutions.push(institution)
           }
-          municipalities[municipality.kommunenr].institutions.push(institution)
         }
 
         // Sort institutions by name.
