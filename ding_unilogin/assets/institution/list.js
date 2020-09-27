@@ -21,7 +21,7 @@ const App = ({ api_url: apiUrl }) => {
         // Group institutions by municipality.
         const municipalities = {}
         for (const { municipality, ...institution } of Object.values(institutions.data)) {
-          if (municipality) {
+          if (municipality && municipality.kommunenr) {
             if (!municipalities[municipality.kommunenr]) {
               municipalities[municipality.kommunenr] = {
                 municipality: municipality,
