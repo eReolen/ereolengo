@@ -75,3 +75,10 @@ function ding_unilogin_update_7102() {
 function ding_unilogin_update_7103() {
   _ding_unilogin_update_municipalities();
 }
+
+/**
+ * Convert institution ids to strings.
+ */
+function ding_unilogin_update_7104() {
+  _ding_unilogin_set_institutions(_ding_unilogin_get_institutions());
+}

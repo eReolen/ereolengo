@@ -1,0 +1,29 @@
+.institution-list {
+  .header {
+    text-align: right;
+  }
+
+  #app {
+    margin-top: 1em;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    font-size: 100%;
+  }
+
+  table {
+    margin: 1em 0;
+    tr {
+      th, td {
+        text-align: left;
+        background: transparent;
+      }
+
+      &.municipality {
+        background: #ddd;
+      }
+    }
+  }
+}

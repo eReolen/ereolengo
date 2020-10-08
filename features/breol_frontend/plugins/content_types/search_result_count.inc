@@ -22,7 +22,11 @@ function breol_frontend_search_result_count_content_type_render($subtype, $conf,
 
   $search_result = ting_search_current_results();
   if (isset($search_result)) {
-    $results = $search_result->getNumTotalObjects();
+    // See comment in ting_search_result_count_content_type_render for details
+    // on this.
+    $results = $search_result->hasMoreResults() ?
+      $search_result->getNumTotalObjects() :
+      $search_result->getNumCollections();
     $string = format_plural($results,
       'Search result: 1 result',
       'Search result: @count results');

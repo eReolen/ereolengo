@@ -2,15 +2,13 @@
 
 namespace Drupal\ding_unilogin;
 
-use Drupal\ding_unilogin\Controller\Api\InstitutionController;
-use Drupal\ding_unilogin\Controller\Api\MunicipalityController;
-use Drupal\ding_unilogin\Controller\Api\UserController;
+use Drupal\ding_unilogin\Controller\InstitutionController;
 use RuntimeException;
 
 /**
- * Router for api requests.
+ * Router for requests.
  */
-class ApiRouter {
+class Router {
 
   /**
    * Route to controller.
@@ -46,12 +44,6 @@ class ApiRouter {
     switch ($name) {
       case 'institutions':
         return new InstitutionController();
-
-      case 'municipalities':
-        return new MunicipalityController();
-
-      case 'users':
-        return new UserController();
 
       default:
         throw new RuntimeException(sprintf('Invalid controller name: %s', $name));

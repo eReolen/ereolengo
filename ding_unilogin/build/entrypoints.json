@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "institution/list": {
+      "css": [
+        "/build/institution/list.css"
+      ],
+      "js": [
+        "/build/institution/list.js"
+      ]
+    }
+  }
+}
