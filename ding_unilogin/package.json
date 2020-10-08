@@ -1,0 +1,26 @@
+{
+  "name": "os2conticki_content",
+  "version": "1.0.0",
+  "author": "Mikkel Ricky <rimi@aarhus.dk>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@symfony/webpack-encore": "^0.30.2",
+    "core-js": "^3.6.5",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "sass-loader": "^8.0.0",
+    "standard": "^14.3.1",
+    "webpack-notifier": "^1.6.0"
+  },
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "build": "encore production --progress",
+    "watch": "encore dev --watch",
+    "coding-standards-check": "cd assets && standard",
+    "coding-standards-apply": "cd assets && standard --fix"
+  }
+}

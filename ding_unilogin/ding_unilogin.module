@@ -6,6 +6,7 @@
  */
 
 use Drupal\ding_unilogin\ApiRouter;
+use Drupal\ding_unilogin\Router;
 use Drupal\ding_unilogin\Exception\HttpException;
 
 /**
@@ -77,6 +78,12 @@ function ding_unilogin_menu() {
     'page arguments' => array(2),
     'access callback' => TRUE,
     'delivery callback' => 'ding_unilogin_jsonapi_deliver',
+  );
+
+  $items['unilogin/%'] = array(
+    'page callback' => 'ding_unilogin_router',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
   );
 
   return $items;
@@ -662,6 +669,10 @@ function _ding_unilogin_get_institutions($with_municipalities = FALSE) {
  *   The list of institutions indexed by id.
  */
 function _ding_unilogin_set_institutions(array $institutions) {
+  // Force institution ids to be strings (most look like integers).
+  foreach ($institutions as &$institution) {
+    $institution['id'] = (string) $institution['id'];
+  }
   variable_set('ding_unilogin_institutions', $institutions);
 
   _ding_unilogin_update_municipalities(array_keys($institutions));
@@ -750,6 +761,27 @@ function _ding_unilogin_get_municipalities() {
   }
 
   return $municipalities;
+}
+
+/**
+ * Router.
+ *
+ * @return array|\Exception
+ *   The data on success or an exception.
+ */
+function ding_unilogin_router() {
+  $args = func_get_args();
+
+  try {
+    $router = new Router();
+
+    return $router->route($args);
+  }
+  catch (\Exception $exception) {
+    return [
+      '#markup' => $exception->getMessage(),
+    ];
+  }
 }
 
 /**

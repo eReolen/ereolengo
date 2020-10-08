@@ -47,3 +47,21 @@ institutions!
 docker-compose run --rm drush --root=/app --yes pm-enable simpletest
 docker-compose run --rm drush --root=/app --uri=http://nginx0 test-run ding_unilogin
 ```
+
+## Institutions list
+
+A list of institutions is available on `/unilogin/institutions`.
+
+### Building React app
+
+```sh
+yarn install
+yarn build
+```
+
+#### Coding standards
+
+```sh
+yarn coding-standards-check
+yarn coding-standards-apply
+```

@@ -3,12 +3,11 @@
 namespace Drupal\ding_unilogin\Controller;
 
 use Drupal\ding_unilogin\Exception\HttpBadRequestException;
-use Drupal\ding_unilogin\Exception\HttpNotFoundException;
 
 /**
  * Institution controller.
  */
-class InstitutionController extends ApiController {
+class InstitutionController {
 
   /**
    * Handle request.
@@ -22,28 +21,14 @@ class InstitutionController extends ApiController {
    * @throws \Drupal\ding_unilogin\Exception\HttpException
    */
   public function handle(array $path) {
-    // Always allow 'OPTIONS' requests.
     $method = $_SERVER['REQUEST_METHOD'];
-    if ('OPTIONS' === $method) {
-      return 'OK';
-    }
 
-    $this->checkAuthorization($path);
+    switch ($method) {
+      case 'GET':
+        return $this->list();
 
-    if (empty($path)) {
-      switch ($method) {
-        case 'POST':
-          return $this->update();
-
-        case 'GET':
-          return $this->list();
-
-        default:
-          throw new HttpBadRequestException(sprintf('Method %s not supported', $method));
-      }
-    }
-    elseif (1 === count($path)) {
-      return $this->read($path[0]);
+      default:
+        throw new HttpBadRequestException(sprintf('Method %s not supported', $method));
     }
 
     throw new HttpBadRequestException('Invalid request');
@@ -56,68 +41,104 @@ class InstitutionController extends ApiController {
    *   The list of institutions.
    */
   public function list() {
-    $institutions = _ding_unilogin_get_institutions(TRUE);
+    $format = drupal_get_query_parameters()['_format'] ?? NULL;
+    if (!empty($format)) {
+      return $this->export($format);
+    }
 
-    return ['data' => $institutions];
+    $settings = [
+      'api_url' => url('unilogin/institutions', ['query' => ['_format' => 'json']]),
+    ];
+
+    return [
+      '#type' => 'container',
+      '#prefix' => '<div class="institution-list">',
+      '#suffix' => '</div>',
+
+      'header' => [
+        '#type' => 'container',
+        '#prefix' => '<div class="header">',
+        '#suffix' => '</div>',
+
+        'export_csv' => [
+          '#markup' => l(t('Export all institutions (CSV)'), 'unilogin/institutions', [
+            'query' => ['_format' => 'csv'],
+            'attributes' => ['class' => ['export', 'csv']],
+          ]),
+        ],
+      ],
+      'app' => [
+        '#markup' => '<div id="app"></div>',
+      ],
+
+      '#attached' => [
+        'css' => [
+          drupal_get_path('module', 'ding_unilogin') . '/build/institution/list.css' => [],
+        ],
+        'js' => [
+          [
+            'type' => 'setting',
+            'data' => ['ding_unilogin' => $settings],
+          ],
+          [
+            'data' => drupal_get_path('module', 'ding_unilogin') . '/build/institution/list.js',
+            'type' => 'file',
+            'scope' => 'footer',
+          ],
+        ],
+      ],
+    ];
   }
 
   /**
-   * Get an institution by id.
+   * Export UNI•Login institutions data.
    *
-   * @param string $id
-   *   The institution id.
-   *
-   * @return array
-   *   The institution if found.
-   *
-   * @throws \Drupal\ding_unilogin\Exception\HttpException
+   * @param string $format
+   *   The format.
    */
-  public function read($id) {
-    $institutions = _ding_unilogin_get_institutions(TRUE);
-
-    if (isset($institutions[$id])) {
-      return ['data' => $institutions[$id]];
+  private function export($format) {
+    // Call the UNI•Login institutions api to get data.
+    $apiUrl = url('unilogin/api/institutions', ['absolute' => TRUE]);
+    $response = drupal_http_request($apiUrl, [
+      'headers' => [
+        'x-authorization' => 'token ' . variable_get('ding_unilogin_api_token_read'),
+      ],
+    ]);
+    // Forward status and all headers.
+    drupal_add_http_header('Status', $response->code . ' ' . $response->status_message);
+    foreach ($response->headers as $name => $value) {
+      drupal_add_http_header($name, $value);
     }
 
-    throw new HttpNotFoundException(sprintf('Invalid institution id: %s', $id));
-  }
-
-  /**
-   * Update the list of institutions.
-   *
-   * @throws \Drupal\ding_unilogin\Exception\HttpException
-   */
-  public function update() {
-    $contentType = $this->getRequestHeader('content-type');
-    if ('application/vnd.api+json' !== $contentType) {
-      throw new HttpBadRequestException(sprintf('Invalid content type: %s', $contentType));
-    }
-
-    $payload = json_decode(file_get_contents('php://input'), TRUE);
-    if (empty($payload) || empty($payload['data'])) {
-      throw new HttpBadRequestException(sprintf('Invalid content'));
-    }
-
-    $data = $payload['data'];
-
-    // Validate data.
-    foreach ($data as $id => &$item) {
-      if (!isset($item['name'], $item['group'], $item['type'], $item['number_of_members'])) {
-        throw new HttpBadRequestException(sprintf('Invalid content'));
+    if ('csv' === $format) {
+      drupal_add_http_header('content-type', 'text/csv');
+      $filename = 'ereolengo-institutions-' . (new \DateTime())->format('Ymd') . '.csv';
+      drupal_add_http_header('content-disposition', 'attachment; filename="' . $filename . '"');
+      $data = json_decode($response->data);
+      $out = fopen('php://output', 'w');
+      // Write CSV header.
+      fputcsv($out, [
+        'skolenavn',
+        'institutionsnummer',
+        'number_of_members',
+        'kommune',
+      ]);
+      foreach ($data->data as $item) {
+        $municipality = $item->municipality;
+        fputcsv($out, [
+          $item->name,
+          $item->id,
+          $item->number_of_members,
+          // Some municipalities are fake and don't have a name ("kommune").
+          $municipality->kommune ?? NULL,
+        ]);
       }
-      if (!preg_match('/^[a-z0-9]{6}$/i', (string) $id)) {
-        throw new HttpBadRequestException(sprintf('Invalid id: %s', $id));
-      }
-      if (!is_int($item['number_of_members']) || $item['number_of_members'] <= 0) {
-        throw new HttpBadRequestException(sprintf('Invalid number_of_members: %d', $item['number_of_members']));
-      }
-
-      $item['id'] = $id;
+      fclose($out);
     }
-
-    _ding_unilogin_set_institutions($data);
-
-    return NULL;
+    else {
+      echo $response->data;
+    }
+    drupal_exit();
   }
 
 }
