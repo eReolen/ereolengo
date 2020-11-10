@@ -20,3 +20,14 @@ function breol_inspiration_node_validate($node, $form, &$form_state) {
     }
   }
 }
+
+/**
+ * Implements hook_field_default_field_bases_alter().
+ *
+ * Make sure that we can pick news in news carousels.
+ */
+function breol_inspiration_field_default_field_bases_alter(&$fields) {
+  if (isset($fields['field_picked_articles'])) {
+    $fields['field_picked_articles']['settings']['handler_settings']['target_bundles'] = ['breol_news' => 'breol_news'];
+  }
+}

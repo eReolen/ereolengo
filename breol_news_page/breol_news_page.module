@@ -62,9 +62,10 @@ function breol_news_page_preprocess_entity(&$variables) {
     /** @var \ParagraphsItemEntity $paragraphs_item */
     $paragraphs_item = $variables['paragraphs_item'];
     if ('picked_article_carousel' === $paragraphs_item->bundle()) {
+      $wrapper = entity_metadata_wrapper('paragraphs_item', $paragraphs_item);
       $variables['content'] = array(
         '#type' => 'ding_carousel',
-        '#title' => t('News'),
+        '#title' => $wrapper->field_picked_title->value(),
         '#more_link' => l(t('All news'), 'nyheder'),
         '#path' => 'reol_news_paragraph/ajax/paragraphs_item/' . $paragraphs_item->item_id . '/field_picked_articles',
         '#offset' => 0,
