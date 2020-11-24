@@ -707,6 +707,14 @@ user/*',
     'name' => 'breol-ting-collection',
     'body_classes_to_remove' => '',
     'body_classes_to_add' => '',
+    'metatag_panels' => array(
+      'enabled' => 1,
+      'metatags' => array(
+        'title' => array(
+          'value' => '%ting_collection:title_full | [current-page:pager][site:name]',
+        ),
+      ),
+    ),
   );
   $display = new panels_display();
   $display->layout = 'stacked_columns';
@@ -786,6 +794,14 @@ user/*',
     'contexts' => array(),
     'relationships' => array(),
     'name' => 'breol-ting-object',
+    'metatag_panels' => array(
+      'enabled' => 1,
+      'metatags' => array(
+        'title' => array(
+          'value' => '%ting_object:title_full | [current-page:pager][site:name]',
+        ),
+      ),
+    ),
   );
   $display = new panels_display();
   $display->layout = 'stacked_columns';
