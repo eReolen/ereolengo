@@ -33,7 +33,7 @@ function breol_search_frontend_default_page_manager_handlers() {
       'enabled' => 1,
       'metatags' => array(
         'title' => array(
-          'value' => 'Søgning | %keywords:html_safe | [current-page:pager][site:name]',
+          'value' => 'Search Ting | %keywords:html_safe | [current-page:pager][site:name]',
         ),
       ),
     ),

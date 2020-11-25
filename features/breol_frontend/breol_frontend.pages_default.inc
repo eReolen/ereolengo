@@ -711,7 +711,7 @@ user/*',
       'enabled' => 1,
       'metatags' => array(
         'title' => array(
-          'value' => '%ting_collection:title_full | [current-page:pager][site:name]',
+          'value' => 'Ting collection | %ting_collection:title_full | [current-page:pager][site:name]',
         ),
       ),
     ),
@@ -798,7 +798,7 @@ user/*',
       'enabled' => 1,
       'metatags' => array(
         'title' => array(
-          'value' => '%ting_object:title_full | [current-page:pager][site:name]',
+          'value' => 'Ting object | %ting_object:title_full | [current-page:pager][site:name]',
         ),
       ),
     ),
