@@ -18,6 +18,21 @@ use Drupal\ding_unilogin\Exception\HttpException;
  * re-trigger it later (after logging in via UNI•Login).
  */
 function ding_unilogin_init() {
+  // Authenticated users with no "update" access to specials paths should be
+  // redirected to the special redirect path.
+  if (user_is_logged_in()) {
+    global $user;
+    $node = menu_get_object();
+    if (!$node || !node_access('update', $node, $user)) {
+      $path = current_path();
+      $patterns = variable_get('ding_unilogin_special_paths', '');
+      $redirect_path = variable_get('ding_unilogin_special_paths_redirect_path', 'user');
+      if ($redirect_path !== $path && drupal_match_path($path, $patterns)) {
+        drupal_goto($redirect_path);
+      }
+    }
+  }
+
   drupal_add_js(drupal_get_path('module', 'ding_unilogin') . '/js/ding_unilogin_monkeypatch.js', 'file');
   _ding_unilogin_handle_login();
 }

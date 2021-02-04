@@ -85,6 +85,27 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
     '#description' => t('The WS05 project to check for access to.'),
   );
 
+  // Miscellaneus settings.
+  $form['misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Miscellaneus'),
+    '#description' => t('Miscellaneus settings.'),
+  );
+
+  $form['misc']['ding_unilogin_special_paths'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Special paths'),
+    '#default_value' => variable_get('ding_unilogin_special_paths', ''),
+    '#description' => t('Special paths. One per line.'),
+  );
+
+  $form['misc']['ding_unilogin_special_paths_redirect_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Special paths redirect path'),
+    '#default_value' => variable_get('ding_unilogin_special_paths_redirect_path', 'user'),
+    '#description' => t('Special paths redirect path.'),
+  );
+
   // Make the form look like at system form.
   $form = system_settings_form($form);
 
