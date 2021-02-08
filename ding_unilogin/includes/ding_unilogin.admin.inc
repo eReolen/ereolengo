@@ -92,18 +92,18 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
     '#description' => t('Miscellaneus settings.'),
   );
 
-  $form['misc']['ding_unilogin_special_paths'] = array(
+  $form['misc']['ding_unilogin_error_paths'] = array(
     '#type' => 'textarea',
-    '#title' => t('Special paths'),
-    '#default_value' => variable_get('ding_unilogin_special_paths', ''),
-    '#description' => t('Special paths. One per line.'),
+    '#title' => t('Error paths'),
+    '#default_value' => variable_get('ding_unilogin_error_paths', ''),
+    '#description' => t('Error paths (e.g. node/65) that should not be accessible by authenticated users unless they have edit access. One path per line.'),
   );
 
-  $form['misc']['ding_unilogin_special_paths_redirect_path'] = array(
+  $form['misc']['ding_unilogin_error_paths_redirect_path'] = array(
     '#type' => 'textfield',
-    '#title' => t('Special paths redirect path'),
-    '#default_value' => variable_get('ding_unilogin_special_paths_redirect_path', 'user'),
-    '#description' => t('Special paths redirect path.'),
+    '#title' => t('Error paths redirect path'),
+    '#default_value' => variable_get('ding_unilogin_error_paths_redirect_path', 'user'),
+    '#description' => t('The path to redirect authenticated users to when they access an error path.'),
   );
 
   // Make the form look like at system form.

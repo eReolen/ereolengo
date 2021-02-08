@@ -22,8 +22,8 @@ function ding_unilogin_uninstall() {
   variable_del('ding_unilogin_api_token_read');
   variable_del('ding_unilogin_api_token_write');
   variable_del('ding_unilogin_api_allowed_http_origins');
-  variable_del('ding_unilogin_special_paths');
-  variable_del('ding_unilogin_special_paths_redirect_path');
+  variable_del('ding_unilogin_error_paths');
+  variable_del('ding_unilogin_error_paths_redirect_path');
 }
 
 /**
