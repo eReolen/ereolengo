@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the breol_news module.
+ */
+
+/**
+ * Move news content from body to lead.
+ */
+function breol_news_update_7101() {
+  $nodes = node_load_multiple([], ['type' => 'breol_news']);
+  foreach ($nodes as $node) {
+    $node->field_lead = $node->body;
+    $node->body = [];
+    node_save($node);
+  }
+
+}
