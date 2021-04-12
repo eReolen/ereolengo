@@ -10,49 +10,55 @@
  */
 class DingUniloginUser {
   /**
-   * TODO missing member variable doc comment.
+   * The name.
    *
    * @var string
    */
   protected $name;
+
   /**
-   * TODO missing member variable doc comment.
+   * The authname.
    *
    * @var string
    */
   protected $authname;
   /**
-   * TODO missing member variable doc comment.
+   * The authService.
    *
-   * @var string
+   * @var DingUniloginWSIautor
    */
   protected $authService;
+
   /**
-   * TODO missing member variable doc comment.
+   * The user service.
    *
-   * @var string
+   * @var DingUniloginWSIbruger
    */
   protected $userService;
+
   /**
-   * TODO missing member variable doc comment.
+   * The instution service.
    *
-   * @var string
+   * @var DingUniloginWSIinst
    */
   protected $institutionService;
+
   /**
-   * TODO missing member variable doc comment.
+   * The profile data.
    *
-   * @var string
+   * @var array
    */
   protected $profileData = array();
+
   /**
-   * TODO missing member variable doc comment.
+   * The web service username.
    *
    * @var string
    */
   protected $wsuser;
+
   /**
-   * TODO missing member variable doc comment.
+   * The web service password.
    *
    * @var string
    */

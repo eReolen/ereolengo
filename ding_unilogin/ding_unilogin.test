@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class DingUniloginApiTestCase.
+ * Ding Unilogin Api TestCase.
  */
 class DingUniloginApiTestCase extends DrupalUnitTestCase {
 

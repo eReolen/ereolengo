@@ -3,7 +3,7 @@
 namespace Drupal\ding_unilogin\Exception;
 
 /**
- * Class HttpUnauthorizedException.
+ * Http Unauthorized Exception class.
  *
  * @package Drupal\ding_unilogin\Exception
  */

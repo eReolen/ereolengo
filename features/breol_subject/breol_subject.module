@@ -22,7 +22,7 @@ function breol_subject_preprocess_node(&$variables) {
     $node = $variables['node'];
     // Overwrite the node url if subject has a teaser menu target.
     if (isset($node->field_teaser_menu_target[LANGUAGE_NONE][0]['target_id'])) {
-      $variables['node_url'] = url('node/'.$node->field_teaser_menu_target[LANGUAGE_NONE][0]['target_id']);
+      $variables['node_url'] = url('node/' . $node->field_teaser_menu_target[LANGUAGE_NONE][0]['target_id']);
     }
   }
 }

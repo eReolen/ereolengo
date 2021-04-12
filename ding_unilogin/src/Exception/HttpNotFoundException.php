@@ -3,7 +3,7 @@
 namespace Drupal\ding_unilogin\Exception;
 
 /**
- * Class HttpNotFoundException.
+ * Http Not Found Exception class.
  *
  * @package Drupal\ding_unilogin\Exception
  */

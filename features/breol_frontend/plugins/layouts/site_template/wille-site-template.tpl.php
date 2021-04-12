@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TODO missing file doc comment.
+ * Site template.
  */
 ?>
 <div id="page<?php print $css_id ? " $css_id" : ''; ?>" class="<?php print $classes; ?>">

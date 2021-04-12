@@ -3,7 +3,7 @@
 namespace Drupal\ding_unilogin\Exception;
 
 /**
- * Class HttpBadRequestException.
+ * Http Bad Request Exception class.
  *
  * @package Drupal\ding_unilogin\Exception
  */

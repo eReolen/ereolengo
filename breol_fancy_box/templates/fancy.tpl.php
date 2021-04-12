@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TODO missing file doc comment.
+ * Missing file doc comment.
  */
 ?>
 <div class="container">

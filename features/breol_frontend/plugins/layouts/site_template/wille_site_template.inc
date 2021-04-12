@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TODO missing file doc comment.
+ * Site template.
  */
 
 $plugin = array(
