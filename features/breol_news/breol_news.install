@@ -13,8 +13,14 @@ function breol_news_update_7101(&$sandbox) {
 
   // Initial setup.
   if (!isset($sandbox['processed'])) {
-    // Load the nids to update.
-    $nids = db_query('SELECT nid FROM {node} WHERE type = :type', ['type' => 'breol_news'])->fetchCol();
+    // Get nids of news with body.
+    $query = db_select('node', 'n');
+    $query->join('field_data_body', 'b', '(b.entity_id = n.nid AND b.entity_type = :node)', [':node' => 'node']);
+    $nids = $query
+      ->fields('n', ['nid'])
+      ->condition('n.type', 'breol_news')
+      ->execute()
+      ->fetchCol();
     if (empty($nids)) {
       watchdog('breol_news', 'There are no items to process.', [], WATCHDOG_NOTICE);
       return;
