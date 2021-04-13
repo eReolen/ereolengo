@@ -8,11 +8,42 @@
 /**
  * Move news content from body to lead.
  */
-function breol_news_update_7101() {
-  $nodes = node_load_multiple([], ['type' => 'breol_news']);
-  foreach ($nodes as $node) {
-    $node->field_lead = $node->body;
-    $node->body = [];
-    node_save($node);
+function breol_news_update_7101(&$sandbox) {
+  $items_per_batch = 50;
+
+  // Initial setup.
+  if (!isset($sandbox['processed'])) {
+    // Load the nids to update.
+    $nids = db_query('SELECT nid FROM {node} WHERE type = :type', ['type' => 'breol_news'])->fetchCol();
+    if (empty($nids)) {
+      watchdog('breol_news', 'There are no items to process.', [], WATCHDOG_NOTICE);
+      return;
+    }
+
+    $sandbox['processed'] = 0;
+    $sandbox['total'] = count($nids);
+    $sandbox['nids'] = $nids;
   }
+
+  // Process a batch of nids.
+  for ($i = 0; $i < $items_per_batch; $i++) {
+    if ($nid = array_shift($sandbox['nids'])) {
+      $node = node_load($nid);
+      $node->field_lead = $node->body;
+      $node->body = [];
+      node_save($node);
+      $sandbox['processed']++;
+    }
+  }
+
+  // Update batch status.
+  $sandbox['#finished'] = ($sandbox['processed'] >= $sandbox['total']) ? 1 : ($sandbox['processed'] / $sandbox['total']);
+
+  $args = array(
+    '!done' => $sandbox['processed'],
+    '!total' => $sandbox['total'],
+    '!pct' => round(($sandbox['processed'] / $sandbox['total']) * 100, 2),
+  );
+
+  return t('Completed !done/!total (!pct%)', $args);
 }
