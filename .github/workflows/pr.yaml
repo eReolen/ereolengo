@@ -2,10 +2,11 @@ on: pull_request
 name: PR Review
 jobs:
   test-composer-files:
-    name: Validate composer
+    name: Validate composer and install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -13,15 +14,33 @@ jobs:
           extensions: ctype, dom, iconv, json, zip, gd, soap
           coverage: none
           tools: composer:v2
+
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
       - name: Validate composer files
         run: |
           composer validate composer.json
+
+      - name: Validate composer install
+        run: |
+          composer install --prefer-dist
 
   phpcs:
     name: PHP - Check Coding Standards
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -29,11 +48,25 @@ jobs:
           extensions: ctype, dom, iconv, json, zip, gd, soap
           coverage: none
           tools: composer:v2
+
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+          composer install --quiet --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
           # @see https://github.com/Dealerdirect/phpcodesniffer-composer-installer#calling-the-plugin-directly
           composer run-script install-codestandards
+
       - name: PHPCS
         run: |
           composer coding-standards-check
