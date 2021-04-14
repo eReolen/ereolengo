@@ -416,7 +416,7 @@ function ding_unilogin_url($path = NULL) {
  * Check whether a user is logged in via UNI•Login.
  *
  * @param mixed $account
- *   @todo Missing parameter comment.
+ *   The user account.
  *
  * @return bool
  *   TRUE if authenticated with unilogin else FALSE.

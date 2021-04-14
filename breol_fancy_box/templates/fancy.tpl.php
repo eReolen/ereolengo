@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Missing file doc comment.
+ * Fancy template.
  */
 ?>
 <div class="container">

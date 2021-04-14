@@ -24,5 +24,6 @@
     <exclude name="Drupal.InfoFiles.AutoAddedKeys.Project"/>
     <exclude name="Drupal.Files.TxtFileLineLength.TooLong"/>
     <exclude name="Generic.CodeAnalysis.UselessOverridingMethod.Found"/>
+    <exclude name="Drupal.Commenting.ClassComment.Short"/>
   </rule>
 </ruleset>

@@ -10,19 +10,19 @@ Standards](https://www.drupal.org/docs/develop/standards).
 Install tools to check coding standards:
 
 ```sh
-docker run --rm -it --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 install
+docker run --rm --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 install
 ```
 
 Check the coding standards:
 
 ```sh
-docker run --rm -it --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-check
+docker run --rm --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-check
 ```
 
 Apply the coding standards:
 
 ```sh
-docker run --rm -it --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-apply
+docker run --rm --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-apply
 ```
 
 ### GitHub Actions
