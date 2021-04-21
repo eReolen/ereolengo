@@ -19,6 +19,12 @@ Check the coding standards:
 docker run --rm --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-check
 ```
 
+Append `-- -p` to show progress:
+
+```sh
+docker run --rm --volume $(pwd):/app itkdev/php7.0-fpm:latest composer2 coding-standards-check -- -p
+```
+
 Apply the coding standards:
 
 ```sh
