@@ -19,6 +19,8 @@
   <arg value="s"/>
   <config name="drupal_core_version" value="7"/>
 
+  <rule ref="Generic.PHP.Syntax"/>
+
   <rule ref="Drupal">
     <exclude name="Drupal.InfoFiles.AutoAddedKeys.Version"/>
     <exclude name="Drupal.InfoFiles.AutoAddedKeys.Project"/>
