@@ -3,7 +3,6 @@
 namespace Drupal\ding_unilogin;
 
 use Drupal\ding_unilogin\Controller\InstitutionController;
-use RuntimeException;
 
 /**
  * Router for requests.
@@ -46,7 +45,7 @@ class Router {
         return new InstitutionController();
 
       default:
-        throw new RuntimeException(sprintf('Invalid controller name: %s', $name));
+        throw new \RuntimeException(sprintf('Invalid controller name: %s', $name));
     }
   }
 

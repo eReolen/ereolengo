@@ -38,7 +38,10 @@ function breol_facetbrowser_content_type_render($subtype, $conf, $panel_args, $c
       }
     }
     if ($content_in_facet === TRUE || $results->show_empty == TRUE) {
-      $block_content = theme('facetbrowser', array($results->facets, (!empty($results->searchkey) ? $results->searchkey : NULL)));
+      $block_content = theme('facetbrowser', array(
+        $results->facets,
+        !empty($results->searchkey) ? $results->searchkey : NULL,
+      ));
     }
   }
 

@@ -10,9 +10,9 @@
  */
 abstract class DingUniloginServiceBase {
   /**
-   * TODO missing member variable doc comment.
+   * The client.
    *
-   * @var string
+   * @var SoapClient
    */
   protected $client;
 

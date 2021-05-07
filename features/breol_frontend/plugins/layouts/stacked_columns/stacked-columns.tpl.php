@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TODO missing file doc comment.
+ * Template for stacked columns.
  */
 ?>
 <div <?php

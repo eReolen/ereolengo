@@ -313,7 +313,7 @@ function ding_unilogin_publizon_client_id_alter(&$client_id) {
  *   The current logout state.
  *
  * @return array|mixed|null
- *   TODO Description for the @return value is missing.
+ *   Whether to globally log out.
  */
 function _ding_unilogin_global_logout($state = NULL) {
   $logout = &drupal_static(__FUNCTION__);
@@ -364,7 +364,15 @@ function _ding_unilogin_handle_login() {
     }
 
     if ($error) {
-      watchdog('ding_unilogin', $error, array('%time' => $_GET['timestamp'], '%user' => $_GET['user']), WATCHDOG_WARNING);
+      watchdog(
+        'ding_unilogin',
+        $error,
+        array(
+          '%time' => $_GET['timestamp'],
+          '%user' => $_GET['user'],
+        ),
+        WATCHDOG_WARNING
+      );
       drupal_set_message(t('Could not understand the reply from UNI•Login, so cannot log you in.'), 'error');
     }
     // Redirect to current_path() to clear most GET parameters.
@@ -408,7 +416,7 @@ function ding_unilogin_url($path = NULL) {
  * Check whether a user is logged in via UNI•Login.
  *
  * @param mixed $account
- *   TODO Missing parameter comment.
+ *   The user account.
  *
  * @return bool
  *   TRUE if authenticated with unilogin else FALSE.
@@ -836,7 +844,10 @@ function ding_unilogin_jsonapi_deliver($result = NULL) {
     drupal_add_http_header('access-control-allow-origin', $http_origin);
     // Allow our custom authorization header.
     // @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
-    drupal_add_http_header('access-control-allow-headers', implode(',', ['x-authorization', 'content-type']));
+    drupal_add_http_header(
+      'access-control-allow-headers',
+      implode(',', ['x-authorization', 'content-type'])
+    );
   }
 
   drupal_page_is_cacheable(FALSE);

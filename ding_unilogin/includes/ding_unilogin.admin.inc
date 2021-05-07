@@ -260,7 +260,10 @@ function theme_ding_unilogin_admin_institutions_form($variables) {
     $rows[] = $row;
     $first_row = FALSE;
   }
-  $form['ding_unilogin_institutions']['#children'] = theme('table', array('header' => $header, 'rows' => $rows));
+  $form['ding_unilogin_institutions']['#children'] = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+  ));
 
   // Render the form.
   return drupal_render_children($form);
@@ -381,7 +384,10 @@ function ding_unilogin_admin_nonstitutions_form($form, &$form_state) {
       );
     }, $institutions_with_no_municipality_id);
 
-    $form['institutions_with_no_municipality_id']['list']['#markup'] = theme('table', array('header' => $header, 'rows' => $rows));
+    $form['institutions_with_no_municipality_id']['list']['#markup'] = theme('table', array(
+      'header' => $header,
+      'rows' => $rows,
+    ));
   }
 
   $form['test'] = [
@@ -431,7 +437,10 @@ function theme_ding_unilogin_admin_nonstitutions_form($variables) {
     $rows[] = $row;
     $first_row = FALSE;
   }
-  $form['ding_unilogin_nonstitutions']['#children'] = theme('table', array('header' => $header, 'rows' => $rows));
+  $form['ding_unilogin_nonstitutions']['#children'] = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+  ));
 
   // Render the form.
   return drupal_render_children($form);

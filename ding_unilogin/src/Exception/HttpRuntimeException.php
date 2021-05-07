@@ -2,8 +2,6 @@
 
 namespace Drupal\ding_unilogin\Exception;
 
-use Throwable;
-
 /**
  * Class HttpBadRequestException.
  *
@@ -14,7 +12,7 @@ class HttpRuntimeException extends HttpException {
   /**
    * {@inheritdoc}
    */
-  public function __construct($message = 'Runtime exception', $code = 400, Throwable $previous = NULL) {
+  public function __construct($message = 'Runtime exception', $code = 400, \Throwable $previous = NULL) {
     parent::__construct($message, $code, $previous);
   }
 

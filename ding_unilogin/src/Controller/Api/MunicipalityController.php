@@ -81,7 +81,7 @@ class MunicipalityController extends ApiController {
   private function getMunicipalities() {
     $municipalities = _ding_unilogin_get_municipalities(TRUE);
 
-    // @TODO: Add Publizon keys.
+    // @todo Add Publizon keys.
     $libraries = publizon_get_libraries();
     // Index by kommunenr (unilogin_id).
     $libraries = array_column($libraries, NULL, 'unilogin_id');

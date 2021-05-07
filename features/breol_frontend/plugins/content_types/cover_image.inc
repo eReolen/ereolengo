@@ -75,7 +75,7 @@ function breol_frontend_cover_image_content_type_render($subtype, $conf, $panel_
 
   if ($node->type === 'breol_subject' || $node->type === 'breol_section') {
 
-    // TODO(ts) - This was made last minute before launch. Should be refactored
+    // @todo (ts) - This was made last minute before launch. Should be refactored
     // later.
     $variables['wrapper_class'] = 'cover__' . strtolower($node->title);
     if (strtolower($node->title) === 'ebøger' || strtolower($node->title) === 'lydbøger') {
