@@ -13,6 +13,10 @@ function breol_news_update_7101(&$sandbox) {
 
   // Initial setup.
   if (!isset($sandbox['processed'])) {
+    // Revert our features to make sure that the lead field exists before we
+    // move content into it.
+    features_revert_module('breol_news');
+
     // Get nids of news with body.
     $query = db_select('node', 'n');
     $query->join('field_data_body', 'b', '(b.entity_id = n.nid AND b.entity_type = :node)', [':node' => 'node']);
