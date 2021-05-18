@@ -401,3 +401,10 @@ function breol_base_update_7145() {
     }
   }
 }
+
+/**
+ * Enable VideoTool media module.
+ */
+function breol_base_update_7146() {
+  module_enable(array('media_videotool'), TRUE);
+}

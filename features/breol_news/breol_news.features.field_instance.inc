@@ -22,7 +22,7 @@ function breol_news_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -51,10 +51,10 @@ function breol_news_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'body',
-    'label' => 'Indhold',
+    'label' => 'Brødtekst',
     'required' => 0,
     'settings' => array(
-      'display_summary' => 1,
+      'display_summary' => 0,
       'text_processing' => 1,
       'user_register_form' => FALSE,
     ),
@@ -66,7 +66,7 @@ function breol_news_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 3,
+      'weight' => 10,
     ),
   );
 
@@ -229,6 +229,58 @@ function breol_news_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-breol_news-field_lead'.
+  $field_instances['node-breol_news-field_lead'] = array(
+    'bundle' => 'breol_news',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser_medium' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+      'teaser_small' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_lead',
+    'label' => 'Manchet',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 20,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 3,
+    ),
+  );
+
   // Exported field_instance: 'node-breol_news-field_news_type'.
   $field_instances['node-breol_news-field_news_type'] = array(
     'bundle' => 'breol_news',
@@ -333,9 +385,10 @@ function breol_news_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Brødtekst');
   t('Cover Image');
-  t('Indhold');
   t('Karouseller');
+  t('Manchet');
   t('Show in app');
   t('Type');
 
