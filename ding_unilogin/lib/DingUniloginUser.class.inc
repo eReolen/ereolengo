@@ -227,6 +227,13 @@ class DingUniloginUser {
       $fake_municipalities = _ding_unilogin_get_nonstitution_municipalities();
       foreach ($institutionIds as $institutionId) {
         $institution = $this->getInstitutionService()->getInstitution($institutionId);
+        // Use “Administrerende kommune” as municipality.
+        if (isset($institution->admkommunenr, $institution->admkommune)) {
+          $institution->beliggenhedskommunenr = $institution->kommunenr;
+          $institution->beliggenhedkommune = $institution->kommune;
+          $institution->kommunenr = $institution->admkommunenr;
+          $institution->kommune = $institution->admkommune;
+        }
         // Add or overwrite kommunenr from fake municipality if it's defined.
         if (isset($institution->instnr, $fake_municipalities[$institution->instnr]['kommunenr'])) {
           $institution->kommunenr = $fake_municipalities[$institution->instnr]['kommunenr'];
