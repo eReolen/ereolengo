@@ -22,5 +22,5 @@
  */
 ?>
 <div class="<?php print $classes; ?> media-videotool-<?php print $id; ?>">
-  <iframe class="media-videotool-player" <?php print $api_id_attribute; ?>width="<?php print $width; ?>" height="<?php print $height; ?>" title="<?php print $title; ?>" src="<?php print $url; ?>" frameborder="0" allowfullscreen><?php print $alternative_content; ?></iframe>
+  <iframe class="media-videotool-player" <?php print $api_id_attribute; ?>width="<?php print $width; ?>" height="<?php print $height; ?>" title="<?php print $title; ?>" src="<?php print $url; ?>" frameborder="0" allowfullscreen allow="autoplay; fullscreen"><?php print $alternative_content; ?></iframe>
 </div>
