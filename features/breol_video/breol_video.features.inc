@@ -33,3 +33,17 @@ function breol_video_node_info() {
   drupal_alter('node_info', $items);
   return $items;
 }
+
+/**
+ * Implements hook_paragraphs_info().
+ */
+function breol_video_paragraphs_info() {
+  $items = array(
+    'video_bundle' => array(
+      'name' => 'Videobundt',
+      'bundle' => 'video_bundle',
+      'locked' => '1',
+    ),
+  );
+  return $items;
+}
