@@ -150,6 +150,44 @@ function breol_video_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'paragraphs_item-video_bundle-field_material_carousel_color'.
+  $field_instances['paragraphs_item-video_bundle-field_material_carousel_color'] = array(
+    'bundle' => 'video_bundle',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'color_field',
+        'settings' => array(),
+        'type' => 'color_field_default_formatter',
+        'weight' => 5,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_material_carousel_color',
+    'label' => 'Farve',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'color_field',
+      'settings' => array(),
+      'type' => 'color_field_default_widget',
+      'weight' => 7,
+    ),
+  );
+
+  // Exported field_instance:
   // 'paragraphs_item-video_bundle-field_video_description'.
   $field_instances['paragraphs_item-video_bundle-field_video_description'] = array(
     'bundle' => 'video_bundle',
@@ -278,6 +316,7 @@ function breol_video_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Carousel');
   t('Description');
+  t('Farve');
   t('Title');
   t('Video');
 
