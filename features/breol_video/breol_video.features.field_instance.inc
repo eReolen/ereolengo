@@ -120,8 +120,8 @@ function breol_video_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'reol_field_carousel',
         'settings' => array(
-          'render_method' => 'cover',
-          'search_link' => FALSE,
+          'render_method' => 'material',
+          'search_link' => 1,
         ),
         'type' => 'reol_field_carousel_notabs',
         'weight' => 3,
