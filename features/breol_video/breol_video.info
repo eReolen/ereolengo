@@ -11,6 +11,7 @@ dependencies[] = features
 dependencies[] = file_entity
 dependencies[] = image
 dependencies[] = media
+dependencies[] = node
 dependencies[] = paragraphs
 dependencies[] = reol_carousel_paragraph
 dependencies[] = reol_field_carousel

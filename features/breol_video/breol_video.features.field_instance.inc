@@ -173,7 +173,7 @@ function breol_video_field_default_field_instances() {
     ),
     'entity_type' => 'paragraphs_item',
     'field_name' => 'field_material_carousel_color',
-    'label' => 'Farve',
+    'label' => 'Color',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -315,8 +315,8 @@ function breol_video_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Carousel');
+  t('Color');
   t('Description');
-  t('Farve');
   t('Title');
   t('Video');
 
