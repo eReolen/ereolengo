@@ -446,7 +446,6 @@ function _ding_unilogin_login($username) {
       if (!empty($libraries)) {
         // Take the first one.
         $library = reset($libraries);
-        $retailer_id = $library->retailer_id;
       }
       else {
         watchdog('publizon', 'UNI•Login municipalities @municipalities not configured on any library', array('@municipalities' => implode(', ', $municipalities)), WATCHDOG_NOTICE);

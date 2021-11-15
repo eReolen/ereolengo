@@ -37,7 +37,7 @@ function breol_base_form_alter(&$form, &$form_state, $form_id) {
     if (module_exists('ding_adgangsplatformen')) {
       $form['adgangsplatformen-wrapper'] = array(
         '#type' => 'fieldset',
-        '#description' => t('Log in via adgangsplatformen'),
+        '#description' => t('Log in adgangsplatformen'),
         '#weight' => 10,
       );
 
