@@ -246,6 +246,7 @@ function breol_inspiration_field_default_field_instances() {
         'see_all_news_button' => 'see_all_news_button',
         'two_elements' => 'two_elements',
         'video' => -1,
+        'video_bundle' => 'video_bundle',
       ),
       'bundle_weights' => array(
         'article_carousel' => 13,
@@ -256,6 +257,7 @@ function breol_inspiration_field_default_field_instances() {
         'see_all_news_button' => 9,
         'two_elements' => 4,
         'video' => 11,
+        'video_bundle' => 23,
       ),
       'default_edit_mode' => 'open',
       'title' => 'Element',
