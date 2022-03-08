@@ -240,6 +240,7 @@ function breol_inspiration_field_default_field_instances() {
       'allowed_bundles' => array(
         'article_carousel' => 'article_carousel',
         'audio_preview' => -1,
+        'blue_titles_info' => 'blue_titles_info',
         'breol_linkbox' => -1,
         'material_carousel' => 'material_carousel',
         'picked_article_carousel' => 'picked_article_carousel',
@@ -251,6 +252,7 @@ function breol_inspiration_field_default_field_instances() {
       'bundle_weights' => array(
         'article_carousel' => 13,
         'audio_preview' => 2,
+        'blue_titles_info' => 27,
         'breol_linkbox' => 7,
         'material_carousel' => 3,
         'picked_article_carousel' => -14,

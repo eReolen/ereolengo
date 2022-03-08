@@ -31,3 +31,11 @@ function breol_inspiration_field_default_field_bases_alter(&$fields) {
     $fields['field_picked_articles']['settings']['handler_settings']['target_bundles'] = ['breol_news' => 'breol_news'];
   }
 }
+
+/**
+ * Implements hook_paragraphs_item_access().
+ */
+function ereol_inspiration_paragraphs_item_access(ParagraphsItemEntity $entity, string $op, $account) {
+  // Deny view access to blue titles info paragraphs.
+  return ('view' === $op && 'blue_titles_info' === $entity->bundle()) ? PARAGRAPHS_ITEM_ACCESS_DENY : PARAGRAPHS_ITEM_ACCESS_IGNORE;
+}

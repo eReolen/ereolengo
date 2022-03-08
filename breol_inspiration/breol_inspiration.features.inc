@@ -41,6 +41,11 @@ function breol_inspiration_paragraphs_info() {
       'bundle' => 'picked_article_carousel',
       'locked' => '1',
     ),
+    'blue_titles_info' => array(
+      'name' => 'blue titles info',
+      'bundle' => 'blue_titles_info',
+      'locked' => '1',
+    ),
   );
   return $items;
 }
