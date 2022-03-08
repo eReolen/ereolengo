@@ -29,6 +29,7 @@ features[field_instance][] = paragraphs_item-picked_article_carousel-field_picke
 features[field_instance][] = paragraphs_item-picked_article_carousel-field_picked_title
 features[node][] = inspiration
 features[paragraphs][] = picked_article_carousel
+features[paragraphs][] = blue_titles_info
 features[variable][] = comment_anonymous_inspiration
 features[variable][] = comment_default_mode_inspiration
 features[variable][] = comment_default_per_page_inspiration
