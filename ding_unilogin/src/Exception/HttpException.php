@@ -2,14 +2,12 @@
 
 namespace Drupal\ding_unilogin\Exception;
 
-use RuntimeException;
-
 /**
  * Class HttpException.
  *
  * @package Drupal\ding_unilogin\Exception
  */
-abstract class HttpException extends RuntimeException {
+abstract class HttpException extends \RuntimeException {
 
   /**
    * Get http status header including status code.

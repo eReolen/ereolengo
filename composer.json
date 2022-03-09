@@ -1,0 +1,33 @@
+{
+    "name": "ereolen/ereolengo",
+    "description": "eReolen Go",
+    "license": "MIT",
+    "require": {
+        "php": "~7.0.0"
+    },
+    "require-dev": {
+        "drupal/coder": "^8.3.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+    },
+    "scripts": {
+        "//": "@see https://github.com/Dealerdirect/phpcodesniffer-composer-installer#calling-the-plugin-directly",
+        "install-codestandards": [
+            "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+        ],
+        "post-install-cmd": [
+            "@install-codestandards"
+        ],
+        "coding-standards-check/phpcs": [
+            "phpcs --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-apply/phpcs": [
+            "phpcbf --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ]
+    }
+}

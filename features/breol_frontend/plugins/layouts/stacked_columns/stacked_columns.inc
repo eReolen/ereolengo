@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TODO missing file doc comment.
+ * Include file stacked_columns.inc.
  */
 
 $plugin['stacked_columns'] = array(
