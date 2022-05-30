@@ -14,3 +14,29 @@ function breol_video_update_7101() {
     field_delete_instance($field_instance);
   }
 }
+
+/**
+ * Migrate color value from field_material_carousel_color to field_video_bundle_color.
+ */
+function breol_video_update_7102() {
+  $old_field_instance = field_info_instance('paragraphs_item', 'field_material_carousel_color', 'video_bundle');
+  if (NULL !== $old_field_instance) {
+    $new_field = field_info_field('field_video_bundle_color');
+    $valid_colors = preg_split('/\s*,\s*/', $new_field['settings']['default_colors'], -1, PREG_SPLIT_NO_EMPTY);
+    /** @var \ParagraphsItemEntity[] $paragraphs */
+    $paragraphs = paragraphs_item_load_multiple(FALSE, [
+      'bundle' => 'video_bundle',
+    ], TRUE);
+    foreach ($paragraphs as $paragraph) {
+      $wrapper = $paragraph->wrapper();
+      $value = $wrapper->get($old_field_instance['field_name'])->value();
+      // Set color value if it's valid.
+      if (in_array($value['rgb'] ?? NULL, $valid_colors, TRUE)) {
+        $wrapper->get($new_field['field_name'])->set($value);
+        $wrapper->save();
+      }
+    }
+
+    field_delete_instance($old_field_instance);
+  }
+}
