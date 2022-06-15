@@ -83,7 +83,7 @@ function breol_video_preprocess_entity(&$variables) {
   && 'video_bundle' === $variables['paragraphs_item']->bundle()) {
     $wrapper = $variables['paragraphs_item']->wrapper();
 
-    $color = $wrapper->field_material_carousel_color->value();
+    $color = $wrapper->field_video_bundle_color->value();
     $variables['classes_array'][] = 'video-bundle-colored';
     // Use #ffffff as background color if none selected.
     $variables['classes_array'][] = '#000000' === reol_base_get_contrast_color($color['rgb'] ?? '#ffffff') ? 'video-bundle-color-dark' : 'video-bundle-color-light';
