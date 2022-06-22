@@ -253,6 +253,7 @@ function ding_unilogin_form_profile2_form_alter(&$form, &$form_state) {
 function ding_unilogin_ding_unilogin_login($user) {
   // Check that the user has license to access us.
   if (variable_get('ding_unilogin_auth_context', '')) {
+    /** @var \DingUniloginUser $user */
     $access = $user->hasLicense(
       variable_get('ding_unilogin_auth_context', ''),
       variable_get('ding_unilogin_auth_project', '')
