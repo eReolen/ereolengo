@@ -12,15 +12,6 @@ class DingUniloginWSIautor extends DingUniloginServiceBase {
   const WSDLURL = 'https://wsiautor.uni-login.dk/wsiautor-v3/ws?WSDL';
 
   /**
-   * Get all licenses for a user.
-   */
-  public function getLicenses($id) {
-    return $this->callWithAuth('hentBrugerLicenser', array(
-      'brugerid' => $id,
-    ));
-  }
-
-  /**
    * Check if user has a license for a project.
    */
   public function hasLicense($id, $context, $project) {
