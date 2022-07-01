@@ -84,3 +84,11 @@ function ding_unilogin_update_7103() {
 function ding_unilogin_update_7104() {
   _ding_unilogin_set_institutions(_ding_unilogin_get_institutions());
 }
+
+/**
+ * Remove unused UNI•Login variables.
+ */
+function ding_unilogin_update_7105() {
+  variable_del('ding_unilogin_auth_context');
+  variable_del('ding_unilogin_auth_project');
+}
