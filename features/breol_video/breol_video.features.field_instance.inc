@@ -110,83 +110,6 @@ function breol_video_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'paragraphs_item-video_bundle-field_material_carousel_color'.
-  $field_instances['paragraphs_item-video_bundle-field_material_carousel_color'] = array(
-    'bundle' => 'video_bundle',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 5,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_material_carousel_color',
-    'label' => 'Color',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'color_field',
-      'settings' => array(),
-      'type' => 'color_field_default_widget',
-      'weight' => 7,
-    ),
-  );
-
-  // Exported field_instance:
-  // 'paragraphs_item-video_bundle-field_video_bundle_materials'.
-  $field_instances['paragraphs_item-video_bundle-field_video_bundle_materials'] = array(
-    'bundle' => 'video_bundle',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'ting_reference',
-        'settings' => array(
-          'view_mode' => 'teaser',
-        ),
-        'type' => 'ting_reference_default',
-        'weight' => 4,
-      ),
-      'paragraphs_editor_preview' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'paragraphs_item',
-    'field_name' => 'field_video_bundle_materials',
-    'label' => 'Promoted materials',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'ting_reference',
-      'settings' => array(),
-      'type' => 'ting_reference_advanced',
-      'weight' => 4,
-    ),
-  );
-
-  // Exported field_instance:
   // 'paragraphs_item-video_bundle-field_promoted_materials_title'.
   $field_instances['paragraphs_item-video_bundle-field_promoted_materials_title'] = array(
     'bundle' => 'video_bundle',
@@ -264,6 +187,84 @@ function breol_video_field_default_field_instances() {
       ),
       'type' => 'text_textarea',
       'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-video_bundle-field_video_bundle_color'.
+  $field_instances['paragraphs_item-video_bundle-field_video_bundle_color'] = array(
+    'bundle' => 'video_bundle',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'color_field',
+        'settings' => array(),
+        'type' => 'color_field_default_formatter',
+        'weight' => 7,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_video_bundle_color',
+    'label' => 'Color',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'color_field',
+      'settings' => array(),
+      'type' => 'color_field_default_widget',
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'paragraphs_item-video_bundle-field_video_bundle_materials'.
+  $field_instances['paragraphs_item-video_bundle-field_video_bundle_materials'] = array(
+    'bundle' => 'video_bundle',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'ting_reference',
+        'settings' => array(
+          'view_mode' => 'teaser',
+        ),
+        'type' => 'ting_reference_default',
+        'weight' => 4,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_video_bundle_materials',
+    'label' => 'Promoted materials',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'ting_reference',
+      'settings' => array(),
+      'type' => 'ting_reference_advanced',
+      'weight' => 4,
     ),
   );
 
