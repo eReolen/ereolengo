@@ -77,20 +77,6 @@ class DingUniloginUser {
   }
 
   /**
-   * Get authorization service.
-   *
-   * @return DingUniloginWSIautor
-   *   The authorization service.
-   */
-  protected function getAuthService() {
-    if (!$this->authService) {
-      $this->authService = new DingUniloginWSIautor($this->wsuser, $this->wspass);
-    }
-
-    return $this->authService;
-  }
-
-  /**
    * Get user service.
    *
    * @return DingUniloginWSIbruger
@@ -241,19 +227,6 @@ class DingUniloginUser {
     }
 
     return $this->municipalityIds;
-  }
-
-  /**
-   * Check if user has been given a particular license.
-   *
-   * @param string $context
-   *   Context to check.
-   * @param string $project
-   *   Project to check.
-   */
-  public function hasLicense($context, $project) {
-    return $this->getAuthService()
-      ->hasLicense($this->name, $context, $project);
   }
 
 }
