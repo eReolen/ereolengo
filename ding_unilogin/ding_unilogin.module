@@ -246,29 +246,6 @@ function ding_unilogin_form_profile2_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_ding_unilogin_login().
- *
- * Check access with authentication web service, if configured.
- */
-function ding_unilogin_ding_unilogin_login($user) {
-  // Check that the user has license to access us.
-  if (variable_get('ding_unilogin_auth_context', '')) {
-    $access = $user->hasLicense(
-      variable_get('ding_unilogin_auth_context', ''),
-      variable_get('ding_unilogin_auth_project', '')
-    );
-
-    if (!$access) {
-      watchdog('ding_unilogin', 'UNI•Login user %user does not have appropriate license.', array('%user' => $user->getName()), WATCHDOG_NOTICE);
-    }
-
-    return $access;
-  }
-
-  return TRUE;
-}
-
-/**
  * Implements hook_user_logout().
  *
  * If configured for global logout, make a note for
@@ -436,7 +413,9 @@ function ding_unilogin_authenticated($account = NULL) {
  */
 function _ding_unilogin_login($username) {
   _ding_unilogin_in_progress(TRUE);
-  $access = FALSE;
+  // If we reach this code a UNI•Login user has been authenticated and has
+  // access to eReolen GO!.
+  $access = TRUE;
   $unilogin_data = [];
 
   try {

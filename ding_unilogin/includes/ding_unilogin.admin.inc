@@ -71,20 +71,6 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
     '#description' => t('Settings for the authentication web services.'),
   );
 
-  $form['auth']['ding_unilogin_auth_context'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Context'),
-    '#default_value' => variable_get('ding_unilogin_auth_context', ''),
-    '#description' => t('The WS05 context to check for access in. If no context is given, all valid UNI•Login users are granted access.'),
-  );
-
-  $form['auth']['ding_unilogin_auth_project'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Project'),
-    '#default_value' => variable_get('ding_unilogin_auth_project', ''),
-    '#description' => t('The WS05 project to check for access to.'),
-  );
-
   // Miscellaneus settings.
   $form['misc'] = array(
     '#type' => 'fieldset',
