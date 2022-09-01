@@ -7,9 +7,7 @@ dependencies[] = publizon
 dependencies[] = xautoload
 files[] = lib/DingUniloginServiceBase.class.inc
 files[] = lib/DingUniloginUser.class.inc
-files[] = lib/DingUniloginWSIautor.class.inc
 files[] = lib/DingUniloginWSIbruger.class.inc
 files[] = lib/DingUniloginWSIinst.class.inc
-files[] = lib/DingUniloginWSALicens.class.inc
 
 files[] = ding_unilogin.test
