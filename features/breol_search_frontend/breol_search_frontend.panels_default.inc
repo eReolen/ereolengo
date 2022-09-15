@@ -100,7 +100,7 @@ function breol_search_frontend_default_panels_mini() {
     $pane->panel = 'before_content';
     $pane->type = 'search_per_page';
     $pane->subtype = 'search_per_page';
-    $pane->shown = TRUE;
+    $pane->shown = FALSE;
     $pane->access = array();
     $pane->configuration = array(
       'select_type' => 'dropdown',
@@ -125,7 +125,7 @@ function breol_search_frontend_default_panels_mini() {
     $pane->panel = 'before_content';
     $pane->type = 'block';
     $pane->subtype = 'ting_search-sort_form';
-    $pane->shown = TRUE;
+    $pane->shown = FALSE;
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 1,
