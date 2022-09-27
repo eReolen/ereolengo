@@ -9,7 +9,7 @@
  * Class for the user information service.
  */
 class DingUniloginWSIbruger extends DingUniloginServiceBase {
-  const WSDLURL = 'https://wsibruger.uni-login.dk/wsibruger-v3/ws?WSDL';
+  const WSDLURL = 'https://wsibruger.unilogin.dk/wsibruger-v6/ws?WSDL';
 
   /**
    * Get user institutions.
