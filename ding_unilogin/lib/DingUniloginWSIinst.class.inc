@@ -9,7 +9,7 @@
  * Class for the instiution information service.
  */
 class DingUniloginWSIinst extends DingUniloginServiceBase {
-  const WSDLURL = 'https://wsiinst.uni-login.dk/wsiinst-v2/ws?WSDL';
+  const WSDLURL = 'https://wsiinst.unilogin.dk/wsiinst-v5/ws?WSDL';
 
   /**
    * Get institution.
