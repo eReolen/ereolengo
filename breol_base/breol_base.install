@@ -415,6 +415,6 @@ function breol_base_update_7146() {
 function breol_base_update_7147() {
   db_update('system')
     ->fields(array('weight' => 0))
-    ->condition('name', 'reol_base', '=')
+    ->condition('name', 'breol_base', '=')
     ->execute();
 }
