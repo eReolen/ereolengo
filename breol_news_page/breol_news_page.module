@@ -71,7 +71,7 @@ function breol_news_page_preprocess_entity(&$variables) {
         '#offset' => 0,
         '#items' => array(),
         '#placeholder' => array(
-          '#theme' => 'reol_news_paragraph_placeholder',
+          '#theme' => 'ereol_article_placeholder',
         ),
         '#placeholders' => 5,
       );
