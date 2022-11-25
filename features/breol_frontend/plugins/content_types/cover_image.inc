@@ -66,7 +66,7 @@ function breol_frontend_cover_image_content_type_render($subtype, $conf, $panel_
   }
 
   // Get body for breol_news.
-  if ($node->type === 'breol_news') {
+  if ($node->type === 'breol_news' && isset($node->body[LANGUAGE_NONE])) {
     $variables['body'] = $node->body[LANGUAGE_NONE][0]['value'];
   }
 
