@@ -78,9 +78,9 @@ function breol_frontend_image_default_styles() {
  */
 function breol_frontend_default_search_api_index() {
   $items = array();
-  $items['breol_index'] = entity_import('search_api_index', '{
-    "name" : "bReol index",
-    "machine_name" : "breol_index",
+  $items['default_multiple_index'] = entity_import('search_api_index', '{
+    "name" : "eReol index",
+    "machine_name" : "default_multiple_index",
     "description" : null,
     "server" : "localhost_db",
     "item_type" : "node",
