@@ -69,3 +69,292 @@ function breol_frontend_image_default_styles() {
 
   return $styles;
 }
+
+
+/**
+ * Implements hook_default_search_api_index().
+ *
+ * Disable search index as default.
+ */
+function breol_frontend_default_search_api_index() {
+  $items = array();
+  $items['breol_index'] = entity_import('search_api_index', '{
+    "name" : "bReol index",
+    "machine_name" : "breol_index",
+    "description" : null,
+    "server" : "localhost_db",
+    "item_type" : "node",
+    "options" : {
+      "datasource" : { "bundles" : [ "article" ] },
+      "index_directly" : 0,
+      "cron_limit" : "50",
+      "fields" : {
+        "body:value" : { "type" : "text" },
+        "nid" : { "type" : "integer" },
+        "search_api_language" : { "type" : "string" },
+        "title" : { "type" : "text", "boost" : "2.0" },
+        "type" : { "type" : "string" }
+      },
+      "data_alter_callbacks" : {
+        "ding_frontend_published_filter" : { "status" : 0, "weight" : "-10", "settings" : [] },
+        "search_api_alter_bundle_filter" : {
+          "status" : 0,
+          "weight" : "-10",
+          "settings" : { "default" : "1", "bundles" : [] }
+        },
+        "ding_frontend_bundle_filter" : {
+          "status" : 0,
+          "weight" : "-10",
+          "settings" : { "default" : "1", "bundles" : [] }
+        },
+        "ding_frontend_role_filter" : {
+          "status" : 0,
+          "weight" : "-10",
+          "settings" : { "default" : "1", "match_type" : "partial", "roles" : [] }
+        },
+        "search_api_alter_node_access" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_alter_language_control" : {
+          "status" : 0,
+          "weight" : "0",
+          "settings" : { "lang_field" : "", "languages" : [] }
+        },
+        "search_api_alter_node_status" : { "status" : 1, "weight" : "0", "settings" : [] },
+        "search_api_alter_add_hierarchy" : { "status" : 0, "weight" : "0", "settings" : { "fields" : [] } },
+        "search_api_alter_add_url" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_metatag_alter_callback" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_alter_add_aggregation" : { "status" : 0, "weight" : "0", "settings" : [] },
+        "search_api_alter_add_viewed_entity" : { "status" : 0, "weight" : "0", "settings" : { "mode" : "full" } }
+      },
+      "processors" : {
+        "search_api_case_ignore" : {
+          "status" : 0,
+          "weight" : "0",
+          "settings" : { "fields" : { "title" : true, "body:value" : true } }
+        },
+        "search_api_html_filter" : {
+          "status" : 0,
+          "weight" : "10",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "title" : 0,
+            "alt" : 1,
+            "tags" : "h1 = 5\\r\\nh2 = 3\\r\\nh3 = 2\\r\\nstrong = 2\\r\\nb = 2\\r\\nem = 1.5\\r\\nu = 1.5"
+          }
+        },
+        "search_api_transliteration" : {
+          "status" : 0,
+          "weight" : "15",
+          "settings" : { "fields" : { "title" : true, "body:value" : true } }
+        },
+        "search_api_tokenizer" : {
+          "status" : 0,
+          "weight" : "20",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "spaces" : "[^[:alnum:]]",
+            "ignorable" : "[\\u0027]"
+          }
+        },
+        "search_api_stopwords" : {
+          "status" : 0,
+          "weight" : "30",
+          "settings" : {
+            "fields" : { "title" : true, "body:value" : true },
+            "file" : "",
+            "stopwords" : "but\\r\\ndid\\r\\nthe this that those\\r\\netc"
+          }
+        },
+        "search_api_highlighting" : {
+          "status" : 0,
+          "weight" : "35",
+          "settings" : {
+            "prefix" : "\\u003Cstrong\\u003E",
+            "suffix" : "\\u003C\\/strong\\u003E",
+            "excerpt" : 1,
+            "excerpt_length" : "256",
+            "exclude_fields" : [],
+            "highlight" : "always"
+          }
+        }
+      }
+    },
+    "enabled" : "0",
+    "read_only" : "0"
+  }');
+
+  return $items;
+}
+
+/**
+ * Implements hook_default_search_api_server().
+ *
+ * Disable database search server as default.
+ */
+function breol_frontend_default_search_api_server() {
+  $items = array();
+  $items['localhost_db'] = entity_import('search_api_server', '{
+    "name" : "Localhost DB",
+    "machine_name" : "localhost_db",
+    "description" : "",
+    "class" : "search_api_db_service",
+    "options" : {
+      "database" : "default:default",
+      "min_chars" : "1",
+      "partial_matches" : 1,
+      "indexes" : {
+        "ereol_index" : {
+          "nid" : {
+            "table" : "search_api_db_ereol_index",
+            "column" : "nid",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "type" : {
+            "table" : "search_api_db_ereol_index",
+            "column" : "type",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "title" : {
+            "table" : "search_api_db_ereol_index_text",
+            "type" : "text",
+            "boost" : "2.0"
+          },
+          "search_api_language" : {
+            "table" : "search_api_db_ereol_index",
+            "column" : "search_api_language",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "body:value" : {
+            "table" : "search_api_db_ereol_index_text",
+            "type" : "text",
+            "boost" : "1.0"
+          }
+        },
+        "default_multiple_index" : {
+          "item_id" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "item_id_1",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "item_type" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "item_type",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "item_bundle" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "item_bundle",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "node" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "user" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "user",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "search_api_language" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "search_api_language",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "node:nid" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_nid",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "node:title" : {
+            "table" : "search_api_db_default_multiple_index_text",
+            "type" : "text",
+            "boost" : "2.0"
+          },
+          "node:created" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_created",
+            "type" : "date",
+            "boost" : "1.0"
+          },
+          "node:changed" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_changed",
+            "type" : "date",
+            "boost" : "1.0"
+          },
+          "node:author" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_author",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "node:field_ding_page_lead" : {
+            "table" : "search_api_db_default_multiple_index_text",
+            "type" : "text",
+            "boost" : "1.0"
+          },
+          "node:field_ding_page_tags" : {
+            "table" : "search_api_db_default_multiple_index_node_field_ding_page_tags",
+            "column" : "value",
+            "type" : "list\\u003Cinteger\\u003E",
+            "boost" : "1.0"
+          },
+          "node:field_ding_group_lead" : {
+            "table" : "search_api_db_default_multiple_index_text",
+            "type" : "text",
+            "boost" : "1.0"
+          },
+          "user:uid" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "user_uid",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "user:roles" : {
+            "table" : "search_api_db_default_multiple_index_user_roles",
+            "column" : "value",
+            "type" : "list\\u003Cinteger\\u003E",
+            "boost" : "1.0"
+          },
+          "user:status" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "user_status",
+            "type" : "integer",
+            "boost" : "1.0"
+          },
+          "user:relation_ting_reference_ting_object" : {
+            "table" : "search_api_db_default_multiple_index_user_relation_ting_refere",
+            "column" : "value",
+            "type" : "list\\u003Cinteger\\u003E",
+            "boost" : "1.0"
+          },
+          "node:type" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_type",
+            "type" : "string",
+            "boost" : "1.0"
+          },
+          "node:url" : {
+            "table" : "search_api_db_default_multiple_index",
+            "column" : "node_url",
+            "type" : "uri",
+            "boost" : "1.0"
+          }
+        }
+      }
+    },
+    "enabled" : "0"
+  }');
+
+  return $items;
+}

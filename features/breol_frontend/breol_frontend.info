@@ -29,4 +29,6 @@ features[page_manager_handlers][] = ting_object__breol-ting-object
 features[page_manager_handlers][] = user_edit__breol-provider-profile
 features[page_manager_handlers][] = user_view_panel_context_3
 features_exclude[dependencies][image] = image
+features[search_api_index][] = breol_index
+features[search_api_server][] = localhost_db
 project path = sites/all/modules/breol/features
