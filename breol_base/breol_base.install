@@ -10,7 +10,7 @@
  */
 function breol_base_install() {
   db_update('system')
-    ->fields(array('weight' => 10000))
+    ->fields(array('weight' => 0))
     ->condition('name', 'breol_base')
     ->condition('type', 'module')
     ->execute();
@@ -492,4 +492,14 @@ function breol_base_update_7149() {
   );
 
   breol_base_remove_dead_entity_type($field_names, 'message_type');
+}
+
+/**
+ * Reset module weight.
+ */
+function breol_base_update_7150() {
+  db_update('system')
+    ->fields(array('weight' => 0))
+    ->condition('name', 'breol_base', '=')
+    ->execute();
 }
