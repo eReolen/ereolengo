@@ -442,11 +442,10 @@ function _ding_unilogin_login($username) {
 
       // Get retailer id from first institution.
       $municipalityIds = !empty($institutions) ? [reset($institutions)->kommunenr] : [];
-      $libraries = publizon_filter_libraries_list($municipalityIds);
+      $libraries = publizon_filter_libraries_list($municipalityIds, 'unilogin');
       if (!empty($libraries)) {
         // Take the first one.
         $library = reset($libraries);
-        $retailer_id = $library->retailer_id;
       }
       else {
         watchdog('publizon', 'UNI•Login municipalities @municipalities not configured on any library', array('@municipalities' => implode(', ', $municipalities)), WATCHDOG_NOTICE);
@@ -468,53 +467,41 @@ function _ding_unilogin_login($username) {
     return FALSE;
   }
 
-  $auth_res = ding_provider_invoke('user', 'external_authenticate', $user->getName(), NULL, array('retailer_id' => $retailer_id));
+  $success = FALSE;
+  try {
+    $account = ding_user_authenticate(array(
+      'name' =>  $user->getName(),
+      'pass' => '',
+      'extra' => array(
+        'attributes' => array(
+          'unilogin' => $library->unilogin_id,
+        )),
+      'single_sign_on' => TRUE
+    ));
 
-  if (!is_array($auth_res) || !isset($auth_res['success'])) {
-    watchdog('ding_unilogin', 'Provider returned invalid result: @res', array('@res' => print_r($auth_res, TRUE)), WATCHDOG_DEBUG);
-    _ding_unilogin_in_progress(FALSE);
-    return FALSE;
-  }
+    if ($account !== FALSE) {
+      global $user;
+      $user = $account;
 
-  if (!$auth_res['success']) {
-    _ding_unilogin_in_progress(FALSE);
-    return FALSE;
-  }
+      // Ensure that the user hooks are called.
+      user_login_finalize();
 
-  /*
-   * We call two private ding_user functions to do the heavy lifting. Sadly,
-   * nobody has re-factored ding_user to have a simple login function, so we
-   * have to duplicate its work here.
-   */
+      // Make a note that this is a UNI•Login account in data by saving once more.
+      user_save($account, array('data' => array('unilogin' => TRUE)));
+      _ding_unilogin_set_user_data($unilogin_data);
 
-  // Create new account in Drupal and if one exists update it.
-  $account = _ding_user_create_account($user->getAuthName(), $auth_res);
-
-  // Make a note that this is a UNI•Login account in data by saving once more.
-  user_save($account, array('data' => array('unilogin' => TRUE)));
-  _ding_unilogin_set_user_data($unilogin_data);
-
-  // Check that a profile exists for the user and if not create one.
-  _ding_user_create_profile2($account);
-
-  // Save profile data provided by hook_ding_unilogin_login implementations.
-  $profile_data = $user->getProfileData();
-  if (!empty($profile_data)) {
-    $profile = profile2_load_by_user($account->uid, 'provider_publizon');
-    $wrapper = entity_metadata_wrapper('profile2', $profile);
-
-    foreach ($profile_data as $field => $value) {
-      $wrapper->{$field} = $value;
+      $success = TRUE;
     }
-    $profile->save();
+  }
+  catch (Exception $exception) {
+    // Exception thrown, log error and carry on.
+    watchdog_exception('ding_user', $exception);
+    drupal_set_message(t('Unknown error. Please contact the library for help'));
+
+    _ding_unilogin_in_progress(FALSE);
   }
 
-  _ding_unilogin_in_progress(FALSE);
-
-  $form_state['uid'] = $account->uid;
-  ding_provider_invoke('user', 'authenticate_finalize', $account);
-  user_login_submit(array(), $form_state);
-  return TRUE;
+  return $success;
 }
 
 /**
