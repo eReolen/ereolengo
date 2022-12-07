@@ -61,3 +61,15 @@ function breol_frontend_update_7104() {
 function breol_frontend_update_7105() {
   image_style_flush(image_style_load('ding_list_medium'));
 }
+
+/**
+ * Update module weight to ensure alter hooks run after reol_base.
+ */
+function breol_frontend_update_7106() {
+  // This will ensure that "emne ord" is not displayed on the search result
+  // page.
+  db_update('system')
+    ->fields(array('weight' => 10100))
+    ->condition('name', 'breol_frontend', '=')
+    ->execute();
+}
