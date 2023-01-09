@@ -108,7 +108,7 @@ class InstitutionController extends ApiController {
       if (!preg_match('/^[a-z0-9]{6}$/i', (string) $id)) {
         throw new HttpBadRequestException(sprintf('Invalid id: %s', $id));
       }
-      if (!is_int($item['number_of_members']) || $item['number_of_members'] <= 0) {
+      if (!is_int($item['number_of_members']) || $item['number_of_members'] < 0) {
         throw new HttpBadRequestException(sprintf('Invalid number_of_members: %d', $item['number_of_members']));
       }
 
