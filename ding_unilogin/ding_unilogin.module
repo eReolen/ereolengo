@@ -355,10 +355,7 @@ function _ding_unilogin_handle_login() {
 
     // Trying to make less load during morning login, by redirecting users to
     // the user page as this is the default pattern observed.
-    $path = current_path();
-    if (drupal_is_front_page()) {
-      $path = '/user/me';
-    }
+    $path = drupal_is_front_page() ? '/user/me' : current_path();
 
     drupal_goto($path, array('query' => $query));
   }
