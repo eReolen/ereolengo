@@ -352,7 +352,12 @@ function _ding_unilogin_handle_login() {
       // just trigger the login form again).
       $query['ding-unilogin-trigger'] = $_GET['ding-unilogin-trigger'];
     }
-    drupal_goto(current_path(), array('query' => $query));
+
+    // Trying to make less load during morning login, by redirecting users to
+    // the user page as this is the default pattern observed.
+    $path = drupal_is_front_page() ? '/user/me' : current_path();
+
+    drupal_goto($path, array('query' => $query));
   }
 }
 
