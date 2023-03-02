@@ -44,29 +44,4 @@ class DingUniloginWSIinst extends DingUniloginServiceBase {
     return $res;
   }
 
-  /**
-   * Get user data.
-   */
-  public function getUser($id, $user_id) {
-    $parameters = array(
-      'instnr' => $id,
-      'brugerid' => $user_id,
-    );
-    $res = $this->callWithAuth('hentInstBruger', $parameters, 'instBruger');
-
-    return $res;
-  }
-
-  /**
-   * Get main group of user.
-   */
-  public function getUserMainGroup($id, $user_id) {
-    $user = $this->getUser($id, $user_id);
-    if (isset($user->elev->hovedgruppenavn)) {
-      return $user->elev->hovedgruppenavn;
-    }
-
-    return NULL;
-  }
-
 }
