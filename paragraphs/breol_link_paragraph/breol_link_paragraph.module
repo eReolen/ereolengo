@@ -33,7 +33,11 @@ function breol_link_paragraph_preprocess_entity(&$variables) {
           'style_name' => 'ding_campaign_p_75',
           'path' => $image['uri'],
         );
-        $variables['image'] = theme('image_style', $params);
+
+        // Skip image style for gifs (which we assume are only used for animated gifs).
+        $originalImage = '<img src="' . file_create_url($image['uri']) . '"/>';
+        $variables['image'] = $image['filemime'] === 'image/gif' ? $originalImage : theme('image_style', $params);
+
         $variables['classes_array'][] = 'linkbox--with-image';
       }
       if (isset($link['title'])) {
