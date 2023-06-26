@@ -272,6 +272,47 @@ function breol_link_paragraph_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'paragraphs_item-breol_linkbox-field_show_on'.
+  $field_instances['paragraphs_item-breol_linkbox-field_show_on'] = array(
+    'bundle' => 'breol_linkbox',
+    'default_value' => array(
+      0 => array(
+        'value' => 'web',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 5,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_show_on',
+    'label' => 'Vis på',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 5,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Billed');
@@ -279,6 +320,7 @@ function breol_link_paragraph_field_default_field_instances() {
   t('Header');
   t('Knap-tekst til app');
   t('Link');
+  t('Vis på');
   t('Vises kun i app\'en.');
 
   return $field_instances;
