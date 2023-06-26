@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * breol_link_paragraph.features.field_instance.inc
@@ -9,6 +10,47 @@
  */
 function breol_link_paragraph_field_default_field_instances() {
   $field_instances = array();
+
+  // Exported field_instance:
+  // 'paragraphs_item-breol_linkbox-field_breol_linkbox_app_text'.
+  $field_instances['paragraphs_item-breol_linkbox-field_breol_linkbox_app_text'] = array(
+    'bundle' => 'breol_linkbox',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Vises kun i app\'en.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'paragraphs_editor_preview' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'paragraphs_item',
+    'field_name' => 'field_breol_linkbox_app_text',
+    'label' => 'Knap-tekst til app',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 80,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
+    ),
+  );
 
   // Exported field_instance:
   // 'paragraphs_item-breol_linkbox-field_breol_linkbox_color'.
@@ -235,7 +277,9 @@ function breol_link_paragraph_field_default_field_instances() {
   t('Billed');
   t('Farve');
   t('Header');
+  t('Knap-tekst til app');
   t('Link');
+  t('Vises kun i app\'en.');
 
   return $field_instances;
 }
