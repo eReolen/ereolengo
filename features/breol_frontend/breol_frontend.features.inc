@@ -56,13 +56,14 @@ function breol_frontend_image_default_styles() {
   $styles['breol_cover_base'] = array(
     'label' => 'bReol cover base',
     'effects' => array(
-      1 => array(
-        'name' => 'image_scale_and_crop',
+      4 => array(
+        'name' => 'image_scale',
         'data' => array(
-          'width' => 200,
+          'width' => '',
           'height' => 290,
+          'upscale' => 0,
         ),
-        'weight' => 1,
+        'weight' => 2,
       ),
     ),
   );
