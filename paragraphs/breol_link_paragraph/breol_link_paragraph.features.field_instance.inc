@@ -34,7 +34,7 @@ function breol_link_paragraph_field_default_field_instances() {
     ),
     'entity_type' => 'paragraphs_item',
     'field_name' => 'field_breol_linkbox_app_text',
-    'label' => 'Knap-tekst til app',
+    'label' => 'Tekst til app',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -317,7 +317,7 @@ function breol_link_paragraph_field_default_field_instances() {
   t('Call to action');
   t('Farve');
   t('Header');
-  t('Knap-tekst til app');
+  t('Tekst til app');
   t('Vis på');
   t('Vises kun i app\'en.');
 
