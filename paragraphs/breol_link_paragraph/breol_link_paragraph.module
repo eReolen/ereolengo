@@ -29,7 +29,7 @@ function breol_link_paragraph_preprocess_entity(&$variables) {
       }
 
       $image = $wrapper->field_breol_linkbox_image->value();
-      if ($image['uri']) {
+      if (isset($image['uri'])) {
         $params = array(
           'style_name' => 'ding_campaign_p_75',
           'path' => $image['uri'],
