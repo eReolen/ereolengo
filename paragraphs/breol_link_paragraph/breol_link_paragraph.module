@@ -25,10 +25,11 @@ function breol_link_paragraph_preprocess_entity(&$variables) {
       $link = $wrapper->field_breol_linkbox_link->value();
       if (isset($link['url'])) {
         $variables['href'] = $link['url'];
+        $variables['link_attributes'] =  drupal_attributes($link['attributes'] ?? []);
       }
 
       $image = $wrapper->field_breol_linkbox_image->value();
-      if ($image['uri']) {
+      if (isset($image['uri'])) {
         $params = array(
           'style_name' => 'ding_campaign_p_75',
           'path' => $image['uri'],
