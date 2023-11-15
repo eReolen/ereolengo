@@ -70,7 +70,7 @@ function breol_video_field_default_field_bases() {
     'locked' => 0,
     'module' => 'color_field',
     'settings' => array(
-      'default_colors' => '#3174cf,,#a729dc,#d50049',
+      'default_colors' => '#FF73D7,#9B6EFF,#FF9100,#32B4FF',
       'profile2_private' => FALSE,
     ),
     'translatable' => 0,
