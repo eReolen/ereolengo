@@ -49,7 +49,7 @@ function breol_link_paragraph_field_default_field_bases() {
     'locked' => 0,
     'module' => 'color_field',
     'settings' => array(
-      'default_colors' => '#FF73D7,#9B6EFF,#FF9100,#32B4FF',
+      'default_colors' => '#FF73D7,#9B6EFF,#FF9100,#32B4FF,#FFD2F0,#DCC3FF,#FFDCB9,#BEE6FA',
       'profile2_private' => FALSE,
     ),
     'translatable' => 0,
