@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * breol_video.features.field_base.inc
@@ -71,7 +70,7 @@ function breol_video_field_default_field_bases() {
     'locked' => 0,
     'module' => 'color_field',
     'settings' => array(
-      'default_colors' => '#FF73D7,#9B6EFF,#FF9100,#32B4FF,#FFD2F0,#DCC3FF,#FFDCB9,#BEE6FA',
+      'default_colors' => '#FF73D7,#9B6EFF,#FF9100,#32B4FF',
       'profile2_private' => FALSE,
     ),
     'translatable' => 0,
