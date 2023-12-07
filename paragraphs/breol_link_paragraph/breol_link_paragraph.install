@@ -24,36 +24,3 @@ function breol_link_paragraph_update_7001() {
     }
   }
 }
-
-/**
- * Migrate color values.
- */
-function breol_link_paragraph_update_7002() {
-  $color_map = [
-    // Old value => New value.
-    '#A729DC' => '#9B6EFF',
-    '#D50049' => '#FF73D7',
-    '#0AA9C1' => '#32B4FF',
-    '#3174CF' => '#32B4FF',
-    '#FF7800' => '#FF9100',
-    '#7BB93A' => '#FF9100',
-  ];
-
-  $paragraph_bundle = 'breol_linkbox';
-  $field_name = 'field_breol_linkbox_color';
-
-  $paragraphs = paragraphs_item_load_multiple(FALSE, [
-    'bundle' => $paragraph_bundle,
-  ], TRUE);
-  foreach ($paragraphs as $paragraph) {
-    $wrapper = $paragraph->wrapper();
-    $value = $wrapper->get($field_name)->value();
-    if (isset($value['rgb'])) {
-      if ($new_color = ($color_map[strtoupper($value['rgb'])] ?? NULL)) {
-        $value['rgb'] = $new_color;
-        $wrapper->get($field_name)->set($value);
-        $wrapper->save();
-      }
-    }
-  }
-}
