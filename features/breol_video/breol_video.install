@@ -40,36 +40,3 @@ function breol_video_update_7102() {
     field_delete_instance($old_field_instance);
   }
 }
-
-/**
- * Migrate color values.
- */
-function breol_video_update_7103() {
-  $color_map = [
-    // Old value => New value.
-    '#A729DC' => '#9B6EFF',
-    '#D50049' => '#FF73D7',
-    '#0AA9C1' => '#32B4FF',
-    '#3174CF' => '#32B4FF',
-    '#FF7800' => '#FF9100',
-    '#7BB93A' => '#FF9100',
-  ];
-
-  $paragraph_bundle = 'video_bundle';
-  $field_name = 'field_video_bundle_color';
-
-  $paragraphs = paragraphs_item_load_multiple(FALSE, [
-    'bundle' => $paragraph_bundle,
-  ], TRUE);
-  foreach ($paragraphs as $paragraph) {
-    $wrapper = $paragraph->wrapper();
-    $value = $wrapper->get($field_name)->value();
-    if (isset($value['rgb'])) {
-      if ($new_color = ($color_map[strtoupper($value['rgb'])] ?? NULL)) {
-        $value['rgb'] = $new_color;
-        $wrapper->get($field_name)->set($value);
-        $wrapper->save();
-      }
-    }
-  }
-}
