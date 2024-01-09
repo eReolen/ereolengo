@@ -1,0 +1,7 @@
+name = Stil Unilogin
+description = Authentication with Stil Unilogin
+core = 7.x
+package = eReolen for kids
+
+dependencies[] = ding_unilogin
+dependencies[] = xautoload
