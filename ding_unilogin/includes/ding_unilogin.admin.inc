@@ -6,34 +6,34 @@
  */
 
 /**
- * UNI•Login settings form.
+ * Unilogin settings form.
  */
 function ding_unilogin_admin_settings_form($form, &$form_state) {
   // Settings for the basic login service.
   $form['login'] = array(
     '#type' => 'fieldset',
-    '#title' => t('UNI•Login'),
+    '#title' => t('Unilogin'),
     '#description' => t('Settings for the base login service.'),
   );
 
   $form['login']['ding_unilogin_publizon_client_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Publizon Client ID'),
-    '#description' => t('The client ID to send to publizon, for UNI•Login users.'),
+    '#description' => t('The client ID to send to publizon, for Unilogin users.'),
     '#default_value' => variable_get('ding_unilogin_publizon_client_id', ''),
     '#required' => TRUE,
   );
 
   $form['login']['ding_unilogin_id'] = array(
     '#type' => 'textfield',
-    '#title' => t('UNI•Login ID'),
-    '#description' => t('The UNI•Login ID. Leave empty to disable UNI•Login.'),
+    '#title' => t('Unilogin ID'),
+    '#description' => t('The Unilogin ID. Leave empty to disable Unilogin.'),
     '#default_value' => variable_get('ding_unilogin_id', ''),
   );
 
   $form['login']['ding_unilogin_secret'] = array(
     '#type' => 'textfield',
-    '#title' => t('UNI•Login shared secret'),
+    '#title' => t('Unilogin shared secret'),
     '#description' => t('The shared secret used to calculate hashes.'),
     '#default_value' => variable_get('ding_unilogin_secret', ''),
   );
@@ -41,35 +41,102 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
   $form['login']['ding_unilogin_global_logout'] = array(
     '#type' => 'checkbox',
     '#title' => t('Global logout'),
-    '#description' => t('Log out of UNI•Login when logging out of Drupal.'),
+    '#description' => t('Log out of Unilogin when logging out of Drupal.'),
     '#default_value' => variable_get('ding_unilogin_global_logout', 0),
   );
 
   // Settings for WS service general access.
   $form['ws'] = array(
     '#type' => 'fieldset',
-    '#title' => t('UNI•Login WS common'),
+    '#title' => t('Unilogin WS common'),
     '#description' => t('Common settings for the additional information web services.'),
   );
 
   $form['ws']['ding_unilogin_ws_user'] = array(
     '#type' => 'textfield',
-    '#title' => t('UNI•Login webservice user ID'),
+    '#title' => t('Unilogin webservice user ID'),
     '#default_value' => variable_get('ding_unilogin_ws_user', ''),
   );
 
   $form['ws']['ding_unilogin_ws_pass'] = array(
     '#type' => 'textfield',
-    '#title' => t('UNI•Login webservice password'),
+    '#title' => t('Unilogin webservice password'),
     '#default_value' => variable_get('ding_unilogin_ws_pass', ''),
   );
 
   // Settings for auth settings.
   $form['auth'] = array(
     '#type' => 'fieldset',
-    '#title' => t('UNI•Login Auth'),
+    '#title' => t('Unilogin Auth'),
     '#description' => t('Settings for the authentication web services.'),
   );
+
+  $configuration = _ding_unilogin_get_unilogin_helper()->getConfiguration();
+  $form['auth']['ding_unilogin_oidc'] = [
+    '#type' => 'fieldset',
+    '#title' => t('OIDC'),
+    '#tree' => TRUE,
+    '#description' => t('Settings for <a href="!url">Nyt Unilogin (OIDC)</a>', [
+      '!url' => 'https://viden.stil.dk/display/OFFSKOLELOGIN/OIDC',
+    ]),
+  ];
+
+  $form['auth']['ding_unilogin_oidc']['client_id'] = [
+    '#type' => 'textfield',
+    '#title' => t('Client ID'),
+    '#size' => 36,
+    '#default_value' => $configuration['client_id'] ?? NULL,
+    '#required' => TRUE,
+  ];
+
+  $form['auth']['ding_unilogin_oidc']['client_secret'] = [
+    '#type' => 'textfield',
+    '#title' => t('Client secret'),
+    '#size' => 36,
+    '#default_value' => $configuration['client_secret'] ?? NULL,
+    '#required' => TRUE,
+  ];
+
+  $form['auth']['ding_unilogin_oidc']['oidc_discovery_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('OIDC discovery document URL'),
+    '#size' => 128,
+    '#default_value' => $configuration['oidc_discovery_url'] ?? NULL,
+    '#required' => TRUE,
+    '#description' => t('URL to your OIDC discovery document. Hints: !hints', [
+      '!hints' => implode(', ', array_map(
+        static function (string $url) {
+          return sprintf('<a target="oidc_discovery_url" href="%1$s">%1$s</a>', $url);
+        },
+        [
+          'https://et-broker.unilogin.dk/auth/realms/broker/.well-known/openid-configuration',
+          'https://broker.unilogin.dk/auth/realms/broker/.well-known/openid-configuration',
+        ]
+      )),
+    ]),
+  ];
+
+  $form['auth']['ding_unilogin_oidc']['oidc'] = [
+    '#type' => 'hidden',
+    '#title' => 'OIDC data',
+    '#default_value' => json_encode($configuration['oidc'] ?? (object) []),
+  ];
+
+  if (isset($configuration['oidc'], $configuration['oidc_discovery_url'])) {
+    $form['auth']['ding_unilogin_oidc']['oidc_data'] = [
+      '#type' => 'fieldset',
+      '#title' => t('OIDC data'),
+      '#description' => t('Loaded from <a href="!url">!url</a>', ['!url' => $configuration['oidc_discovery_url']]),
+
+      'data' => [
+        '#markup' => json_encode($configuration['oidc'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+        '#prefix' => '<pre style="max-height: 20em; overflow: scroll">',
+        '#suffix' => '</pre>',
+      ],
+    ];
+  }
+
+  $form['#validate'][] = 'ding_unilogin_admin_settings_form_validate_oidc';
 
   // Miscellaneus settings.
   $form['misc'] = array(
@@ -99,7 +166,39 @@ function ding_unilogin_admin_settings_form($form, &$form_state) {
 }
 
 /**
- * UNI•Login api form.
+ * Validation function for (mis)used to discover OIDC data.
+ */
+function ding_unilogin_admin_settings_form_validate_oidc(&$form, &$form_state) {
+  $oidc_discovery_url = trim($form_state['values']['ding_unilogin_oidc']['oidc_discovery_url'] ?? '');
+  if (valid_url($oidc_discovery_url)) {
+    $response = drupal_http_request($oidc_discovery_url);
+    if (200 === (int) ($response->code ?? NULL)) {
+      $data = json_decode($response->data, TRUE);
+      form_set_value($form['auth']['ding_unilogin_oidc']['oidc'], $data, $form_state);
+
+      $required_keys = [
+        'authorization_endpoint',
+        'token_endpoint',
+        'token_introspection_endpoint',
+      ];
+      foreach ($required_keys as $key) {
+        if (!isset($data[$key])) {
+          form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url',
+            t('Key "@key" missing in OIDC discovery data', ['@key' => $key]));
+        }
+      }
+    }
+    else {
+      form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url', t('Cannot load content from OIDC discovery URL'));
+    }
+  }
+  else {
+    form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url', t('Please enter a valid OIDC discovery URL'));
+  }
+}
+
+/**
+ * Unilogin api form.
  */
 function ding_unilogin_admin_api_form($form, &$form_state) {
   $form['api']['ding_unilogin_api_token_read'] = array(
@@ -147,7 +246,7 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
 }
 
 /**
- * UNI•Login institutions form.
+ * Unilogin institutions form.
  */
 function ding_unilogin_admin_institutions_form($form, &$form_state) {
   $institutions = _ding_unilogin_get_institutions();
@@ -168,7 +267,7 @@ function ding_unilogin_admin_institutions_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Apply institutions filter'),
     '#default_value' => variable_get('ding_unilogin_institutions_apply_filter', FALSE),
-    '#description' => t("If set, a user's list of institutions will be filtered by the list below when signing in via UNI•Login."),
+    '#description' => t("If set, a user's list of institutions will be filtered by the list below when signing in via Unilogin."),
   );
 
   $form['ding_unilogin_institutions'] = array(
@@ -223,7 +322,7 @@ function ding_unilogin_admin_institutions_form($form, &$form_state) {
 }
 
 /**
- * Theme for UNI•Login institutions form.
+ * Theme for Unilogin institutions form.
  *
  * Renders fields of each institution as rows in a table.
  */
@@ -253,7 +352,7 @@ function theme_ding_unilogin_admin_institutions_form($variables) {
 }
 
 /**
- * Submit handler for UNI•Login institutions form.
+ * Submit handler for Unilogin institutions form.
  */
 function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_state) {
   $values = $form_state['values'];
@@ -270,7 +369,7 @@ function ding_unilogin_admin_institutions_form_submit(array $form, array &$form_
 }
 
 /**
- * UNI•Login nonstitutions form.
+ * Unilogin nonstitutions form.
  */
 function ding_unilogin_admin_nonstitutions_form($form, &$form_state) {
   $nonstitutions = _ding_unilogin_get_nonstitutions();
@@ -394,7 +493,7 @@ function ding_unilogin_admin_nonstitutions_form($form, &$form_state) {
 }
 
 /**
- * Theme for UNI•Login nonstitutions form.
+ * Theme for Unilogin nonstitutions form.
  *
  * Renders fields of each nonstitution as rows in a table.
  */
@@ -424,7 +523,7 @@ function theme_ding_unilogin_admin_nonstitutions_form($variables) {
 }
 
 /**
- * Validating handler for UNI•Login nonstitutions form.
+ * Validating handler for Unilogin nonstitutions form.
  */
 function ding_unilogin_admin_nonstitutions_form_validate(array $form, array &$form_state) {
   $institutions = _ding_unilogin_get_institutions();
@@ -449,7 +548,7 @@ function ding_unilogin_admin_nonstitutions_form_validate(array $form, array &$fo
 }
 
 /**
- * Submit handler for UNI•Login nonstitutions form.
+ * Submit handler for Unilogin nonstitutions form.
  */
 function ding_unilogin_admin_nonstitutions_form_submit(array $form, array &$form_state) {
   $values = $form_state['values'];
@@ -465,7 +564,7 @@ function ding_unilogin_admin_nonstitutions_form_submit(array $form, array &$form
 }
 
 /**
- * Submit handler for UNI•Login api form.
+ * Submit handler for Unilogin api form.
  */
 function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {
   $values = &$form_state['values'];
