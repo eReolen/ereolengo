@@ -24,7 +24,11 @@ class UniloginHelper {
    */
   public function generateLoginUrl(string $destination = '') {
     $provider = $this->getProvider();
-    $authorization_url = $provider->getAuthorizationUrl();
+    $authorization_url = $provider->getAuthorizationUrl([
+      // We need an id_token for later use when ending Unilogin session (cf.
+      // https://viden.stil.dk/display/OFFSKOLELOGIN/Implementering+af+tjeneste#Implementeringaftjeneste-1.3LogindviaOIDCTjeneste)
+      'scope' => 'openid',
+    ]);
 
     // Get the state generated for you and store it to the session.
     $_SESSION['oauth2state'] = $provider->getState();

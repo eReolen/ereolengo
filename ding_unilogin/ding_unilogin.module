@@ -248,9 +248,9 @@ function ding_unilogin_user_logout($account) {
     try {
       _ding_unilogin_get_unilogin_helper()->getProvider()->logout(
         url('<front>', ['absolute' => TRUE]),
-        $_SESSION['oauth2token']
+        $_SESSION['oauth2access_token_values']['id_token'] ?? ''
       );
-      // @todo Should we show this message?
+      unset($_SESSION['oauth2access_token_values']);
       drupal_set_message(t('Succesfully logged out of Unilogin'));
     }
     catch (\Exception $e) {
@@ -859,8 +859,9 @@ function ding_unilogin_callback() {
       ]);
       unset($_SESSION['oauth2code_verifier']);
 
-      // Store access token for later usage.
-      $_SESSION['oauth2token'] = $access_token->getToken();
+      // Store access tokens values for later usage, e.g. whe ending Unilogin
+      // session.
+      $_SESSION['oauth2access_token_values'] = $access_token->getValues();
 
       $user_info = $provider->introspectToken($access_token);
 
@@ -895,7 +896,7 @@ function ding_unilogin_callback() {
       drupal_set_message(t('Failed to login and get user details for the user.'), 'warning');
 
       // Clean up session variables to prevent redirects loop.
-      unset($_SESSION['oauth2token']);
+      unset($_SESSION['oauth2access_token_values']);
       unset($_SESSION['oauth2state']);
 
       // Redirect user back.
@@ -922,11 +923,11 @@ function _ding_unilogin_redirect_user($url = 'user') {
 
   // Add fragment to the redirect if this was started as an ajax auth redirect.
   // @todo
-  //  $options = array();
-  //  if (!empty($_SESSION['oauth2ajax'])) {
-  //    $options['fragment'] = 'redo=' . $_SESSION['oauth2ajax'];
-  //    unset($_SESSION['oauth2ajax']);
-  //  }
+  // $options = array();
+  // if (!empty($_SESSION['oauth2ajax'])) {
+  //   $options['fragment'] = 'redo=' . $_SESSION['oauth2ajax'];
+  //   unset($_SESSION['oauth2ajax']);
+  // }
 
   // The redirect url may contain query parameters from tracking etc. but this
   // be encoded in drupal_goto below, so we need to split it into an query
