@@ -2,6 +2,7 @@
 
 namespace Drupal\ding_unilogin\OAuth2\Client\Provider;
 
+use Drupal\ding_unilogin\Exception\StilUniloginException;
 use GuzzleHttp\Exception\ConnectException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
@@ -80,7 +81,14 @@ class StilUniloginProvider extends GenericProvider {
     );
     $response = $this->getResponse($request);
 
-    return drupal_json_decode($response->getBody()->getContents());
+    try {
+      $content = $response->getBody()->getContents();
+      return json_decode($content, TRUE, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $jsonException) {
+      throw new StilUniloginException('Cannot parse token', $jsonException->getCode(), $jsonException);
+    } catch (\Exception $exception) {
+      throw new StilUniloginException('Cannot introspect token', $exception->getCode(), $exception);
+    }
   }
 
   /**

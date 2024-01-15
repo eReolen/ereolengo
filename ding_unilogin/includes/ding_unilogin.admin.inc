@@ -173,19 +173,25 @@ function ding_unilogin_admin_settings_form_validate_oidc(&$form, &$form_state) {
   if (valid_url($oidc_discovery_url)) {
     $response = drupal_http_request($oidc_discovery_url);
     if (200 === (int) ($response->code ?? NULL)) {
-      $data = json_decode($response->data, TRUE);
-      form_set_value($form['auth']['ding_unilogin_oidc']['oidc'], $data, $form_state);
+      try {
+        $data = json_decode($response->data, TRUE, 512, JSON_THROW_ON_ERROR);
+        form_set_value($form['auth']['ding_unilogin_oidc']['oidc'], $data,
+          $form_state);
 
-      $required_keys = [
-        'authorization_endpoint',
-        'token_endpoint',
-        'token_introspection_endpoint',
-      ];
-      foreach ($required_keys as $key) {
-        if (!isset($data[$key])) {
-          form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url',
-            t('Key "@key" missing in OIDC discovery data', ['@key' => $key]));
+        $required_keys = [
+          'authorization_endpoint',
+          'token_endpoint',
+          'token_introspection_endpoint',
+        ];
+        foreach ($required_keys as $key) {
+          if (!isset($data[$key])) {
+            form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url',
+              t('Key "@key" missing in OIDC discovery data', ['@key' => $key]));
+          }
         }
+      }
+      catch (JsonException $jsonException) {
+        form_set_error('auth][ding_unilogin_oidc][oidc_discovery_url', t('Error parsing OIDC discovery document: %message', ['%message' => $jsonException->getMessage()]));
       }
     }
     else {
