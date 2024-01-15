@@ -92,14 +92,19 @@ class StilUniloginProvider extends GenericProvider {
   }
 
   /**
-   * Logout.
+   * End Unilogin session.
+   *
+   * @param string $postLogoutRedirectUri
+   *   The post logout redirect URI.
+   * @param string $idTokenHint
+   *   The ID token hint.
    *
    * @see https://viden.stil.dk/display/OFFSKOLELOGIN/Implementering+af+tjeneste#Implementeringaftjeneste-1.5LogudmedOIDC
    */
-  public function logout(string $postLogoutRedirectUri, string $idTokenHint) {
+  public function endSession(string $postLogoutRedirectUri, string $idTokenHint) {
     $parameters = [
-      'id_token_hint' => $idTokenHint,
       'post_logout_redirect_uri' => $postLogoutRedirectUri,
+      'id_token_hint' => $idTokenHint,
     ];
 
     // "Logud håndteres af Unilogin brokeren, og kræver derfor kun et get request med redirectUri som parameter. Der arbejdes på at kunne understøtte Frontchannel og Backchannel Logout." (cf. https://viden.stil.dk/display/OFFSKOLELOGIN/Implementering+af+tjeneste#Implementeringaftjeneste-1.5LogudmedOIDC_

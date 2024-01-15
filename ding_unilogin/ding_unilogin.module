@@ -246,7 +246,7 @@ function ding_unilogin_form_profile2_form_alter(&$form, &$form_state) {
 function ding_unilogin_user_logout($account) {
   if (variable_get('ding_unilogin_global_logout', FALSE) && ding_unilogin_authenticated($account)) {
     try {
-      _ding_unilogin_get_unilogin_helper()->getProvider()->logout(
+      _ding_unilogin_get_unilogin_helper()->getProvider()->endSession(
         url('<front>', ['absolute' => TRUE]),
         $_SESSION['oauth2access_token_values']['id_token'] ?? ''
       );
