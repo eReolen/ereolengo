@@ -29,15 +29,22 @@ class StilUniloginProvider extends GenericProvider {
   protected $urlEndSession;
 
   /**
+   * The required options for this provider.
+   *
+   * @var string[]
+   */
+  private $requiredOptions = [
+    'urlTokenIntrospect',
+    'urlEndSession',
+  ];
+
+  /**
    * {@inheritdoc}
    */
   protected function getRequiredOptions() {
     return array_merge(
       parent::getRequiredOptions(),
-      [
-        'urlTokenIntrospect',
-        'urlEndSession',
-      ]
+      $this->requiredOptions
     );
   }
 
@@ -47,10 +54,7 @@ class StilUniloginProvider extends GenericProvider {
   protected function getConfigurableOptions() {
     return array_merge(
       parent::getConfigurableOptions(),
-      [
-        'urlTokenIntrospect',
-        'urlEndSession',
-      ]
+      $this->requiredOptions
     );
   }
 
