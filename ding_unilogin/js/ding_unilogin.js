@@ -3,7 +3,7 @@
  * JS to activate the UNI•Login button.
  */
 
-(function ($, Drupal) {
+(function ($) {
   'use strict';
 
   /**
@@ -13,7 +13,7 @@
    * really on, so we hack it in with JS.
    */
   Drupal.behaviors.ding_unilogin = {
-    attach: function (context) {
+    attach: function (context, settings) {
       $('.unilogin-button', context).once('ding-unilogin', function () {
         var link = $(this);
         var loginUrl = new URL(link.attr('href'), window.location.href);
@@ -34,5 +34,5 @@
       });
     }
   };
-})(jQuery, Drupal);
+})(jQuery);
 
