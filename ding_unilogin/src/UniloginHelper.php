@@ -12,17 +12,13 @@ class UniloginHelper {
   /**
    * Generate login url endpoint at the IDP.
    *
-   * @param string $destination
-   *   Override the destination set in the current request. Mainly used in ajax
-   *   context. Defaults to empty string.
-   *
    * @return string
    *   URL to redirect to at the IDP.
    *
    * @throws Exception
    *   If required libraries are not loaded.
    */
-  public function generateLoginUrl(string $destination = '') {
+  public function generateLoginUrl() {
     $provider = $this->getProvider();
     $authorization_url = $provider->getAuthorizationUrl([
       // We need an id_token for later use when ending Unilogin session (cf.
@@ -32,8 +28,6 @@ class UniloginHelper {
 
     // Get the state generated for you and store it to the session.
     $_SESSION['oauth2state'] = $provider->getState();
-    $destination = $destination ?: ($_REQUEST['destination'] ?? NULL);
-    ding_user_set_destination($destination);
 
     // https://viden.stil.dk/display/OFFSKOLELOGIN/Implementering+af+tjeneste#Implementeringaftjeneste-1.3.1Hvordangenerereskorrektcode_challengeogcodeverifier
     // https://medium.com/zenchef-tech-and-product/how-to-generate-a-pkce-challenge-with-php-fbee1fa29379

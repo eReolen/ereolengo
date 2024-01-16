@@ -868,22 +868,13 @@ function ding_unilogin_callback() {
       if ($username = $user_info['uniid'] ?? NULL) {
         $success = _ding_unilogin_login($username);
 
-        // Redirect to current_path() to clear most GET parameters.
-        $query = [];
-        // @todo $_GET['ding-unilogin-trigger'] will never be set.
-        if (isset($_GET['ding-unilogin-trigger']) && $success) {
-          // This should propagate if we logged in a user, else it doesn't
-          // matter (doesn't make sense to re-display the reservation popup, as
-          // it'll just trigger the login form again).
-          $query['ding-unilogin-trigger'] = $_GET['ding-unilogin-trigger'];
-        }
-
+        $info = drupal_parse_url($destination ?? '');
         // Trying to make less load during morning login, by redirecting users
-        // to the user page as this is the default pattern observed. $path =
-        // drupal_is_front_page() ? '/user/me' : current_path();
-        $path = $success ? 'user/me' : '<front>';
+        // from the frontpage to the user page as this is the default pattern
+        // observed.
+        $path = rtrim($info['path'], '/') ?: '/user/me';
 
-        drupal_goto($path, ['query' => $query]);
+        drupal_goto($path, ['query' => $info['query'] ?? []]);
       }
 
       drupal_set_message(t('Cannot get Unilogin user ID'), 'error');
@@ -921,24 +912,11 @@ function _ding_unilogin_redirect_user($url = 'user') {
     ding_user_set_destination(NULL);
   }
 
-  // Add fragment to the redirect if this was started as an ajax auth redirect.
-  // @todo
-  // $options = array();
-  // if (!empty($_SESSION['oauth2ajax'])) {
-  //   $options['fragment'] = 'redo=' . $_SESSION['oauth2ajax'];
-  //   unset($_SESSION['oauth2ajax']);
-  // }
-
   // The redirect url may contain query parameters from tracking etc. but this
   // be encoded in drupal_goto below, so we need to split it into an query
   // option.
   $info = drupal_parse_url($url);
-  if (array_key_exists('query', $info)) {
-    $options['query'] = $info['query'];
-  }
-  $url = $info['path'];
-
-  drupal_goto($url, $options);
+  drupal_goto($info['path'], ['query' => $info['query'] ?? []]);
 }
 
 /**

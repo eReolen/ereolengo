@@ -25,7 +25,11 @@
           // un-decoded all the way back to our triggering JS.
           currentUrl.searchParams.set('ding-unilogin-trigger', Drupal.ding_unilogin.last_clicked);
         }
-        loginUrl.searchParams.set('path', currentUrl.toString());
+        loginUrl.searchParams.set('path', currentUrl.pathname
+            // Something weird is going on with colon in paths in eReolen.
+            // Decode them to make sure that they are handled correctly on the server.
+            .replace(encodeURIComponent(':'), ':')
+          + currentUrl.search);
         link.attr('href', loginUrl.toString());
       });
     }
