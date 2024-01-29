@@ -76,14 +76,6 @@ class UniloginHelper {
     // Allways set redirect url (editing not allowed in admin).
     $config['redirect_uri'] = url(DING_UNILOGIN_REDIRECT_PATH, ['absolute' => TRUE]);
 
-    // HACK HACK HACK!
-    //
-    // Remove this when proper redirect URI is enabled.
-    // DEBUG
-    // For now only the empty path is a valid redirect URI.
-    // @see ding_unilogin_boot().
-    $config['redirect_uri'] = url('/', ['absolute' => TRUE]);
-
     return $config;
   }
 

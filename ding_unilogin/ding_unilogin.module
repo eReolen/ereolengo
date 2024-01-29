@@ -933,25 +933,3 @@ function _ding_unilogin_get_unilogin_helper() {
 
   return $helper;
 }
-
-/**
- * Implements hook_boot().
- *
- * HACK HACK HACK!
- *
- * Remove this when proper redirect URI is enabled.
- */
-function ding_unilogin_boot() {
-  // Hack to redirect to real redirect URI.
-  // Check if we're on frontpage.
-  if ('/' === preg_replace('/\?.*/', '', $_SERVER['REQUEST_URI'])) {
-    // Check if the request looks like a OIDC callback.
-    if (isset($_GET['error'], $_GET['error_description'])
-      || isset($_GET['state'], $_GET['session_state'])) {
-      unset($_GET['q']);
-      $url = DING_UNILOGIN_REDIRECT_PATH . '?' . http_build_query($_GET);
-      header('Location: ' . $url);
-      exit;
-    }
-  }
-}
