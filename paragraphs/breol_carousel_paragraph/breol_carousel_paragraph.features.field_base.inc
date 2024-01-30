@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * breol_carousel_paragraph.features.field_base.inc
