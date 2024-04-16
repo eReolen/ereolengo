@@ -601,6 +601,7 @@ function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {
 function _ding_unilogin_admin_bookmarklet(array &$form) {
   $api_url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
   $api_token = variable_get('ding_unilogin_api_token_write');
+  $script_url = url(drupal_get_path('module', 'ding_unilogin').'/js/givadgang_bookmarklet.js', ['absolute' => TRUE]);
 
   if ($api_token) {
     // JavaScript to inject a script on the page.
@@ -608,11 +609,11 @@ function _ding_unilogin_admin_bookmarklet(array &$form) {
       <<<'JS'
 try {
   // Global variable used by script.
-  ereolen_givadgang_api_url = '%s';
-  ereolen_givadgang_api_token = '%s';
+  ereolen_givadgang_api_url = '%1$s';
+  ereolen_givadgang_api_token = '%2$s';
   s = document.createElement('script');
   // @see https://statically.io/
-  s.src = 'https://cdn.statically.io/gh/rimi-itk/ereolengo-givadgang/feature/bookmarklet/script.js';
+  s.src = '%3$s';
   document.body.appendChild(s);
 } catch (error) {
   alert(error);
@@ -620,6 +621,7 @@ try {
 JS,
       $api_url,
       $api_token,
+      $script_url,
     );
 
     $form['ding_unilogin_admin_bookmarklet'] = [
