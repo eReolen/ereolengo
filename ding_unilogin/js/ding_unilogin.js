@@ -16,22 +16,23 @@
     attach: function (context, settings) {
       $('.unilogin-button', context).once('ding-unilogin', function () {
         var link = $(this);
-        var path = window.location.href;
+        var loginUrl = new URL(link.attr('href'), window.location.href);
+        var currentUrl = new URL(window.location.href);
         // Add the id of the link clicked to open the popup, so we'll
         // be able to re-trigger it when returning from UNI•Login..
         if (Drupal.ding_unilogin.last_clicked) {
           // We'll encode the id once more to ensure that it'll stay
           // un-decoded all the way back to our triggering JS.
-          path = path + (path.match(/\?/) ? '&' : '?') +
-            'ding-unilogin-trigger=' + encodeURIComponent(Drupal.ding_unilogin.last_clicked);
+          currentUrl.searchParams.set('ding-unilogin-trigger', Drupal.ding_unilogin.last_clicked);
         }
-        // Double encoded to avoid that the web server decodes it.
-        path = encodeURIComponent(encodeURIComponent(path));
-        $.getJSON('/ding_unilogin/get/' + path, function (data) {
-          link.attr('href', data.url);
-          link.removeClass('element-hidden');
-        });
+        loginUrl.searchParams.set('path', currentUrl.pathname
+            // Something weird is going on with colon in paths in eReolen.
+            // Decode them to make sure that they are handled correctly on the server.
+            .replace(encodeURIComponent(':'), ':')
+          + currentUrl.search);
+        link.attr('href', loginUrl.toString());
       });
     }
   };
 })(jQuery);
+
