@@ -243,6 +243,8 @@ function ding_unilogin_admin_api_form($form, &$form_state) {
     ),
   );
 
+  _ding_unilogin_admin_bookmarklet($form);
+
   // Important: Our custom submit hook must be added before the ones added by
   // `system_settings_form`.
   $form['#submit'][] = 'ding_unilogin_admin_api_form_submit';
@@ -580,5 +582,81 @@ function ding_unilogin_admin_api_form_submit(array $form, array &$form_state) {
     if (empty(trim($values[$field]))) {
       $values[$field] = sha1(random_bytes(32));
     }
+  }
+}
+
+/**
+ * Bookmarklet for exporting institutions.
+ *
+ * Until recently, people at eReolen used a Chrome extension
+ * (https://github.com/rimi-itk/ereolengo-givadgang/) to scrape and export
+ * institutions from givadgang.dk to eReolen GO, but Københavns kommune does not
+ * allow users to install browser extensions.
+ *
+ * Therefore, we use a bookmarklet as a (temporary?) workaround.
+ *
+ * @param array $form
+ *   The form.
+ */
+function _ding_unilogin_admin_bookmarklet(array &$form) {
+  $api_url = url('/unilogin/api/institutions', ['absolute' => TRUE]);
+  $api_token = variable_get('ding_unilogin_api_token_write');
+  $script_url = url(drupal_get_path('module', 'ding_unilogin').'/js/givadgang_bookmarklet.js', ['absolute' => TRUE]);
+
+  if ($api_token) {
+    // JavaScript to inject a script on the page.
+    $js = sprintf(
+      <<<'JS'
+try {
+  // Global variable used by script.
+  ereolen_givadgang_api_url = '%1$s';
+  ereolen_givadgang_api_token = '%2$s';
+  s = document.createElement('script');
+  // @see https://statically.io/
+  s.src = '%3$s';
+  document.body.appendChild(s);
+} catch (error) {
+  alert(error);
+}
+JS,
+      $api_url,
+      $api_token,
+      $script_url,
+    );
+
+    $form['ding_unilogin_admin_bookmarklet'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Giv adgang (bookmarklet)'),
+
+      'intro' => [
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+        '#markup' => t('Drag the following <a href="!bookmarklet_url">bookmarklet</a> to your bookmark bar and save it:', [
+          '!bookmarklet_url' => 'https://en.wikipedia.org/wiki/Bookmarklet',
+        ]),
+      ],
+
+      'bookmarklet' => [
+        '#prefix' => '<div>',
+        '#suffix' => '</div>',
+        '#markup' => '<a class="button" href="javascript:(function(){'
+        . rawurlencode(
+          // Remove inline comments and white space.
+          preg_replace(['#^\s*//.+#m', '#\s+#'], '', $js)
+        )
+        . '})();">'
+        . t('Export institutions to !host', ['!host' => parse_url($api_url, PHP_URL_HOST)])
+        . '</a>',
+      ],
+
+      'outtro' => [
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+        '#markup' => t('Activate the bookmarklet when you want to export institutions from <a href="!giv_adgang_url">!giv_adgang_url</a>.', [
+          '!giv_adgang_url' => 'https://givadgang.unilogin.dk/#/',
+        ]),
+      ],
+
+    ];
   }
 }
